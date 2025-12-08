@@ -1,0 +1,5 @@
+
+
+$(SOCLABS_DSPSOC_TECH_DIR)/logical/dspsoc_chip_pads/dspsoc_chip_pads.v
+$(SOCLABS_DSPSOC_TECH_DIR)/logical/dspsoc_chip_pads/dspsoc_chip.v
+$(SOCLABS_DSPSOC_TECH_DIR)/logical/dspsoc_system/dspsoc_system.v
