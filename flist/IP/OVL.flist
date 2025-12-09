@@ -1,0 +1,6 @@
++libext+.v+.vlib
+
++incdir+/research/downloads/std_ovl
+-y /research/downloads/std_ovl
+
+/research/downloads/std_ovl/assert_proposition.vlib

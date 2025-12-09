@@ -28,7 +28,7 @@ CORTEXM7INTEGRATIONMCU #(
     .TARGETID(32'h00000000),
     .JEPID(7'h00),
     .JEPCONT(4'h0),
-    .PARTNUM(12'h0000)
+    .PARTNUM(12'h000)
 )
     u_cortexm7integrationmcu (
     // Ports would be connected here
@@ -280,6 +280,47 @@ CORTEXM7INTEGRATIONMCU #(
     .DFTRAMHOLD(),
     // Control Wires
     .CTLPPBLOCK(4'h0)
+);
+
+dspsoc_cpu_dma u_dspsoc_cpu_dma (
+    .HCLK(),
+    .HRESETn(),
+
+    .PCLKEN_DMA(),
+    .PSEL_DMA(),
+    .PEN_DMA(),
+    .PWRITE_DMA(),
+    .PADDR_DMA(),
+    .PWDATA_DMA(),
+    .PRDATA_DMA(),
+
+    .HSEL_M7_AHBS(),
+    .HADDR_M7_AHBS(),
+    .HTRANS_M7_AHBS(),
+    .HWRITE_M7_AHBS(),
+    .HSIZE_M7_AHBS(),
+    .HBURST_M7_AHBS(),
+    .HPROT_M7_AHBS(),
+    .HWDATA_M7_AHBS(),
+    .HMASTLOCK_M7_AHBS(),
+    .HREADYMUX_M7_AHBS(),
+    .HRDATA_M7_AHBS(),
+    .HREADYOUT_M7_AHBS(),
+    .HRESP_M7_AHBS(),
+
+    .HSEL_SYS_BUS(),
+    .HADDR_SYS_BUS(),
+    .HTRANS_SYS_BUS(),
+    .HWRITE_SYS_BUS(),
+    .HSIZE_SYS_BUS(),
+    .HBURST_SYS_BUS(),
+    .HPROT_SYS_BUS(),
+    .HWDATA_SYS_BUS(),
+    .HMASTLOCK_SYS_BUS(),
+    .HREADYMUX_SYS_BUS(),
+    .HRDATA_SYS_BUS(),
+    .HREADYOUT_SYS_BUS(),
+    .HRESP_SYS_BUS()
 );
 
 

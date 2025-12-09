@@ -1,0 +1,190 @@
+
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7_integration/verilog/CORTEXM7INTEGRATIONMCU.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7_integration/verilog/CORTEXM7INTEGRATIONCS.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7_integration/verilog/cm7_cs_apb_interconnect.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7_integration/verilog/cm7_cs_apb_rom_table.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7_integration/verilog/cm7_mcu_apb_interconnect.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7_integration/verilog/cm7_wic.v
+
+// -----------------------------------------------------------------------------
+//  The confidential and proprietary information contained in this file may
+//  only be used by a person authorised under and to the extent permitted
+//  by a subsisting licensing agreement from ARM Limited.
+//
+//                (C) COPYRIGHT 2008-2014  ARM Limited
+//                    ALL RIGHTS RESERVED
+//
+//  This entire notice must be reproduced on all copies of this file
+//  and copies of this file may only be made by a person if such person is
+//  permitted to do so under the terms of a subsisting license agreement
+//  from ARM Limited.
+//
+//  SVN Information
+//
+//  Revision            : $Revision: 299408 $
+//  Release Information : CORTEX-M7-r1p2-00rel0
+//
+// -----------------------------------------------------------------------------
+//  Purpose : CORTEX-M7 IK testbench RTL verilog command file.
+// -----------------------------------------------------------------------------
+
+
+// ============= Verilog library extensions ===========
++libext+.v+.vlib
+
+
++incdir+$(CORTEX_M7_LOGICAL_DIR)/models/cells/generic
+-y $(CORTEX_M7_LOGICAL_DIR)/models/cells/generic
+
+// RAMS - change these paths to your local directories following RAM integration.
++incdir+$(CORTEX_M7_LOGICAL_DIR)/models/rams/generic
+-y $(CORTEX_M7_LOGICAL_DIR)/models/rams/generic
+
+// Tarmac
++incdir+$(CORTEX_M7_LOGICAL_DIR)/testbench/shared/tarmac/verilog
+$(CORTEX_M7_LOGICAL_DIR)/testbench/shared/tarmac/verilog/cm7_tarmac.sv
+
+// Blocks directories
++incdir+$(CORTEX_M7_LOGICAL_DIR)/cm7aab/verilog
+-y $(CORTEX_M7_LOGICAL_DIR)/cm7aab/verilog
+
++incdir+$(CORTEX_M7_LOGICAL_DIR)/cm7biu/verilog
+-y $(CORTEX_M7_LOGICAL_DIR)/cm7biu/verilog
+
++incdir+$(CORTEX_M7_LOGICAL_DIR)/cm7core/verilog
+-y $(CORTEX_M7_LOGICAL_DIR)/cm7core/verilog
+
++incdir+$(CORTEX_M7_LOGICAL_DIR)/cm7ppb/verilog
+-y $(CORTEX_M7_LOGICAL_DIR)/cm7ppb/verilog
+
++incdir+$(CORTEX_M7_LOGICAL_DIR)/cm7dcu/verilog
+-y $(CORTEX_M7_LOGICAL_DIR)/cm7dcu/verilog
+
++incdir+$(CORTEX_M7_LOGICAL_DIR)/cm7dwt/verilog
+-y $(CORTEX_M7_LOGICAL_DIR)/cm7dwt/verilog
+
++incdir+$(CORTEX_M7_LOGICAL_DIR)/cm7fpb/verilog
+-y $(CORTEX_M7_LOGICAL_DIR)/cm7fpb/verilog
+
++incdir+$(CORTEX_M7_LOGICAL_DIR)/cm7fpu/verilog
+-y $(CORTEX_M7_LOGICAL_DIR)/cm7fpu/verilog
+
++incdir+$(CORTEX_M7_LOGICAL_DIR)/cm7icu/verilog
+-y $(CORTEX_M7_LOGICAL_DIR)/cm7icu/verilog
+
++incdir+$(CORTEX_M7_LOGICAL_DIR)/cm7itm/verilog
+-y $(CORTEX_M7_LOGICAL_DIR)/cm7itm/verilog
+
++incdir+$(CORTEX_M7_LOGICAL_DIR)/cm7lsu/verilog
+-y $(CORTEX_M7_LOGICAL_DIR)/cm7lsu/verilog
+
++incdir+$(CORTEX_M7_LOGICAL_DIR)/cm7mpu/verilog
+-y $(CORTEX_M7_LOGICAL_DIR)/cm7mpu/verilog
+
++incdir+$(CORTEX_M7_LOGICAL_DIR)/cm7nvic/verilog
+$(CORTEX_M7_LOGICAL_DIR)/cm7nvic/verilog/cm7nvic_actv_cell.v
+$(CORTEX_M7_LOGICAL_DIR)/cm7nvic/verilog/cm7nvic_actv_tree_stage.v
+$(CORTEX_M7_LOGICAL_DIR)/cm7nvic/verilog/cm7nvic_actv_tree.v
+$(CORTEX_M7_LOGICAL_DIR)/cm7nvic/verilog/cm7nvic_decl.v
+$(CORTEX_M7_LOGICAL_DIR)/cm7nvic/verilog/cm7nvic_int_state.v
+$(CORTEX_M7_LOGICAL_DIR)/cm7nvic/verilog/cm7nvic_main.v
+$(CORTEX_M7_LOGICAL_DIR)/cm7nvic/verilog/cm7nvic_pend_cell.v
+$(CORTEX_M7_LOGICAL_DIR)/cm7nvic/verilog/cm7nvic_pend_tree_stage.v
+$(CORTEX_M7_LOGICAL_DIR)/cm7nvic/verilog/cm7nvic_pend_tree.v
+$(CORTEX_M7_LOGICAL_DIR)/cm7nvic/verilog/cm7nvic_ppb_intf.v
+$(CORTEX_M7_LOGICAL_DIR)/cm7nvic/verilog/cm7nvic_preempt.v
+$(CORTEX_M7_LOGICAL_DIR)/cm7nvic/verilog/cm7nvic_reg.v
+$(CORTEX_M7_LOGICAL_DIR)/cm7nvic/verilog/cm7nvic.v
+
+//+incdir+$(CORTEX_M7_LOGICAL_DIR)/cm7pmc/verilog
+//-y $(CORTEX_M7_LOGICAL_DIR)/cm7pmc/verilog
+
++incdir+$(CORTEX_M7_LOGICAL_DIR)/cm7stb/verilog
+-y $(CORTEX_M7_LOGICAL_DIR)/cm7stb/verilog
+
++incdir+$(CORTEX_M7_LOGICAL_DIR)/cm7tcu/verilog
+-y $(CORTEX_M7_LOGICAL_DIR)/cm7tcu/verilog
+
++incdir+$(CORTEX_M7_LOGICAL_DIR)/cm7miu/verilog
+-y $(CORTEX_M7_LOGICAL_DIR)/cm7miu/verilog
+
++incdir+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_ahbd_dpu.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_ahbp_ext.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_axi_ext.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_biu_ext.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_dpu_trc.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_csetmm7_pc.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_dbg_atb.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_dcu_biu.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_dcu_ram.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_dcu_stb.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_dpu_dwt.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_dpu_fpu.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_dpu_icu.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_dpu_lsu.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_dpu_pfu.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_dpu_ppb.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_dwt_itm.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_eppb_ext.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_etm_dpipe.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_etm_ipipe.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_ext_ahbd.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_ext_ahbs.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_ext_dc.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_ext_miu.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_icu_biu.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_icu_ram.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_itm_ext.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_lsu_ahbp.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_lsu_biu.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_lsu_dcu.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_lsu_stb_biu.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_lsu_stb.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_lsu_tcu.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_miu_biu.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_miu_dcu.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_miu_icu.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_miu_tcu.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_mpu_dpu.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_mpu_pfu.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_nvic_dpu.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_nvic_tcu.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_pfu_ext.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_pfu_icu.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_pfu_tcu.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_ppb_dcu.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_ppb_icu.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_ppb_slv.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_ppb_tcu.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_stb_biu.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_stb_dpu.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_tcu_tcm.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7_top_ext.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7aab_ahb_ext.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7top_clk.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cm7top_sys.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cortexm7_axi_tracker_reads.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cortexm7_axi_tracker_writes.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cortexm7_ecc_check32.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cortexm7_ecc_check64.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cortexm7_ecc_fatal32.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cortexm7_ecc_fatal64.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cortexm7_ecc_generate32.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cortexm7_ecc_generate64.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cortexm7_ecc_repair32.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cortexm7_ecc_repair64.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/cortexm7_sva_liveness.v
+$(CORTEX_M7_LOGICAL_DIR)/cortexm7/verilog/CORTEXM7.v
+
++incdir+$(CORTEX_M7_LOGICAL_DIR)/cm7cti/verilog
+-y $(CORTEX_M7_LOGICAL_DIR)/cm7cti/verilog
+
++incdir+$(CORTEX_M7_LOGICAL_DIR)/csetmm7/verilog
+-y $(CORTEX_M7_LOGICAL_DIR)/csetmm7/verilog
+
++incdir+$(CORTEX_M7_LOGICAL_DIR)/cm7dap/verilog
+-y $(CORTEX_M7_LOGICAL_DIR)/cm7dap/verilog
+
++incdir+$(CORTEX_M7_LOGICAL_DIR)/cm7tpiu/verilog
+-y $(CORTEX_M7_LOGICAL_DIR)/cm7tpiu/verilog

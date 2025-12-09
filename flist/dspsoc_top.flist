@@ -1,0 +1,14 @@
+-f $(SOCLABS_DSPSOC_TECH_DIR)/flist/IP/OVL.flist 
+
+$(SOCLABS_DSPSOC_TECH_DIR)/logical/dspsoc_chip_pads/dspsoc_chip_pads.v
+$(SOCLABS_DSPSOC_TECH_DIR)/logical/dspsoc_chip_pads/dspsoc_chip.v
+$(SOCLABS_DSPSOC_TECH_DIR)/logical/dspsoc_system/dspsoc_system.v
+
++incdir+$(SOCLABS_DSPSOC_TECH_DIR)/logical/dspsoc_subsystems/dspsoc_cpu_subsystem
+$(SOCLABS_DSPSOC_TECH_DIR)/logical/dspsoc_subsystems/dspsoc_cpu_subsystem/dspsoc_cpu_ss.v
+$(SOCLABS_DSPSOC_TECH_DIR)/logical/dspsoc_subsystems/dspsoc_cpu_subsystem/dspsoc_cpu_dma.v
+
+-f $(SOCLABS_DSPSOC_TECH_DIR)/flist/IP/CortexM7.flist
+-f $(SOCLABS_DSPSOC_TECH_DIR)/flist/IP/dspsoc_dma_busmatrix.flist
+
+-f $(SOCLABS_SLDMA230_TECH_DIR)/flist/sldma230_ip.flist
