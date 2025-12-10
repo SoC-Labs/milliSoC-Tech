@@ -1,0 +1,56 @@
+Warning: This configuration has one slave port and will use 'single' output
+ and arbiter stage(s) only.
+
+==============================================================
+=  The confidential and proprietary information contained in this file may
+=  only be used by a person authorised under and to the extent permitted
+=  by a subsisting licensing agreement from Arm Limited or its affiliates.
+= 
+=    (C) COPYRIGHT 2001-2013,2017 Arm Limited or its affiliates.
+=        ALL RIGHTS RESERVED
+= 
+=  This entire notice must be reproduced on all copies of this file
+=  and copies of this file may only be made by a person if such person is
+=  permitted to do so under the terms of a subsisting license agreement
+=  from Arm Limited or its affiliates.
+=
+= BuildBusMatrix.pl
+=
+= Run Date : 10/12/2025 20:51:57
+==============================================================
+
+Script accepted the following parameters:
+
+ - Configuration file      : '/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_dma_busmatrix/xml/millisoc_dma.xml'
+ - Top-level name          : 'millisoc_dma_busmatrix'
+ - Slave interfaces        : 1
+ - Master interfaces       : 2
+ - Architecture type       : 'ahb2'
+ - Arbitration scheme      : 'burst'
+ - Address map             : user defined
+ - Connectivity mapping    : _DMAC_0 -> _M7_AHBS, _SYS_BUS
+ - Connectivity type       : full
+ - Routing data width      : 32
+ - Routing address width   : 32
+ - User signal width       : 0
+ - Timescales              : no
+ - Configuration directory : '/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_dma_busmatrix/verilog'
+ - Source directory        : '/research/AAA/ip_library/latest/Corstone-101/logical/cmsdk_ahb_busmatrix/verilog/src'
+ - IPXact target directory : '/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_dma_busmatrix/ipxact'
+ - IPXact source directory : '/research/AAA/ip_library/latest/Corstone-101/logical/cmsdk_ahb_busmatrix/ipxact/src'
+ - Overwrite mode          : enabled
+
+Creating the bus matrix variant...
+
+ - Rendering 'millisoc_dma_busmatrix_lite.xml'
+ - Rendering 'millisoc_dma_busmatrix.v'
+ - Rendering 'millisoc_dma_busmatrix_default_slave.v'
+ - Rendering 'millisoc_dma_busmatrix.xml'
+ - Rendering 'millisoc_dma_arbiter.v'
+ - Rendering 'millisoc_dma_inititator_input.v'
+ - Rendering 'millisoc_dma_busmatrix_lite.v'
+ - Rendering 'millisoc_dma_target_output.v'
+ - Rendering 'millisoc_dma_matrix_decode_DMAC_0.v'
+
+Done!
+

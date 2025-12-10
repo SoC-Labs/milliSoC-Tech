@@ -1,0 +1,31 @@
+-f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/OVL.flist 
+
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_chip_pads/millisoc_chip_pads.v
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_system/millisoc_system.sv
+
++incdir+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_cpu_subsystem
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_cpu_subsystem/millisoc_cpu_ss.v
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_cpu_subsystem/millisoc_cpu_dma.v
+
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_peripheral_subsystem/millisoc_peripheral_subsystem.sv
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_peripheral_subsystem/millisoc_peripheral_addr_decode.v
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_peripheral_subsystem/millisoc_peripheral_debug.v
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_peripheral_subsystem/extio8x4_axis_initiator.v
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_peripheral_subsystem/extio8x4_ifsm.v
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_peripheral_subsystem/extio8x4_sync.v
+
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/interfaces/ahb_if.sv
+
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/ROM/generic/ROM_wrapper.v
+
+-f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/CortexM7.flist
+-f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/millisoc_dma_busmatrix.flist
+-f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/NIC400.flist
+-f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/PL022.flist
+-f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/PL031.flist
+-f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/Corstone101.flist
+-f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/SoCDebug_tech.flist
+
+-f $(SOCLABS_SLDMA230_TECH_DIR)/flist/sldma230_ip.flist
+
+-f $(SOCLABS_AHB_QSPI_DIR)/flist/Top/ahb_QSPI_SIM.flist

@@ -38,7 +38,7 @@ CPU_PRODUCT = CORTEX_M7
 
 TARGET = arm-none-eabi
 # Shared software directory
-SOFTWARE_DIR = $(SOCLABS_DSPSOC_TECH_DIR)/software
+SOFTWARE_DIR = $(SOCLABS_MILLISOC_TECH_DIR)/software
 CMSIS_DIR    = $(SOFTWARE_DIR)/lib/CMSIS
 CORE_DIR     = $(CMSIS_DIR)/include
 

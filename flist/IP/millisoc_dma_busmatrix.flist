@@ -1,0 +1,10 @@
+
+
+
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_dma_busmatrix/verilog/millisoc_dma_busmatrix/millisoc_dma_arbiter.v
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_dma_busmatrix/verilog/millisoc_dma_busmatrix/millisoc_dma_busmatrix_default_slave.v
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_dma_busmatrix/verilog/millisoc_dma_busmatrix/millisoc_dma_busmatrix_lite.v
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_dma_busmatrix/verilog/millisoc_dma_busmatrix/millisoc_dma_busmatrix.v
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_dma_busmatrix/verilog/millisoc_dma_busmatrix/millisoc_dma_inititator_input.v
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_dma_busmatrix/verilog/millisoc_dma_busmatrix/millisoc_dma_matrix_decode_DMAC_0.v
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_dma_busmatrix/verilog/millisoc_dma_busmatrix/millisoc_dma_target_output.v
