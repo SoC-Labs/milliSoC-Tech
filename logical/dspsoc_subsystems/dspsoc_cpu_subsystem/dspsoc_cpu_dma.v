@@ -3,7 +3,7 @@ module dspsoc_cpu_dma(
     input  wire         HCLK,
     input  wire         HRESETn,
 
-    input  wire         PCLKEN_DMA,
+    input wire          PCLKEN_DMA,
     input wire          PSEL_DMA,
     input wire          PEN_DMA,
     input wire          PWRITE_DMA,

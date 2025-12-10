@@ -36,13 +36,7 @@ $(CORTEX_M7_LOGICAL_DIR)/cortexm7_integration/verilog/cm7_wic.v
 +incdir+$(CORTEX_M7_LOGICAL_DIR)/models/cells/generic
 -y $(CORTEX_M7_LOGICAL_DIR)/models/cells/generic
 
-// RAMS - change these paths to your local directories following RAM integration.
-+incdir+$(CORTEX_M7_LOGICAL_DIR)/models/rams/generic
--y $(CORTEX_M7_LOGICAL_DIR)/models/rams/generic
 
-// Tarmac
-+incdir+$(CORTEX_M7_LOGICAL_DIR)/testbench/shared/tarmac/verilog
-$(CORTEX_M7_LOGICAL_DIR)/testbench/shared/tarmac/verilog/cm7_tarmac.sv
 
 // Blocks directories
 +incdir+$(CORTEX_M7_LOGICAL_DIR)/cm7aab/verilog

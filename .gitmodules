@@ -1,3 +1,9 @@
 [submodule "logical/sldma230_tech"]
 	path = logical/sldma230_tech
 	url = https://git.soton.ac.uk/soclabs/sldma230_tech.git
+[submodule "logical/ahb_qspi"]
+	path = logical/ahb_qspi
+	url = https://git.soton.ac.uk/soclabs/ahb_qspi.git
+[submodule "logical/socdebug_tech"]
+	path = logical/socdebug_tech
+	url = https://git.soton.ac.uk/soclabs/socdebug_tech.git
