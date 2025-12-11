@@ -25,7 +25,6 @@
 /* The functions are implemented in shared/software/common/uart_stdout.c */
 
 extern void UartStdOutInit(void);
-extern void Uart2StdOutInit(void);
 extern unsigned char UartPutc(unsigned char my_ch);
 extern unsigned char UartGetc(void);
-extern unsigned char UartEndSimulation(void);
+extern void UartEndSimulation(void);

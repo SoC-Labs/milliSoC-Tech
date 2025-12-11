@@ -34,28 +34,6 @@ module millisoc_cpu_ss #(
     input wire          TRACECLKIN,   // TPIU trace port clock
     input wire          TRESETn,      // TPIU trace port reset
 
-    input  wire         PCLKEN_DMA,
-    input  wire         PSEL_DMA,
-    input  wire         PEN_DMA,
-    input  wire         PWRITE_DMA,
-    input  wire [11:0]  PADDR_DMA,
-    input  wire [31:0]  PWDATA_DMA,
-    output wire [31:0]  PRDATA_DMA,
-
-    output wire         HSEL_SYS_BUS,
-    output wire [31:0]  HADDR_SYS_BUS,
-    output wire [1:0]   HTRANS_SYS_BUS,
-    output wire         HWRITE_SYS_BUS,
-    output wire [2:0]   HSIZE_SYS_BUS,
-    output wire [2:0]   HBURST_SYS_BUS,
-    output wire [3:0]   HPROT_SYS_BUS,
-    output wire [31:0]  HWDATA_SYS_BUS,
-    output wire         HMASTLOCK_SYS_BUS,
-    output wire         HREADYMUX_SYS_BUS,
-    input  wire [31:0]  HRDATA_SYS_BUS,
-    input  wire         HREADYOUT_SYS_BUS,
-    input  wire         HRESP_SYS_BUS,
-
     output wire [ 1:0]  HTRANSP,
     output wire         HWRITEP,
     output wire [ 2:0]  HSIZEP,
@@ -69,6 +47,20 @@ module millisoc_cpu_ss #(
     input wire          HRESPP,
     input wire [31:0]   HRDATAP,
     input wire          EXRESPP,
+
+    // AHBS (AMBA3 AHB-LITE)
+    output wire         HREADYOUTS,
+    output wire         HRESPS,
+    output wire [31:0]  HRDATAS,
+    input wire          HREADYS,
+    input wire          HSELS,
+    input wire [ 1:0]   HTRANSS,
+    input wire          HWRITES,
+    input wire [ 2:0]   HSIZES,
+    input wire [ 2:0]   HBURSTS,
+    input wire [ 3:0]   HPROTS,
+    input wire [31:0]   HADDRS,
+    input wire [31:0]   HWDATAS,
 
     input wire          ACLKEN,
     output wire         ARVALID,
@@ -122,20 +114,6 @@ module millisoc_cpu_ss #(
 // Internal Wires
 // - Timestamp
 reg [63:0]   TSVALUEB;
-// - AHBs from DMA
-wire         HSEL_M7_AHBS;
-wire [31:0]  HADDR_M7_AHBS;
-wire [1:0]   HTRANS_M7_AHBS;
-wire         HWRITE_M7_AHBS;
-wire [2:0]   HSIZE_M7_AHBS;
-wire [2:0]   HBURST_M7_AHBS;
-wire [3:0]   HPROT_M7_AHBS;
-wire [31:0]  HWDATA_M7_AHBS;
-wire         HMASTLOCK_M7_AHBS;
-wire         HREADYMUX_M7_AHBS;
-wire [31:0]  HRDATA_M7_AHBS;
-wire         HREADYOUT_M7_AHBS;
-wire         HRESP_M7_AHBS;
 // - ITCM
 wire         ITCMCS;
 wire [23:3]  ITCMADDR;
@@ -300,21 +278,21 @@ CORTEXM7INTEGRATIONMCU #(
     .HRDATAP(HRDATAP),
     .EXRESPP(EXRESPP),
     // AHBs
-    .HREADYOUTS(HREADYOUT_M7_AHBS),
-    .HRESPS(HRESP_M7_AHBS),
-    .HRDATAS(HRDATA_M7_AHBS),
+    .HREADYOUTS(HREADYOUTS),
+    .HRESPS(HRESPS),
+    .HRDATAS(HRDATAS),
     .AHBSRDY(),
     .WABORTS(),
     .AHBSPRI(1'b1),
-    .HREADYS(HREADYMUX_M7_AHBS),
-    .HSELS(HSEL_M7_AHBS),
-    .HTRANSS(HTRANS_M7_AHBS),
-    .HWRITES(HWRITE_M7_AHBS),
-    .HSIZES(HSIZE_M7_AHBS),
-    .HBURSTS(HBURST_M7_AHBS),
-    .HPROTS(HPROT_M7_AHBS),
-    .HADDRS(HADDR_M7_AHBS),
-    .HWDATAS(HWDATA_M7_AHBS),
+    .HREADYS(HREADYS),
+    .HSELS(HSELS),
+    .HTRANSS(HTRANSS),
+    .HWRITES(HWRITES),
+    .HSIZES(HSIZES),
+    .HBURSTS(HBURSTS),
+    .HPROTS(HPROTS),
+    .HADDRS(HADDRS),
+    .HWDATAS(HWDATAS),
     // EPPB
     .PENABLE(),
     .PSEL(),
@@ -429,46 +407,6 @@ always @(posedge FCLK or negedge nPORESET) begin
     end
 end
 
-millisoc_cpu_dma u_millisoc_cpu_dma (
-    .HCLK(FCLK),
-    .HRESETn(),
-
-    .PCLKEN_DMA(PCLKEN_DMA),
-    .PSEL_DMA(PSEL_DMA),
-    .PEN_DMA(PEN_DMA),
-    .PWRITE_DMA(PWRITE_DMA),
-    .PADDR_DMA(PADDR_DMA),
-    .PWDATA_DMA(PWDATA_DMA),
-    .PRDATA_DMA(PRDATA_DMA),
-
-    .HSEL_M7_AHBS(HSEL_M7_AHBS),
-    .HADDR_M7_AHBS(HADDR_M7_AHBS),
-    .HTRANS_M7_AHBS(HTRANS_M7_AHBS),
-    .HWRITE_M7_AHBS(HWRITE_M7_AHBS),
-    .HSIZE_M7_AHBS(HSIZE_M7_AHBS),
-    .HBURST_M7_AHBS(HBURST_M7_AHBS),
-    .HPROT_M7_AHBS(HPROT_M7_AHBS),
-    .HWDATA_M7_AHBS(HWDATA_M7_AHBS),
-    .HMASTLOCK_M7_AHBS(HMASTLOCK_M7_AHBS),
-    .HREADYMUX_M7_AHBS(HREADYMUX_M7_AHBS),
-    .HRDATA_M7_AHBS(HRDATA_M7_AHBS),
-    .HREADYOUT_M7_AHBS(HREADYOUT_M7_AHBS),
-    .HRESP_M7_AHBS(HRESP_M7_AHBS),
-
-    .HSEL_SYS_BUS(HSEL_SYS_BUS),
-    .HADDR_SYS_BUS(HADDR_SYS_BUS),
-    .HTRANS_SYS_BUS(HTRANS_SYS_BUS),
-    .HWRITE_SYS_BUS(HWRITE_SYS_BUS),
-    .HSIZE_SYS_BUS(HSIZE_SYS_BUS),
-    .HBURST_SYS_BUS(HBURST_SYS_BUS),
-    .HPROT_SYS_BUS(HPROT_SYS_BUS),
-    .HWDATA_SYS_BUS(HWDATA_SYS_BUS),
-    .HMASTLOCK_SYS_BUS(HMASTLOCK_SYS_BUS),
-    .HREADYMUX_SYS_BUS(HREADYMUX_SYS_BUS),
-    .HRDATA_SYS_BUS(HRDATA_SYS_BUS),
-    .HREADYOUT_SYS_BUS(HREADYOUT_SYS_BUS),
-    .HRESP_SYS_BUS(HRESP_SYS_BUS)
-);
 
 dtcm u_dtcm (
     .CLK(FCLK),

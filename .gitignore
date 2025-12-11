@@ -3,7 +3,7 @@ software/build
 .ecmproject
 .project
 
-logical/nic400_dspsoc_main
+logical/nic400_millisoc_main
 logical/shared
 
 software/src/*/*.hex
@@ -11,3 +11,4 @@ software/src/*/*.lst
 software/src/*/*.o
 software/src/*/*.ELF
 software/src/*/*.bin
+

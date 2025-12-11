@@ -27,61 +27,42 @@
  UART functions for retargetting
 
  */
-#include "CMSDK.h"
 
-#define CLKFREQ    240000000
-#define BAUDRATE   38400
+#include "uart_stdout.h"
+#include "CMSDK.h"
+#define CLKFREQ    100000000
+#define BAUDRATE   3125000
 #define BAUDCLKDIV (CLKFREQ / BAUDRATE)
 
 void UartStdOutInit(void)
 {
-  CMSDK_UART2->CTRL    = 0x00;       // disable whie reprogramming
-  CMSDK_UART2->BAUDDIV = BAUDCLKDIV; // (240MHz/BAUDRATE) in 16.4 format
-  CMSDK_UART2->CTRL    = 0x01;       // TX, standard UART2
-  CMSDK_USRT2->BAUDDIV = 0xf0;       // (prescaler value = ~((div+1)[7:0))
-  CMSDK_USRT2->CTRL    = 0x03;       // RX+TX, FT1248 USRT
-  CMSDK_GPIO1->ALTFUNCSET = (1<<5);  // UART2 mapped to GP1[5,4]
+  CMSDK_UART0->CTRL    = 0x00;       // disable whie reprogramming
+  CMSDK_UART0->BAUDDIV = BAUDCLKDIV; // (100MHz/BAUDRATE) in 16.4 format
+  CMSDK_UART0->CTRL    = 0x00;       // TX, standard UART2
+  CMSDK_USRT0->BAUDDIV =    3;       // (prescaler value)
+  CMSDK_USRT0->CTRL    = 0x03;       // RX+TX, FT1248 USRT
   return;
 }
 
-void Uart2StdOutInit(void)
-{
-// ensure full character shift before reprogramming UART2
-  CMSDK_DUALTIMER->Timer1Load = (11 * BAUDCLKDIV); // 10+1 x baud tick clock
-  CMSDK_DUALTIMER->Timer1BGLoad = (10 * BAUDCLKDIV); // 10 x baud tick clock
-  CMSDK_DUALTIMER->Timer1IntClr = 1;
-  CMSDK_DUALTIMER->Timer1Control = 0xC3; // enable, periodic, 32-bit
-  while ((CMSDK_DUALTIMER->Timer1RIS & 1)== 0) ; // wait until any UART character time
-// reinitialize UART2
-///  CMSDK_UART2->CTRL    = 0x00;       // disable whie reprogramming
-///  CMSDK_UART2->BAUDDIV = BAUDCLKDIV; // (240MHz/BAUDRATE) in 16.4 format
-///  CMSDK_UART2->CTRL    = 0x01;       // RX+TX, standard UART2
-  CMSDK_GPIO1->ALTFUNCSET = (1<<5);  // UART2 mapped to GP1[5,4]
-  CMSDK_USRT2->CTRL    = 0x00;       // RX+TX, FT1248 USRT disabled
-  CMSDK_USRT2->BAUDDIV = 0xf0;       // (prescaler value = ~((div+1)[7:0))
-  CMSDK_USRT2->CTRL    = 0x03;       // RX+TX, FT1248 USRT disabled
-  return;
-}
 
 // Output a character
 unsigned char UartPutc(unsigned char my_ch)
 {
-  if ((CMSDK_USRT2->CTRL & 1)==0) {
-    while (CMSDK_UART2->STATE & 1); // Wait if Transmit Holding register full
-    CMSDK_UART2->DATA = my_ch; // write to transmit holding register
-    CMSDK_USRT2->DATA = my_ch; // (also write to transmit holding register)
+  if ((CMSDK_USRT0->CTRL & 1)==0) {
+    while (CMSDK_UART0->STATE & 1); // Wait if Transmit Holding register full
+    CMSDK_UART0->DATA = my_ch; // write to transmit holding register
   } else {
-    while (CMSDK_USRT2->STATE & 1); // Wait if Transmit Holding register full
-    CMSDK_USRT2->DATA = my_ch; // write to transmit holding register
+    while (CMSDK_USRT0->STATE & 1); // Wait if Transmit Holding register full
+    CMSDK_USRT0->DATA = my_ch; // write to transmit holding register
   }
   return (my_ch);
 }
 // Get a character
 unsigned char UartGetc(void)
 {
-  while (((CMSDK_UART2->STATE & 2)==0) & ((CMSDK_USRT2->STATE & 2)==0));
-  if ((CMSDK_UART2->STATE & 2)==2) return (CMSDK_UART2->DATA);
-  if ((CMSDK_USRT2->STATE & 2)==2) return (CMSDK_USRT2->DATA);
+  while (((CMSDK_UART0->STATE & 2)==0) & ((CMSDK_USRT0->STATE & 2)==0));
+  if ((CMSDK_UART0->STATE & 2)==2) return (CMSDK_UART0->DATA);
+  if ((CMSDK_USRT0->STATE & 2)==2) return (CMSDK_USRT0->DATA);
 }
 
 void UartEndSimulation(void)

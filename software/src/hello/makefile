@@ -48,11 +48,11 @@ DEPS_LIST       = makefile
 TOOL_CHAIN      = ds5
 
 ifeq ($(TOOL_CHAIN),ds5)
-    CPU_TYPE        = --cpu Cortex-M7
+    CPU_TYPE        = --cpu=Pelican.fp
 endif
 
 ifeq ($(TOOL_CHAIN),ds6)
-    CPU_TYPE        = -mcpu=Cortex-M7
+    CPU_TYPE        = -mcpu=Cortex-M7.fp.sp
 endif
 
 ifeq ($(TOOL_CHAIN),gcc)
@@ -83,8 +83,6 @@ SYSTEM_FILE  = system_cm7ikmcu
 # MicroLIB option
 COMPILE_MICROLIB = 0
 
-# Small Multiply (Cortex-M0/M0+ has small multiplier option)
-COMPILE_SMALLMUL = 0
 
 #ARM_CC_OPTIONS   = -c -O3 -g -Otime -I $(DEVICE_DIR)/Include  -I $(CORE_DIR) \
 #		   -I $(SOFTWARE_DIR)/common/retarget $(USER_DEFINE)
@@ -100,14 +98,14 @@ ifeq ($(TOOL_CHAIN),ds6)
 else
   CC_TOOL   = armcc -O3
   ASM_TOOL = armasm
-  ARM_TARGET = -Otime
+  ARM_TARGET = -O3 -Otime
 endif
 
-ARM_CC_OPTIONS   = $(ARM_TARGET) -c -I $(DEVICE_DIR)/Include -I$(SOFTWARE_DIR)/lib/common/CMSDK -I $(CORE_DIR) \
+ARM_CC_OPTIONS   = $(ARM_TARGET) -c -D_FPU -Ono_autoinline --enum_is_int -Ono_inline --thumb --apcs /interwork --fpmode=fast -g --data_reorder --diag_suppress=2874 -I $(DEVICE_DIR)/Include -I $(CORE_DIR) -I $(SOFTWARE_DIR)/lib/common/CMSDK \
 		   -I $(SOFTWARE_DIR)/common/retarget $(USER_DEFINE)
 ARM_ASM_OPTIONS  = 
 ARM_LINK_OPTIONS = "--keep=$(STARTUP_FILE).o(vectors)" "--first=$(STARTUP_FILE).o(vectors)" \
-		   --no_debug --rw_base 0x20000000 --ro_base 0x60000000 --map  --info sizes
+		--rw_base 0x20000000 --ro_base 0x60400000 --map --datacompressor=off --info=inline
 
 ifeq ($(COMPILE_BIGEND),1)
  # Big Endian
@@ -121,11 +119,6 @@ ifeq ($(COMPILE_MICROLIB),1)
  ARM_CC_OPTIONS   += --library_type=microlib
  ARM_ASM_OPTIONS  += --library_type=microlib --pd "__MICROLIB SETA 1"
  ARM_LINK_OPTIONS += --library_type=microlib
-endif
-
-ifeq ($(COMPILE_SMALLMUL),1)
- # In Cortex-M0, small multiply takes 32 cycles
- ARM_CC_OPTIONS   += --multiply_latency=32
 endif
 
 # ---------------------------------------------------------------------------------------

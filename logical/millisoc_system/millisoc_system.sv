@@ -72,7 +72,6 @@ wire [31:0] PWDATA_DMA;
 wire [31:0] PRDATA_DMA;
 
 // - AHB from DMA to System Bus
-wire         HSEL_DMA_SYS_BUS;
 wire [31:0]  HADDR_DMA_SYS_BUS;
 wire [1:0]   HTRANS_DMA_SYS_BUS;
 wire         HWRITE_DMA_SYS_BUS;
@@ -85,6 +84,7 @@ wire         HREADYMUX_DMA_SYS_BUS;
 wire [31:0]  HRDATA_DMA_SYS_BUS;
 wire         HREADYOUT_DMA_SYS_BUS;
 wire         HRESP_DMA_SYS_BUS;
+
 
 // - AHB to QSPI
 wire        HSELx_QSPI;
@@ -233,28 +233,6 @@ millisoc_cpu_ss u_millisoc_cpu_ss (
     .TRACECLKIN(TRACECLKIN),
     .TRESETn(TRESETn),
 
-    .PCLKEN_DMA(PCLKEN_DMA),
-    .PSEL_DMA(PSEL_DMA),
-    .PEN_DMA(PEN_DMA),
-    .PWRITE_DMA(PWRITE_DMA),
-    .PADDR_DMA(PADDR_DMA),
-    .PWDATA_DMA(PWDATA_DMA),
-    .PRDATA_DMA(PRDATA_DMA),
-
-    .HSEL_SYS_BUS(HSEL_DMA_SYS_BUS),
-    .HADDR_SYS_BUS(HADDR_DMA_SYS_BUS),
-    .HTRANS_SYS_BUS(HTRANS_DMA_SYS_BUS),
-    .HWRITE_SYS_BUS(HWRITE_DMA_SYS_BUS),
-    .HSIZE_SYS_BUS(HSIZE_DMA_SYS_BUS),
-    .HBURST_SYS_BUS(HBURST_DMA_SYS_BUS),
-    .HPROT_SYS_BUS(HPROT_DMA_SYS_BUS),
-    .HWDATA_SYS_BUS(HWDATA_DMA_SYS_BUS),
-    .HMASTLOCK_SYS_BUS(HMASTLOCK_DMA_SYS_BUS),
-    .HREADYMUX_SYS_BUS(HREADYMUX_DMA_SYS_BUS),
-    .HRDATA_SYS_BUS(HRDATA_DMA_SYS_BUS),
-    .HREADYOUT_SYS_BUS(HREADYOUT_DMA_SYS_BUS),
-    .HRESP_SYS_BUS(HRESP_DMA_SYS_BUS),
-
     .HTRANSP(PERIPH_AHB.HTRANS),
     .HWRITEP(PERIPH_AHB.HWRITE),
     .HSIZEP(PERIPH_AHB.HSIZE),
@@ -268,6 +246,19 @@ millisoc_cpu_ss u_millisoc_cpu_ss (
     .HRESPP(PERIPH_AHB.HRESP),
     .HRDATAP(PERIPH_AHB.HRDATA),
     .EXRESPP(),
+
+    .HREADYOUTS(),
+    .HRESPS(),
+    .HRDATAS(),
+    .HREADYS(),
+    .HSELS(),
+    .HTRANSS(),
+    .HWRITES(),
+    .HSIZES(),
+    .HBURSTS(),
+    .HPROTS(),
+    .HADDRS(),
+    .HWDATAS(),
 
     .ACLKEN(CPU_ACLKEN),
     .ARVALID(CPU_ARVALID),
@@ -313,6 +304,44 @@ millisoc_cpu_ss u_millisoc_cpu_ss (
     .BVALID(CPU_BVALID),
     .BID(CPU_BID),
     .BRESP(CPU_BRESP)
+);
+
+
+sldma230 #(
+    .SYS_ADDR_W (32),
+    .SYS_DATA_W (32),
+    .CFG_ADDR_W (12),
+    .CHANNEL_NUM(2)
+) u_sldma230 (
+    .HCLK        (HCLK        ),
+    .HRESETn     (HRESETn     ),
+
+    // AHB Lite Port
+    .HADDR       (HADDR_DMA_SYS_BUS),
+    .HTRANS      (HTRANS_DMA_SYS_BUS),
+    .HWRITE      (HWRITE_DMA_SYS_BUS),
+    .HSIZE       (HSIZE_DMA_SYS_BUS),
+    .HBURST      (HBURST_DMA_SYS_BUS),
+    .HPROT       (HPROT_DMA_SYS_BUS),
+    .HWDATA      (HWDATA_DMA_SYS_BUS),
+    .HMASTLOCK   (HMASTLOCK_DMA_SYS_BUS),
+    .HRDATA      (HRDATA_DMA_SYS_BUS),
+    .HREADY      (HREADYOUT_DMA_SYS_BUS),
+    .HRESP       (HRESP_DMA_SYS_BUS),
+
+    // APB Configurtation Port
+    .PCLKEN      (PCLKEN_DMA),
+    .PSEL        (PSEL_DMA),
+    .PEN         (PEN_DMA),
+    .PWRITE      (PWRITE_DMA),
+    .PADDR       (PADDR_DMA),
+    .PWDATA      (PWDATA_DMA),
+    .PRDATA      (PRDATA_DMA),
+
+    // DMA Request and Status Port
+    .DMA_REQ     (1'b0        ),
+    .DMA_DONE    (            ),
+    .DMA_ERR     (            )
 );
 
 millisoc_peripheral_subsystem u_millisoc_peripheral_subsystem (

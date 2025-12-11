@@ -60,11 +60,11 @@ DEPS_LIST       = makefile
 TOOL_CHAIN      = ds5
 
 ifeq ($(TOOL_CHAIN),ds5)
-    CPU_TYPE        = --cpu Cortex-M7
+    CPU_TYPE        = --cpu=Pelican.fp
 endif
 
 ifeq ($(TOOL_CHAIN),ds6)
-    CPU_TYPE        = -mcpu=Cortex-M7
+    CPU_TYPE        = -mcpu=Cortex-M7.fp.sp
 endif
 
 ifeq ($(TOOL_CHAIN),gcc)
@@ -95,8 +95,6 @@ SYSTEM_FILE  = system_cm7ikmcu
 # MicroLIB option
 COMPILE_MICROLIB = 0
 
-# Small Multiply (Cortex-M0/M0+ has small multiplier option)
-COMPILE_SMALLMUL = 0
 
 ifeq ($(TOOL_CHAIN),ds6)
   ARM_TARGET = --target=arm-$(TARGET)
@@ -105,14 +103,16 @@ ifeq ($(TOOL_CHAIN),ds6)
 else
   CC_TOOL   = armcc
   ASM_TOOL = armasm
-  ARM_TARGET = -Otime
+  ARM_TARGET = -O3 -Otime
 endif
 
-ARM_CC_OPTIONS   = $(ARM_TARGET) -c -O1 -g -I $(DEVICE_DIR)/Include  -I$(SOFTWARE_DIR)/lib/common/CMSDK -I $(CORE_DIR) $(USER_DEFINE)
+ARM_CC_OPTIONS   = $(ARM_TARGET) -c -D_FPU -Ono_autoinline --enum_is_int -Ono_inline --thumb --apcs /interwork --fpmode=fast -g --data_reorder --diag_suppress=2874 -I $(DEVICE_DIR)/Include -I $(CORE_DIR) -I $(SOFTWARE_DIR)/lib/common/CMSDK  \
+		   -I $(SOFTWARE_DIR)/lib/Drivers/Include  \
+		   -I $(SOFTWARE_DIR)/lib/common/retarget $(USER_DEFINE)
 
 ARM_ASM_OPTIONS  = -g
 ARM_LINK_OPTIONS = "--keep=$(STARTUP_FILE).o(vectors)" "--first=$(STARTUP_FILE).o(vectors)" \
-		--rw_base 0x20000000 --ro_base 0x60400000 --map 
+		--rw_base 0x20000000 --ro_base 0x60400000 --map --datacompressor=off --info=inline
 
 ifeq ($(TOOL_CHAIN),ds6)
 	ARM_LINK_OPTIONS += --no_scatterload_enabled
@@ -132,10 +132,6 @@ ifeq ($(COMPILE_MICROLIB),1)
  ARM_LINK_OPTIONS += --library_type=microlib
 endif
 
-ifeq ($(COMPILE_SMALLMUL),1)
- # In Cortex-M0, small multiply takes 32 cycles
- ARM_CC_OPTIONS  += --multiply_latency=32
-endif
 
 # ---------------------------------------------------------------------------------------
 # gcc options
@@ -174,8 +170,17 @@ $(SYSTEM_FILE).o : $(DEVICE_DIR)/Source/$(SYSTEM_FILE).c $(DEPS_LIST)
 $(STARTUP_FILE).o : $(STARTUP_DIR)/$(STARTUP_FILE).c $(DEPS_LIST)
 	$(CC_TOOL) $(ARM_CC_OPTIONS) $(CPU_TYPE) $< -o  $@
 
-$(BOOTLOADER).ELF : $(BOOTLOADER).o $(SYSTEM_FILE).o $(STARTUP_FILE).o $(DEPS_LIST)
-	armlink $(ARM_LINK_OPTIONS) $(BOOTLOADER).o $(SYSTEM_FILE).o  $(STARTUP_FILE).o -o $@
+dma230.o: $(SOFTWARE_DIR)/lib/Drivers/Source/dma230.c $(DEPS_LIST)
+	$(CC_TOOL) $(ARM_CC_OPTIONS) $(CPU_TYPE) $< -o  $@
+
+retarget.o : $(SOFTWARE_DIR)/lib/common/retarget/retarget.c $(DEPS_LIST)
+	$(CC_TOOL) $(ARM_CC_OPTIONS) $(CPU_TYPE) $< -o  $@
+
+uart_stdout.o : $(SOFTWARE_DIR)/lib/common/retarget/uart_stdout.c $(DEPS_LIST)
+	$(CC_TOOL) $(ARM_CC_OPTIONS) $(CPU_TYPE) $< -o  $@
+
+$(BOOTLOADER).ELF : $(BOOTLOADER).o $(SYSTEM_FILE).o $(STARTUP_FILE).o retarget.o uart_stdout.o dma230.o $(DEPS_LIST)
+	armlink $(ARM_LINK_OPTIONS) $(BOOTLOADER).o $(SYSTEM_FILE).o  $(STARTUP_FILE).o retarget.o uart_stdout.o dma230.o -o $@
 
 $(BOOTLOADER).hex : $(BOOTLOADER).ELF $(DEPS_LIST)
 	fromelf --vhx --8x1 $< --output $@

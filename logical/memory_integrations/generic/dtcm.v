@@ -28,7 +28,7 @@ bit_ram #(
     .rd_o(D0TCMRDATA[7:0]),
     .wd_i(D0TCMWDATA[7:0]),
     .cs_i(D0TCMCS),
-    .we_i(D0TCMWR&D0TCMBYTEWR[0])
+    .we_i({8{D0TCMWR&D0TCMBYTEWR[0]}})
 );
 bit_ram #(
     .addr_bits(21),
@@ -41,7 +41,7 @@ bit_ram #(
     .rd_o(D0TCMRDATA[15:8]),
     .wd_i(D0TCMWDATA[15:8]),
     .cs_i(D0TCMCS),
-    .we_i(D0TCMWR&D0TCMBYTEWR[1])
+    .we_i({8{D0TCMWR&D0TCMBYTEWR[1]}})
 );
 bit_ram #(
     .addr_bits(21),
@@ -54,7 +54,7 @@ bit_ram #(
     .rd_o(D0TCMRDATA[23:16]),
     .wd_i(D0TCMWDATA[23:16]),
     .cs_i(D0TCMCS),
-    .we_i(D0TCMWR&D0TCMBYTEWR[2])
+    .we_i({8{D0TCMWR&D0TCMBYTEWR[2]}})
 );
 bit_ram #(
     .addr_bits(21),
@@ -67,7 +67,7 @@ bit_ram #(
     .rd_o(D0TCMRDATA[31:24]),
     .wd_i(D0TCMWDATA[31:24]),
     .cs_i(D0TCMCS),
-    .we_i(D0TCMWR&D0TCMBYTEWR[3])
+    .we_i({8{D0TCMWR&D0TCMBYTEWR[3]}})
 );
 bit_ram #(
     .addr_bits(21),
@@ -80,7 +80,7 @@ bit_ram #(
     .rd_o(D1TCMRDATA[7:0]),
     .wd_i(D1TCMWDATA[7:0]),
     .cs_i(D1TCMCS),
-    .we_i(D1TCMWR&D1TCMBYTEWR[0])
+    .we_i({8{D1TCMWR&D1TCMBYTEWR[0]}})
 );
 bit_ram #(
     .addr_bits(21),
@@ -93,7 +93,7 @@ bit_ram #(
     .rd_o(D1TCMRDATA[15:8]),
     .wd_i(D1TCMWDATA[15:8]),
     .cs_i(D1TCMCS),
-    .we_i(D1TCMWR&D1TCMBYTEWR[1])
+    .we_i({8{D1TCMWR&D1TCMBYTEWR[1]}})
 );
 bit_ram #(
     .addr_bits(21),
@@ -106,7 +106,7 @@ bit_ram #(
     .rd_o(D1TCMRDATA[23:16]),
     .wd_i(D1TCMWDATA[23:16]),
     .cs_i(D1TCMCS),
-    .we_i(D1TCMWR&D1TCMBYTEWR[2])
+    .we_i({8{D1TCMWR&D1TCMBYTEWR[2]}})
 );
 bit_ram #(
     .addr_bits(21),
@@ -119,7 +119,7 @@ bit_ram #(
     .rd_o(D1TCMRDATA[31:24]),
     .wd_i(D1TCMWDATA[31:24]),
     .cs_i(D1TCMCS),
-    .we_i(D1TCMWR&D1TCMBYTEWR[3])
+    .we_i({8{D1TCMWR&D1TCMBYTEWR[3]}})
 );
 
 
