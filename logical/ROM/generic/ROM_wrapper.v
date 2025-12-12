@@ -13,7 +13,7 @@
 
 module ROM_wrapper #(
     parameter    SYS_DATA_W     = 64,  // System Data Width
-    parameter    BOOTROM_ADDR_W = 12   // Size of Bootrom (Based on Address Width) - Default 2KB
+    parameter    BOOTROM_ADDR_W = 13   // Size of Bootrom (Based on Address Width) - Default 2KB
 )(
   input  wire                      HCLK,      // Clock
   input  wire                      HSEL,      // Device select

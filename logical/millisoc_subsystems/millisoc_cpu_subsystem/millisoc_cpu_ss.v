@@ -172,7 +172,7 @@ CORTEXM7INTEGRATIONMCU #(
     .CFGAHBPSZ(3'b001), // default 64MB
     .CFGSTCALIB(26'h2000000), // No alt reference clock
     // RESET CONFIGURATION PINS
-    .INITTCMEN(2'b10), // Enable DTCM
+    .INITTCMEN(2'b11), // Enable DTCM
     .INITRMWEN(2'b11), // Enable read-modify-write for both TCMs   
     .INITRETRYEN(2'b00), // Disable retry
     .INITAHBPEN(1'b1), // Enable AHB port

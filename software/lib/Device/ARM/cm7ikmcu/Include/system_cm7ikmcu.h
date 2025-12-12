@@ -61,4 +61,8 @@ extern                   void cache_enable     (void);
  */
 extern                   void cache_invalidate     (void);
 
+extern void TEST_PASS(void);
+extern void TEST_FAIL(void);
+
+
 #endif

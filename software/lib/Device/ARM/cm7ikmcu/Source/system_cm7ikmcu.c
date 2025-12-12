@@ -82,6 +82,7 @@ __asm void SystemInit (void)
   BX   lr;
 }
 
+
 /**
  * Enable Caches
  *
@@ -132,4 +133,14 @@ void fpu_enable(void)
   SCB->CPACR = value | 0x00F00000;
   __ISB();
   
+}
+
+void TEST_PASS(void) {
+  printf("\n** TEST PASSED **\n");
+  UartEndSimulation();
+}
+
+void TEST_FAIL(void) {
+  printf("\n** TEST FAILED **\n");
+  UartEndSimulation();
 }

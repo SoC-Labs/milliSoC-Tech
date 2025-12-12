@@ -170,6 +170,9 @@ $(SYSTEM_FILE).o : $(DEVICE_DIR)/Source/$(SYSTEM_FILE).c $(DEPS_LIST)
 $(STARTUP_FILE).o : $(STARTUP_DIR)/$(STARTUP_FILE).c $(DEPS_LIST)
 	$(CC_TOOL) $(ARM_CC_OPTIONS) $(CPU_TYPE) $< -o  $@
 
+SL_QPSI.o: $(SOFTWARE_DIR)/lib/Drivers/Source/SL_QSPI.c $(DEPS_LIST)
+	$(CC_TOOL) $(ARM_CC_OPTIONS) $(CPU_TYPE) $< -o  $@
+
 dma230.o: $(SOFTWARE_DIR)/lib/Drivers/Source/dma230.c $(DEPS_LIST)
 	$(CC_TOOL) $(ARM_CC_OPTIONS) $(CPU_TYPE) $< -o  $@
 
@@ -179,8 +182,8 @@ retarget.o : $(SOFTWARE_DIR)/lib/common/retarget/retarget.c $(DEPS_LIST)
 uart_stdout.o : $(SOFTWARE_DIR)/lib/common/retarget/uart_stdout.c $(DEPS_LIST)
 	$(CC_TOOL) $(ARM_CC_OPTIONS) $(CPU_TYPE) $< -o  $@
 
-$(BOOTLOADER).ELF : $(BOOTLOADER).o $(SYSTEM_FILE).o $(STARTUP_FILE).o retarget.o uart_stdout.o dma230.o $(DEPS_LIST)
-	armlink $(ARM_LINK_OPTIONS) $(BOOTLOADER).o $(SYSTEM_FILE).o  $(STARTUP_FILE).o retarget.o uart_stdout.o dma230.o -o $@
+$(BOOTLOADER).ELF : $(BOOTLOADER).o $(SYSTEM_FILE).o $(STARTUP_FILE).o retarget.o uart_stdout.o dma230.o SL_QPSI.o $(DEPS_LIST)
+	armlink $(ARM_LINK_OPTIONS) $(BOOTLOADER).o $(SYSTEM_FILE).o  $(STARTUP_FILE).o retarget.o uart_stdout.o dma230.o SL_QPSI.o -o $@
 
 $(BOOTLOADER).hex : $(BOOTLOADER).ELF $(DEPS_LIST)
 	fromelf --vhx --8x1 $< --output $@

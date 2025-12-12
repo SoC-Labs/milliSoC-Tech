@@ -55,7 +55,14 @@ __weak void NMI_Handler(void)
 
 __weak void HardFault_Handler(void)
 {
-  while(1);
+  printf("ERR: HardFault\n");
+  printf("CFSR: 0x%08X\n", SCB->CFSR);
+  printf("HFSR: 0x%08X\n", SCB->HFSR);
+  printf("ABFSR: 0x%08X\n", SCB->ABFSR);
+  printf("BFAR: 0x%08X\n", SCB->BFAR);
+  printf("MMFAR: 0x%08X\n", SCB->MMFAR);
+
+  UartEndSimulation();
 }
 
 __weak void SVC_Handler(void)

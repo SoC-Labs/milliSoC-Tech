@@ -228,7 +228,7 @@
         </MappedBlock>
         <MappedBlock>
           <InterfaceRef>QSPI_CFG</InterfaceRef>
-          <Offset>1140854784</Offset>
+          <Offset>1140916224</Offset>
           <Range>65536</Range>
           <Visibility>true</Visibility>
         </MappedBlock>
@@ -282,7 +282,7 @@
         </MappedBlock>
         <MappedBlock>
           <InterfaceRef>QSPI_CFG</InterfaceRef>
-          <Offset>1140854784</Offset>
+          <Offset>1140916224</Offset>
           <Range>65536</Range>
           <Visibility>true</Visibility>
         </MappedBlock>
@@ -419,8 +419,8 @@
                 &lt;/remap&gt;
             &lt;/range&gt;
             &lt;range&gt;
-                &lt;addr_max&gt;0x44010FFF&lt;/addr_max&gt;
-                &lt;addr_min&gt;0x44001000&lt;/addr_min&gt;
+                &lt;addr_max&gt;0x4401FFFF&lt;/addr_max&gt;
+                &lt;addr_min&gt;0x44010000&lt;/addr_min&gt;
                 &lt;remap&gt;
                     &lt;bit&gt;default&lt;/bit&gt;
                     &lt;present&gt;true&lt;/present&gt;
@@ -729,8 +729,8 @@
                 &lt;/remap&gt;
             &lt;/range&gt;
             &lt;range&gt;
-                &lt;addr_max&gt;0x44010FFF&lt;/addr_max&gt;
-                &lt;addr_min&gt;0x44001000&lt;/addr_min&gt;
+                &lt;addr_max&gt;0x4401FFFF&lt;/addr_max&gt;
+                &lt;addr_min&gt;0x44010000&lt;/addr_min&gt;
                 &lt;remap&gt;
                     &lt;bit&gt;default&lt;/bit&gt;
                     &lt;present&gt;true&lt;/present&gt;
@@ -1928,18 +1928,6 @@
     &lt;architecture&gt;
         &lt;link&gt;
             &lt;slave_if&gt;
-                &lt;name&gt;CM7&lt;/name&gt;
-                &lt;master_if&gt;QSPI_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
-                &lt;/master_if&gt;
-                &lt;master_if&gt;QSPI&lt;/master_if&gt;
-                &lt;master_if&gt;DMA_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
-                &lt;/master_if&gt;
-                &lt;master_if&gt;ROM&lt;/master_if&gt;
-                &lt;master_if&gt;apb_group0&lt;/master_if&gt;
-            &lt;/slave_if&gt;
-        &lt;/link&gt;
-        &lt;link&gt;
-            &lt;slave_if&gt;
                 &lt;name&gt;CPU_DMA&lt;/name&gt;
                 &lt;master_if&gt;QSPI&lt;/master_if&gt;
                 &lt;master_if&gt;ROM&lt;/master_if&gt;
@@ -1949,13 +1937,25 @@
         &lt;link&gt;
             &lt;slave_if&gt;
                 &lt;name&gt;ADP&lt;/name&gt;
+                &lt;master_if&gt;QSPI&lt;/master_if&gt;
                 &lt;master_if&gt;QSPI_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
                 &lt;/master_if&gt;
-                &lt;master_if&gt;QSPI&lt;/master_if&gt;
                 &lt;master_if&gt;DMA_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
                 &lt;/master_if&gt;
                 &lt;master_if&gt;ROM&lt;/master_if&gt;
                 &lt;master_if&gt;CPU_S&lt;/master_if&gt;
+                &lt;master_if&gt;apb_group0&lt;/master_if&gt;
+            &lt;/slave_if&gt;
+        &lt;/link&gt;
+        &lt;link&gt;
+            &lt;slave_if&gt;
+                &lt;name&gt;CM7&lt;/name&gt;
+                &lt;master_if&gt;QSPI&lt;/master_if&gt;
+                &lt;master_if&gt;QSPI_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
+                &lt;/master_if&gt;
+                &lt;master_if&gt;DMA_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
+                &lt;/master_if&gt;
+                &lt;master_if&gt;ROM&lt;/master_if&gt;
                 &lt;master_if&gt;apb_group0&lt;/master_if&gt;
             &lt;/slave_if&gt;
         &lt;/link&gt;

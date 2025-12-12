@@ -102,10 +102,11 @@ else
 endif
 
 ARM_CC_OPTIONS   = $(ARM_TARGET) -c -D_FPU -Ono_autoinline --enum_is_int -Ono_inline --thumb --apcs /interwork --fpmode=fast -g --data_reorder --diag_suppress=2874 -I $(DEVICE_DIR)/Include -I $(CORE_DIR) -I $(SOFTWARE_DIR)/lib/common/CMSDK \
-		   -I $(SOFTWARE_DIR)/common/retarget $(USER_DEFINE)
+		   -I $(SOFTWARE_DIR)/lib/Drivers/Include  \
+		   -I $(SOFTWARE_DIR)/lib/common/retarget $(USER_DEFINE)
 ARM_ASM_OPTIONS  = 
 ARM_LINK_OPTIONS = "--keep=$(STARTUP_FILE).o(vectors)" "--first=$(STARTUP_FILE).o(vectors)" \
-		--rw_base 0x20000000 --ro_base 0x60400000 --map --datacompressor=off --info=inline
+		--rw_base 0x20000000 --ro_base 0x000000 --map --datacompressor=off --info=inline
 
 ifeq ($(COMPILE_BIGEND),1)
  # Big Endian
