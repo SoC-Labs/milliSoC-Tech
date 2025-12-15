@@ -64,26 +64,21 @@ wire  PRESETn;
 
 // - APB for DMA
 wire        PCLKEN_DMA;
-wire        PSEL_DMA;
-wire        PEN_DMA;
-wire        PWRITE_DMA;
-wire [11:0] PADDR_DMA;
-wire [31:0] PWDATA_DMA;
-wire [31:0] PRDATA_DMA;
+wire [31:0] PADDR_DMA_CFG;
+wire [31:0] PWDATA_DMA_CFG;
+wire        PWRITE_DMA_CFG;
+wire [2:0]  PPROT_DMA_CFG;
+wire [3:0]  PSTRB_DMA_CFG;
+wire        PENABLE_DMA_CFG;
+wire        PSELx_DMA_CFG;
+wire [31:0] PRDATA_DMA_CFG;
+wire        PSLVERR_DMA_CFG;
+wire        PREADY_DMA_CFG;
 
-// - AHB from DMA to System Bus
-wire [31:0]  HADDR_DMA_SYS_BUS;
-wire [1:0]   HTRANS_DMA_SYS_BUS;
-wire         HWRITE_DMA_SYS_BUS;
-wire [2:0]   HSIZE_DMA_SYS_BUS;
-wire [2:0]   HBURST_DMA_SYS_BUS;
-wire [3:0]   HPROT_DMA_SYS_BUS;
-wire [31:0]  HWDATA_DMA_SYS_BUS;
-wire         HMASTLOCK_DMA_SYS_BUS;
-wire         HREADY_DMA_SYS_BUS;
-wire [31:0]  HRDATA_DMA_SYS_BUS;
-wire         HRESP_DMA_SYS_BUS;
-
+// - AXI from DMA to System Bus
+axi4 #(.DATA_W(64), .ID_W(), .ADDR_W(32)) DMA_AXI();
+wire [3:0]  DMA_awqos;
+wire [3:0]  DMA_arqos;
 
 // - AHB to QSPI
 wire        HSELx_QSPI;
@@ -196,10 +191,8 @@ wire [ 1:0]  CPU_BRESP;
 wire        CLKEN;
 wire        FCLKEN;
 wire        HCLKEN;
-wire        CLK1EN;
-wire        FCLK1EN;
-wire        HCLK1EN;
 wire        ETMCLKEN;
+wire        ACLK;
 
 wire        nSYSRESET;
 wire        SYSRESETREQ;
@@ -208,16 +201,23 @@ wire        CPUWAIT;
 wire        SWCLKTCK;
 wire        TRACECLKIN;
 wire        TRESETn;
+wire        ARESETn;
 
+
+// Interrupts
+wire [239:0]    CPU_IRQs;
+wire [3:0]      SYS_DMA_DONE_IRQ;
+wire            SYS_DMA_COMB_IRQ;
+
+assign CPU_IRQs[3:0]=SYS_DMA_DONE_IRQ[3:0];
+assign CPU_IRQs[4]=SYS_DMA_COMB_IRQ;
+assign CPU_IRQs[239:3]=235'd0;
 
 // Tie offs (may be used later)
 assign PCLKEN_DMA = 1'b1;
 assign CLKEN = 1'b1;
 assign FCLKEN = 1'b1;
 assign HCLKEN = 1'b1;
-assign CLK1EN = 1'b1;
-assign FCLK1EN = 1'b1;
-assign HCLK1EN = 1'b1;
 assign ETMCLKEN = 1'b1;
 assign nSYSRESET = nPORESET;
 assign nDBGETMRESET = nPORESET;
@@ -226,17 +226,20 @@ assign CPUWAIT = 1'b0;
 assign CPU_ACLKEN  = 1'b1;
 assign HCLK = FCLK;
 assign PCLK = FCLK;
+assign ACLK = FCLK;
 assign HRESETn = nPORESET;
 assign PRESETn = nPORESET;
+assign ARESETn = nPORESET;
+
+// Permanent Tie offs
+assign DMA_AXI.AWLOCK=1'b0;
+assign DMA_AXI.ARLOCK=1'b0;
 
 millisoc_cpu_ss u_millisoc_cpu_ss (
     .FCLK(FCLK),
     .CLKEN(CLKEN),
     .FCLKEN(FCLKEN),
     .HCLKEN(HCLKEN),
-    .CLK1EN(CLK1EN),
-    .FCLK1EN(FCLK1EN),
-    .HCLK1EN(HCLK1EN),
     .ETMCLKEN(ETMCLKEN),
     .nSYSRESET(nSYSRESET),
     .SYSRESETREQ(SYSRESETREQ),
@@ -317,45 +320,147 @@ millisoc_cpu_ss u_millisoc_cpu_ss (
     .BREADY(CPU_BREADY),
     .BVALID(CPU_BVALID),
     .BID(CPU_BID),
-    .BRESP(CPU_BRESP)
+    .BRESP(CPU_BRESP),
+
+    .IRQ(CPU_IRQs)
 );
 
 
-sldma230 #(
-    .SYS_ADDR_W (32),
-    .SYS_DATA_W (32),
-    .CFG_ADDR_W (12),
-    .CHANNEL_NUM(2)
-) u_sldma230 (
-    .HCLK        (HCLK        ),
-    .HRESETn     (HRESETn     ),
+ada_top_sldma350 u_dma350 (
+    .clk(ACLK),
+    .resetn(ARESETn),
+    .aclken_m0(1'b1),
+    .pclken(PCLKEN_DMA),
 
-    // AHB Lite Port
-    .HADDR       (HADDR_DMA_SYS_BUS),
-    .HTRANS      (HTRANS_DMA_SYS_BUS),
-    .HWRITE      (HWRITE_DMA_SYS_BUS),
-    .HSIZE       (HSIZE_DMA_SYS_BUS),
-    .HBURST      (HBURST_DMA_SYS_BUS),
-    .HPROT       (HPROT_DMA_SYS_BUS),
-    .HWDATA      (HWDATA_DMA_SYS_BUS),
-    .HMASTLOCK   (HMASTLOCK_DMA_SYS_BUS),
-    .HRDATA      (HRDATA_DMA_SYS_BUS),
-    .HREADY      (HREADY_DMA_SYS_BUS),
-    .HRESP       (HRESP_DMA_SYS_BUS),
+    .clk_qreqn(1'b1),
+    .clk_qacceptn(),
+    .clk_qdeny(),
+    .clk_qactive(),
 
-    // APB Configurtation Port
-    .PCLKEN      (PCLKEN_DMA),
-    .PSEL        (PSEL_DMA),
-    .PEN         (PEN_DMA),
-    .PWRITE      (PWRITE_DMA),
-    .PADDR       (PADDR_DMA),
-    .PWDATA      (PWDATA_DMA),
-    .PRDATA      (PRDATA_DMA),
+    .preq(1'b0),
+    .pstate(4'b1000),
+    .paccept(),
+    .pdeny(),
+    .pactive(),
 
-    // DMA Request and Status Port
-    .DMA_REQ     (1'b0        ),
-    .DMA_DONE    (            ),
-    .DMA_ERR     (            )
+    .pwakeup(1'b1),
+    .pdebug(1'b0),
+
+    .psel(PSELx_DMA_CFG),
+    .penable(PENABLE_DMA_CFG),
+    .pprot(PPROT_DMA_CFG),
+    .pwrite(PWRITE_DMA_CFG),
+    .paddr(PADDR_DMA_CFG),
+    .pwdata(PWDATA_DMA_CFG),
+    .pstrb(PSTRB_DMA_CFG),
+    .pready(PREADY_DMA_CFG),
+    .pslverr(PSLVERR_DMA_CFG),
+    .prdata(PRDATA_DMA_CFG),
+
+    .awakeup_m0(),
+
+    .awid_m0(DMA_AXI.AWID),
+    .awaddr_m0(DMA_AXI.AWADDR),
+    .awlen_m0(DMA_AXI.AWLEN),
+    .awsize_m0(DMA_AXI.AWSIZE),
+    .awburst_m0(DMA_AXI.AWBURST),
+    .awcache_m0(DMA_AXI.AWCACHE),
+    .awprot_m0(DMA_AXI.AWPROT),
+    .awvalid_m0(DMA_AXI.AWVALID),
+    .awready_m0(DMA_AXI.AWREADY),
+
+    .awqos_m0(DMA_awqos),
+
+    .arid_m0(DMA_AXI.ARID),
+    .araddr_m0(DMA_AXI.ARADDR),
+    .arlen_m0(DMA_AXI.ARLEN),
+    .arsize_m0(DMA_AXI.ARSIZE),
+    .arburst_m0(DMA_AXI.ARBURST),
+    .arcache_m0(DMA_AXI.ARCACHE),
+    .arprot_m0(DMA_AXI.ARPROT),
+    .arvalid_m0(DMA_AXI.ARVALID),
+    .arready_m0(DMA_AXI.ARREADY),
+
+    .arqos_m0(DMA_arqos),
+
+    .wdata_m0(DMA_AXI.WDATA),
+    .wstrb_m0(DMA_AXI.WSTRB),
+    .wlast_m0(DMA_AXI.WLAST),
+    .wvalid_m0(DMA_AXI.WVALID),
+    .wready_m0(DMA_AXI.WREADY),
+
+    .rid_m0(DMA_AXI.RID),
+    .rdata_m0(DMA_AXI.RDATA),
+    .rresp_m0(DMA_AXI.RRESP),
+    .rlast_m0(DMA_AXI.RLAST),
+    .rvalid_m0(DMA_AXI.RVALID),
+    .rready_m0(DMA_AXI.RREADY),
+
+    .rpoison_m0(1'b0),
+
+    .bid_m0(DMA_AXI.BID),
+    .bresp_m0(DMA_AXI.BRESP),
+    .bvalid_m0(DMA_AXI.BVALID),
+    .bready_m0(DMA_AXI.BREADY),
+
+    .awdomain_m0(),
+    .awinner_m0(),
+    .ardomain_m0(),
+    .arcmdlink_m0(),
+    .arinner_m0(),
+
+    .trig_in_0_req(1'b0),
+    .trig_in_0_req_type(),
+    .trig_in_0_ack(),
+    .trig_in_0_ack_type(),
+
+    .trig_in_1_req(1'b0),
+    .trig_in_1_req_type(),
+    .trig_in_1_ack(),
+    .trig_in_1_ack_type(),
+
+    .trig_in_2_req(1'b0),
+    .trig_in_2_req_type(),
+    .trig_in_2_ack(),
+    .trig_in_2_ack_type(),
+
+    .trig_in_3_req(1'b0),
+    .trig_in_3_req_type(),
+    .trig_in_3_ack(),
+    .trig_in_3_ack_type(),
+
+    .trig_out_0_req(),
+    .trig_out_0_ack(1'b0),
+    .trig_out_1_req(),
+    .trig_out_1_ack(1'b0),
+    .trig_out_2_req(),
+    .trig_out_2_ack(1'b0),
+    .trig_out_3_req(),
+    .trig_out_3_ack(1'b0),
+
+    .irq_channel(SYS_DMA_DONE_IRQ),
+    .irq_comb_nonsec(SYS_DMA_COMB_IRQ),
+
+    .allch_stop_req_nonsec(1'b0),
+    .allch_stop_ack_nonsec(),
+    .allch_pause_req_nonsec(1'b0),
+    .allch_pause_ack_nonsec(),
+
+    .ch_enabled(),
+    .ch_err(),
+    .ch_stopped(),
+    .ch_paused(),
+    .ch_priv(),
+
+    .halt_req(1'b0),
+    .restart_req(1'b0),
+    .halted(),
+
+    // Boot not used
+    .boot_en(1'b0),
+    .boot_addr(30'd0),
+    .boot_memattr(8'h00),
+    .boot_shareattr(2'h0)
 );
 
 millisoc_peripheral_subsystem u_millisoc_peripheral_subsystem (
@@ -443,7 +548,7 @@ ROM_wrapper u_ROM_wrapper(
     .HCLK(FCLK),
 
     .HSEL(HSELx_ROM),
-    .HADDR(HADDR_ROM[12:0]),
+    .HADDR(HADDR_ROM[14:0]),
     .HTRANS(HTRANS_ROM),
     .HSIZE(HSIZE_ROM),
     .HWRITE(HWRITE_ROM),
@@ -494,14 +599,16 @@ nic400_millisoc_main u_nic400_millisoc_main (
     .HREADY_ROM(HREADY_ROM),
     .HRESP_ROM(HRESP_ROM),
 
-    .PADDR_DMA_CFG(PADDR_DMA),
-    .PWDATA_DMA_CFG(PWDATA_DMA),
-    .PWRITE_DMA_CFG(PWRITE_DMA),
-    .PENABLE_DMA_CFG(PEN_DMA),
-    .PSELx_DMA_CFG(PSEL_DMA),
-    .PRDATA_DMA_CFG(PRDATA_DMA),
-    .PSLVERR_DMA_CFG(1'b0),
-    .PREADY_DMA_CFG(1'b1),
+    .PADDR_DMA_CFG(PADDR_DMA_CFG),
+    .PWDATA_DMA_CFG(PWDATA_DMA_CFG),
+    .PWRITE_DMA_CFG(PWRITE_DMA_CFG),
+    .PPROT_DMA_CFG(PPROT_DMA_CFG),
+    .PSTRB_DMA_CFG(PSTRB_DMA_CFG),
+    .PENABLE_DMA_CFG(PENABLE_DMA_CFG),
+    .PSELx_DMA_CFG(PSELx_DMA_CFG),
+    .PRDATA_DMA_CFG(PRDATA_DMA_CFG),
+    .PSLVERR_DMA_CFG(PSLVERR_DMA_CFG),
+    .PREADY_DMA_CFG(PREADY_DMA_CFG),
 
     .PADDR_QSPI_CFG(PADDR_QSPI_CFG),
     .PWDATA_QSPI_CFG(PWDATA_QSPI_CFG),
@@ -561,16 +668,43 @@ nic400_millisoc_main u_nic400_millisoc_main (
     .RVALID_CM7(CPU_RVALID),
     .RREADY_CM7(CPU_RREADY),
 
-    .HADDR_CPU_DMA(HADDR_DMA_SYS_BUS),
-    .HTRANS_CPU_DMA(HTRANS_DMA_SYS_BUS),
-    .HWRITE_CPU_DMA(HWRITE_DMA_SYS_BUS),
-    .HSIZE_CPU_DMA(HSIZE_DMA_SYS_BUS),
-    .HBURST_CPU_DMA(HBURST_DMA_SYS_BUS),
-    .HPROT_CPU_DMA(HPROT_DMA_SYS_BUS),
-    .HWDATA_CPU_DMA(HWDATA_DMA_SYS_BUS),
-    .HRDATA_CPU_DMA(HRDATA_DMA_SYS_BUS),
-    .HREADY_CPU_DMA(HREADY_DMA_SYS_BUS),
-    .HRESP_CPU_DMA(HRESP_DMA_SYS_BUS),
+    .AWID_DMA(DMA_AXI.AWID),
+    .AWADDR_DMA(DMA_AXI.AWADDR),
+    .AWLEN_DMA(DMA_AXI.AWLEN),
+    .AWSIZE_DMA(DMA_AXI.AWSIZE),
+    .AWBURST_DMA(DMA_AXI.AWBURST),
+    .AWLOCK_DMA(DMA_AXI.AWLOCK),
+    .AWCACHE_DMA(DMA_AXI.AWCACHE),
+    .AWPROT_DMA(DMA_AXI.AWPROT),
+    .AWVALID_DMA(DMA_AXI.AWVALID),
+    .AWREADY_DMA(DMA_AXI.AWREADY),
+    .WDATA_DMA(DMA_AXI.WDATA),
+    .WSTRB_DMA(DMA_AXI.WSTRB),
+    .WLAST_DMA(DMA_AXI.WLAST),
+    .WVALID_DMA(DMA_AXI.WVALID),
+    .WREADY_DMA(DMA_AXI.WREADY),
+    .BID_DMA(DMA_AXI.BID),
+    .BRESP_DMA(DMA_AXI.BRESP),
+    .BVALID_DMA(DMA_AXI.BVALID),
+    .BREADY_DMA(DMA_AXI.BREADY),
+    .ARID_DMA(DMA_AXI.ARID),
+    .ARADDR_DMA(DMA_AXI.ARADDR),
+    .ARLEN_DMA(DMA_AXI.ARLEN),
+    .ARSIZE_DMA(DMA_AXI.ARSIZE),
+    .ARBURST_DMA(DMA_AXI.ARBURST),
+    .ARLOCK_DMA(DMA_AXI.ARLOCK),
+    .ARCACHE_DMA(DMA_AXI.ARCACHE),
+    .ARPROT_DMA(DMA_AXI.ARPROT),
+    .ARVALID_DMA(DMA_AXI.ARVALID),
+    .ARREADY_DMA(DMA_AXI.ARREADY),
+    .RID_DMA(DMA_AXI.RID),
+    .RDATA_DMA(DMA_AXI.RDATA),
+    .RRESP_DMA(DMA_AXI.RRESP),
+    .RLAST_DMA(DMA_AXI.RLAST),
+    .RVALID_DMA(DMA_AXI.RVALID),
+    .RREADY_DMA(DMA_AXI.RREADY),
+    .AWQOS_DMA(DMA_awqos),
+    .ARQOS_DMA(DMA_arqos),
 
     .clk0clk(FCLK),
     .clk0clken(1'b1),

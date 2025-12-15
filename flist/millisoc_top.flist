@@ -14,6 +14,8 @@ $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_peripheral_sub
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_peripheral_subsystem/extio8x4_sync.v
 
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/interfaces/ahb_if.sv
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/interfaces/axi4_if.sv
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/interfaces/axi3_if.sv
 
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/ROM/generic/ROM_wrapper.v
 
@@ -24,6 +26,6 @@ $(SOCLABS_MILLISOC_TECH_DIR)/logical/ROM/generic/ROM_wrapper.v
 -f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/Corstone101.flist
 -f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/SoCDebug_tech.flist
 
--f $(SOCLABS_SLDMA230_TECH_DIR)/flist/sldma230_ip.flist
+-f $(SOCLABS_SLDMA350_TECH_DIR)/flist/dma350_axi_millisoc.flist
 
 -f $(SOCLABS_AHB_QSPI_DIR)/flist/Top/ahb_QSPI_SIM.flist

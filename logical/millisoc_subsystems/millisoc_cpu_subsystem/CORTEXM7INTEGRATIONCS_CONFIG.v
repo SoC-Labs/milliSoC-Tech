@@ -75,7 +75,7 @@ parameter MPU = 8,
 // n can be between 1 and 240 (inclusive)
 // The lower n bits of the IRQ[239:0] bus are implemented
 // Note that this parameter does not affect NMI (which is always implemented)
-parameter IRQNUM = 32,
+parameter IRQNUM = 240,
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------

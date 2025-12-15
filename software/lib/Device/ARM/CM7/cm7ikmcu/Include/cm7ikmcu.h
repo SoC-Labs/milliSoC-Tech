@@ -41,17 +41,11 @@ typedef enum IRQn
   SysTick_IRQn               = -1,     /*!< 15 Cortex M7 System Tick Interrupt                   */
 
 /******  CM7IKMCU Cortex M7 specific Interrupt Numbers ******************************************/
-  GPIO_IRQn                  = 0,      /*!< GPIO Interrupt                                        */
-                                       /* if GPIO Interrupt is changed from default of 0,         */
-                                       /* ensure that all GPIOINT feeds in to new GPIO_IRQn.      */
-                                       /* Also change vector table in boot_cm7ikmcu.c so that    */
-                                       /* GPIO_IRQHandler is correctly set for new GPIO_IRQn.     */
-                                       /*                                                         */
-                                       /*!< maximum of 32 Interrupts are possible                 */
-  CM7IKMCU_IRQ01_IRQn         = 1,
-  CM7IKMCU_IRQ02_IRQn         = 2,
-  CM7IKMCU_IRQ03_IRQn         = 3,
-  CM7IKMCU_IRQ04_IRQn         = 4,
+  DMA_DONE_0_IRQn             = 0,      /*!< System DMA channel 0 done Interrupt                */
+  DMA_DONE_1_IRQn             = 1,      /*!< System DMA channel 1 done Interrupt                */
+  DMA_DONE_3_IRQn             = 2,      /*!< System DMA channel 2 done Interrupt                */
+  DMA_DONE_4_IRQn             = 3,      /*!< System DMA channel 3 done Interrupt                */
+  DMA_COMB_IRQn               = 4,      /*!< System DMA combined Interrupt                */
   CM7IKMCU_IRQ05_IRQn         = 5,
   CM7IKMCU_IRQ06_IRQn         = 6,
   CM7IKMCU_IRQ07_IRQn         = 7,
@@ -530,26 +524,6 @@ typedef struct
 #define TPIU_PIN_TRACEPORT        0          /*!< TPIU Selected Pin Protocol Parallel Port  */
 #define TPIU_PIN_SWO_MANCHESTER   1          /*!< TPIU Selected Pin Protocol SWO Manchester */
 #define TPIU_PIN_SWO_NRZ          2          /*!< TPIU Selected Pin Protocol SWO NRZ (uart) */
-
-/******************************************************************************/
-/*                Device Specific Peripheral registers structures             */
-/******************************************************************************/
-
-/*--------------------- General Purpose Input and Ouptut ---------------------*/
-typedef union
-{
-  __IO uint32_t WORD;
-  __IO uint16_t HALFWORD[2];
-  __IO uint8_t  BYTE[4];
-} GPIO_Data_TypeDef;
-
-typedef struct
-{
-  GPIO_Data_TypeDef DATA [256];
-  GPIO_Data_TypeDef DIR;
-  uint32_t RESERVED[3];
-  GPIO_Data_TypeDef IE;
-} GPIO_TypeDef;
 
 /******************************************************************************/
 /*          CoreSight and other Peripheral memory map                         */

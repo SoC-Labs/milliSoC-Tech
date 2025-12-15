@@ -2,14 +2,12 @@
 #include "CMSDK.h"
 #include "uart_stdout.h"
 #include <stdio.h>
-#include "dma230.h"
+#include "ada_dma_command_lib.h"
 #include "SL_QSPI.h"
+#include <inttypes.h>
 
-void dma_data_struct_init(void);
 int FlashInit(void);
 int DmaMemcpy(void);
-void dma_memory_copy (unsigned int src, unsigned int dest, unsigned int size, unsigned int num);
-
 void start_main_code(void);
 
 int FlashInit(void){
@@ -24,32 +22,20 @@ int FlashInit(void){
 }
 
 
-int DmaMemcpy(void){
-  unsigned int i;
-  dma_pl230_init(1);
-  DMA_PL230_DMAC->CHNL_ENABLE_SET = (1<<0); /* Enable channel 0 */
-  for(i=0;i<0x1000;i=i+0x1000){
-    dma_memory_copy(FLASH_BASE+i,ITCM_BASE+i,2,0x400);
-    printf("Cpy: 0x%05X / 0x%05X\n",i+0x1000,ITCM_SIZE);
-    while(dma_pl230_channel_active(1)==0){;}
-    while(dma_pl230_channel_active(1)!=0){;}
-  }
-
-  return 0;
-}
-
 int main (void)
 {
   // STDOUT init
   UartStdOutInit();
 
   printf("\nSoCLabs MilliSoC'25 ARM-CM7\n");
+  printf("Bootloader starting...\n");
 
   FlashInit();
   printf("Preload ITCM...\n");
   DmaMemcpy();
 
-  printf("Enable ITCM\n\n");
+  printf("Start main program\n\n");
+  printf("***********************\n");
 
   //EnableITCM();
   __DSB();
@@ -69,34 +55,117 @@ __asm void start_main_code(void){
   LDR   R1,[R0, #4]; //; Get initial PC value
   BX    R1;
 }
-/* --------------------------------------------------------------- */
-/*  DMA memory copy                                                */
-/* --------------------------------------------------------------- */
-void dma_memory_copy (unsigned int src, unsigned int dest, unsigned int size, unsigned int num)
+
+int DmaMemcpy(void){
+// Define structures for the tests
+  // Note: Command and channel parameters can be modified to the desired settings
+
+  // Set the DMA channel related parameters
+  // Channel Priority is '0' - Lowest Priority
+  // Cleaning DMA Channel registers at the end of the command is enabled
+  // Reloading initial register values at the end of the command is disabled
+  // STATUS_DONE status flag is asserted at the end of the command.
+  // Automatic pause request at the end of the command is disabled
+  // Maximum source and destination burst lengths sent by the DMA are 15+1=16 (Can be limited by FIFO size)
+  AdaChannelSettingsType ch_settings = {
+    .CHPRIO         = 15,
+    .CLEARCMD       = 1,
+    .REGRELOADTYPE  = RELOAD_DISABLED,
+    .DONETYPE       = DONETYPE_EOF_CMD,
+    .DONEPAUSEEN    = 0,
+    .SRCMAXBURSTLEN = 15,
+    .DESMAXBURSTLEN = 15
+  };
+
+  // Set the attributes of the read AXI transactions sent by the DMA
+  // These settings affects the ARINNER[3:0], AWINNER[3:0], ARCACHE[3:0], AWCACHE[3:0] and AxDOMAIN[1:0] attributes
+  // of the AXI transactions
+  // This command uses Normal memory, Non-Cacheable, Bufferable, System-shareable AXI attributes
+  // ARINNER[3:0] = 4'b0011, AWINNER[3:0] = 4'b0011, ARCACHE[3:0] = 4'b0011, AWCACHE[3:0] = 4'b0011, AxDOMAIN[1:0] = 2'b11
+  // More information about the AXI attribute settings can be found in the TRM
+  // The command uses non-secure, non-privileged AXI read transactions
+  AdaChannelSrcAttrType ch_srcattr = {
+    .SRCMEMATTRLO  = 4,
+    .SRCMEMATTRHI  = 4,
+    .SRCSHAREATTR  = 0,
+    .SRCNONSECATTR = 1,
+    .SRCPRIVATTR   = 0
+  };
+
+  // Set the attributes of the write AXI transactions sent by the DMA
+  // These settings affects the ARINNER[3:0], AWINNER[3:0], ARCACHE[3:0], AWCACHE[3:0] and AxDOMAIN[1:0] attributes
+  // of the AXI transactions
+  // This command uses Normal memory, Non-Cacheable, Bufferable, System-shareable AXI attributes
+  // ARINNER[3:0] = 4'b0011, AWINNER[3:0] = 4'b0011, ARCACHE[3:0] = 4'b0011, AWCACHE[3:0] = 4'b0011, AxDOMAIN[1:0] = 2'b11
+  // More information about the AXI attribute settings can be found in the TRM
+  // The command uses non-secure, non-privileged AXI write transactions
+  AdaChannelDesAttrType ch_desattr = {
+    .DESMEMATTRLO  = 4,
+    .DESMEMATTRHI  = 4,
+    .DESSHAREATTR  = 0,
+    .DESNONSECATTR = 1,
+    .DESPRIVATTR   = 0
+  };
+
+  // Set the attributes of the read AXI transactions used for the command link related transfers
+  AdaChannelLinkAttrType ch_linkattr = {
+    .LINKMEMATTRLO = 4,
+    .LINKMEMATTRHI = 4,
+    .LINKSHAREATTR = 0
+  };
+
+  // Set the basic command parameters
+  // The command uses the defined FLASH_BASE as source address, ITCM_BASE as destination address
+  // the defined DATA_SIZE as source and destination data (X)size and 64 bit transaction size
+  AdaBaseCommandType command_base = {
+    .SRCADDR  = FLASH_BASE, // Read from M0 interface
+    .DESADDR  = ITCM_BASE, // Write to M0 interface
+    .SRCXSIZE = ITCM_SIZE/8,
+    .DESXSIZE = ITCM_SIZE/8,
+    .TRANSIZE = BITS_64
+  };
+
+  // Set the increment of source and destination addresses
+  // The source and destination address increments are 1
+  Ada1DIncrCommandType command_1d_incr = {
+    .SRCXADDRINC = 1,           // Autoincrement by transaction size
+    .DESXADDRINC = 1            // Autoincrement by transaction size
+  };
+
+  // Enable/disable the interupts of the channel
+  // Error and done interrupts are enabled
+  AdaIrqEnType ch_irqs = {
+    .INTREN_DONE     = 1,
+    .INTREN_ERR      = 1,
+    .INTREN_DISABLED = 0,
+    .INTREN_STOPPED  = 0
+  };
+
+
+  AdaChannelInit(ch_settings, ch_srcattr, ch_desattr, 0, SECURE);
+  Ada1DIncrCommand(command_base, command_1d_incr, 0, SECURE);
+  AdaSetIntEn(ch_irqs, 0, SECURE);
+
+  NVIC_EnableIRQ(DMA_DONE_0_IRQn);
+  __enable_irq();
+
+  AdaEnable(0, SECURE);
+  __WFI();
+
+  NVIC_DisableIRQ(DMA_DONE_0_IRQn);
+
+  return 0;
+
+}
+
+void DMA0_IRQHandler(void)
 {
-  unsigned long src_end_pointer =  src + ((1<<size)*(num-1));
-  unsigned long dst_end_pointer = dest + ((1<<size)*(num-1));
-  unsigned long control         = (size << 30) |  /* dst_inc */
-                                  (size << 28) |  /* dst_size */
-                                  (size << 26) |  /* src_inc */
-                                  (size << 24) |  /* src_size */
-                                  (size << 21) |  /* dst_prot_ctrl - HPROT[3:1] */
-                                  (size << 18) |  /* src_prot_ctrl - HPROT[3:1] */
-//                                  (0    << 14) |  /* R_power */
-                                  (4    << 14) |  /* R_power set for up to 16 transfers */
-                                  ((num-1)<< 4) | /* n_minus_1 */
-                                  (0    <<  3) |  /* next_useburst */
-                                  (2    <<  0) ;  /* cycle_ctrl - auto */
-
-  dma_pl230_table->Primary->SrcEndPointer  =  (unsigned char*)(src_end_pointer);
-  dma_pl230_table->Primary->DstEndPointer =   (unsigned char*)(dst_end_pointer);
-  dma_pl230_table->Primary->Control        =  (control        );
-  /* Debugging printfs: */
-  /*printf ("SrcEndPointer  = %x\n", dma_data->Primary->SrcEndPointer);*/
-  /*printf ("DestEndPointer = %x\n", dma_data->Primary->DestEndPointer);*/
-
-  DMA_PL230_DMAC->CHNL_ENABLE_SET = (1<<0); /* Enable channel 0 */
-  DMA_PL230_DMAC->CHNL_SW_REQUEST = (1<<0); /* request channel 0 DMA */
-
-  return;
+  __disable_irq();
+  // Check the source of the interrupt and clear interrupts
+  AdaStatType ST = AdaReadStatus(0, SECURE);
+  if (ST.STAT_DONE == 1) {
+    AdaClearChDone(0, SECURE);
+  } else {
+    printf("Unknown IRQ on CH0!\n");
+  }
 }

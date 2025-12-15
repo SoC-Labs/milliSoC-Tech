@@ -23,7 +23,7 @@
 # Cortex-M System Design Kit software compilation make file
 #
 #-----------------------------------------------------------------------------
-CPU_PRODUCT = CORTEX_M7
+CPU_PRODUCT ?= CORTEX_M7
 
 TARGET = arm-none-eabi
 # Shared software directory
@@ -31,16 +31,26 @@ SOFTWARE_DIR = $(SOCLABS_MILLISOC_TECH_DIR)/software
 CMSIS_DIR    = $(SOFTWARE_DIR)/lib/CMSIS
 CORE_DIR     = $(CMSIS_DIR)/include
 
-DEVICE_DIR   = $(SOFTWARE_DIR)/lib/Device/ARM/cm7ikmcu
+ifeq ($(CPU_TYPE),CM7)
+	DEVICE_DIR   = $(SOFTWARE_DIR)/lib/Device/ARM/CM7/cm7ikmcu
+else ifeq ($(CPU_TYPE), CM55)
+	DEVICE_DIR   = $(SOFTWARE_DIR)/lib/Device/ARM/CM55/cm7ikmcu
+
+endif
 
 # Program file
-TESTNAME     = hello
+TESTNAME     ?= hello
+TEST_DIR 	 = $(SOFTWARE_DIR)/src/$(TESTNAME)
 
 # Endian Option
 COMPILE_BIGEND = 0
 
 # Configuration
-USER_DEFINE    = -DCORTEX_M7
+ifeq ($(CPU_TYPE), CM7)
+	USER_DEFINE    = -DCORTEX_M7
+else ifeq ($(CPU_TYPE), CM55)
+	USER_DEFINE    = -DCORTEX_M55
+endif
 
 DEPS_LIST       = makefile
 
@@ -48,7 +58,7 @@ DEPS_LIST       = makefile
 TOOL_CHAIN      = ds5
 
 ifeq ($(TOOL_CHAIN),ds5)
-    CPU_TYPE        = --cpu=Pelican.fp
+    CPU_TYPE        = --cpu=Cortex-M7.fp.sp
 endif
 
 ifeq ($(TOOL_CHAIN),ds6)
@@ -147,32 +157,32 @@ all: all_$(TOOL_CHAIN)
 
 # ---------------------------------------------------------------------------------------
 # DS-5
-all_ds5 : $(TESTNAME).hex $(TESTNAME).lst
-all_ds6 : $(TESTNAME).hex $(TESTNAME).lst
+all_ds5 : $(TEST_DIR)/$(TESTNAME).hex $(TEST_DIR)/$(TESTNAME).lst
+all_ds6 : $(TEST_DIR)/$(TESTNAME).hex $(TEST_DIR)/$(TESTNAME).lst
 
-$(TESTNAME).o :  $(TESTNAME).c $(DEPS_LIST)
+$(TEST_DIR)/$(TESTNAME).o :  $(TEST_DIR)/$(TESTNAME).c $(DEPS_LIST)
 	$(CC_TOOL) $(ARM_CC_OPTIONS) $(CPU_TYPE) $< -o  $@
 
-$(SYSTEM_FILE).o : $(DEVICE_DIR)/Source/$(SYSTEM_FILE).c $(DEPS_LIST)
+$(TEST_DIR)/$(SYSTEM_FILE).o : $(DEVICE_DIR)/Source/$(SYSTEM_FILE).c $(DEPS_LIST)
 	$(CC_TOOL) $(ARM_CC_OPTIONS) $(CPU_TYPE) $< -o  $@
 
-retarget.o : $(SOFTWARE_DIR)/lib/common/retarget/retarget.c $(DEPS_LIST)
+$(TEST_DIR)/retarget.o : $(SOFTWARE_DIR)/lib/common/retarget/retarget.c $(DEPS_LIST)
 	$(CC_TOOL) $(ARM_CC_OPTIONS) $(CPU_TYPE) $< -o  $@
 
-uart_stdout.o : $(SOFTWARE_DIR)/lib/common/retarget/uart_stdout.c $(DEPS_LIST)
+$(TEST_DIR)/uart_stdout.o : $(SOFTWARE_DIR)/lib/common/retarget/uart_stdout.c $(DEPS_LIST)
 	$(CC_TOOL) $(ARM_CC_OPTIONS) $(CPU_TYPE) $< -o  $@
 
-$(STARTUP_FILE).o : $(STARTUP_DIR)/$(STARTUP_FILE).c $(DEPS_LIST)
+$(TEST_DIR)/$(STARTUP_FILE).o : $(STARTUP_DIR)/$(STARTUP_FILE).c $(DEPS_LIST)
 	$(CC_TOOL) $(ARM_CC_OPTIONS) $(CPU_TYPE) $< -o  $@
 
-$(TESTNAME).ELF : $(TESTNAME).o $(SYSTEM_FILE).o $(STARTUP_FILE).o retarget.o uart_stdout.o
-	armlink $(ARM_LINK_OPTIONS) $(TESTNAME).o $(SYSTEM_FILE).o  $(STARTUP_FILE).o retarget.o uart_stdout.o -o $@
+$(TEST_DIR)/$(TESTNAME).ELF : $(TEST_DIR)/$(TESTNAME).o $(TEST_DIR)/$(SYSTEM_FILE).o $(TEST_DIR)/$(STARTUP_FILE).o $(TEST_DIR)/retarget.o $(TEST_DIR)/uart_stdout.o
+	armlink $(ARM_LINK_OPTIONS) $(TEST_DIR)/$(TESTNAME).o $(TEST_DIR)/$(SYSTEM_FILE).o  $(TEST_DIR)/$(STARTUP_FILE).o $(TEST_DIR)/retarget.o $(TEST_DIR)/uart_stdout.o -o $@
 
-$(TESTNAME).hex : $(TESTNAME).ELF
-	fromelf --bin $< --output $(TESTNAME).bin
+$(TEST_DIR)/$(TESTNAME).hex : $(TEST_DIR)/$(TESTNAME).ELF
+	fromelf --bin $< --output $(TEST_DIR)/$(TESTNAME).bin
 	fromelf --vhx --8x1 $< --output $@
 
-$(TESTNAME).lst : $(TESTNAME).ELF
+$(TEST_DIR)/$(TESTNAME).lst : $(TEST_DIR)/$(TESTNAME).ELF
 	fromelf -c -d -e -s -z -v $< --output $@
 
 # ---------------------------------------------------------------------------------------
@@ -219,30 +229,30 @@ all_bin: $(TESTNAME).bin
 # ---------------------------------------------------------------------------------------
 # Clean
 clean :
-	@rm -rf *.o
-	@if [ -e $(TESTNAME).hex ] ; then \
-	  rm -rf $(TESTNAME).hex ; \
+	@rm -rf $(TEST_DIR)/*.o
+	@if [ -e $(TEST_DIR)/$(TESTNAME).hex ] ; then \
+	  rm -rf $(TEST_DIR)/$(TESTNAME).hex ; \
 	fi
-	@if [ -e $(TESTNAME).lst ] ; then \
-	  rm -rf $(TESTNAME).lst ; \
+	@if [ -e $(TEST_DIR)/$(TESTNAME).lst ] ; then \
+	  rm -rf $(TEST_DIR)/$(TESTNAME).lst ; \
 	fi
-	@if [ -e $(TESTNAME).ELF ] ; then \
-	  rm -rf $(TESTNAME).ELF ; \
+	@if [ -e $(TEST_DIR)/$(TESTNAME).ELF ] ; then \
+	  rm -rf $(TEST_DIR)/$(TESTNAME).ELF ; \
 	fi
-	@if [ -e $(TESTNAME).bin ] ; then \
-	  rm -rf $(TESTNAME).bin ; \
+	@if [ -e $(TEST_DIR)/$(TESTNAME).bin ] ; then \
+	  rm -rf $(TEST_DIR)/$(TESTNAME).bin ; \
 	fi
-	@rm -rf *.crf
-	@rm -rf *.plg
-	@rm -rf *.tra
-	@rm -rf *.htm
-	@rm -rf *.map
-	@rm -rf *.dep
-	@rm -rf *.d
-	@rm -rf *.lnp
-	@rm -rf *.bak
-	@rm -rf *.lst
-	@rm -rf *.axf
-	@rm -rf *.sct
-	@rm -rf *.__i
-	@rm -rf *._ia
+	@rm -rf $(TEST_DIR)/*.crf
+	@rm -rf $(TEST_DIR)/*.plg
+	@rm -rf $(TEST_DIR)/*.tra
+	@rm -rf $(TEST_DIR)/*.htm
+	@rm -rf $(TEST_DIR)/*.map
+	@rm -rf $(TEST_DIR)/*.dep
+	@rm -rf $(TEST_DIR)/*.d
+	@rm -rf $(TEST_DIR)/*.lnp
+	@rm -rf $(TEST_DIR)/*.bak
+	@rm -rf $(TEST_DIR)/*.lst
+	@rm -rf $(TEST_DIR)/*.axf
+	@rm -rf $(TEST_DIR)/*.sct
+	@rm -rf $(TEST_DIR)/*.__i
+	@rm -rf $(TEST_DIR)/*._ia

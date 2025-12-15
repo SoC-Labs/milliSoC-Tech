@@ -63,6 +63,7 @@ unsigned char UartGetc(void)
   while (((CMSDK_UART0->STATE & 2)==0) & ((CMSDK_USRT0->STATE & 2)==0));
   if ((CMSDK_UART0->STATE & 2)==2) return (CMSDK_UART0->DATA);
   if ((CMSDK_USRT0->STATE & 2)==2) return (CMSDK_USRT0->DATA);
+  else{return 0;}
 }
 
 void UartEndSimulation(void)

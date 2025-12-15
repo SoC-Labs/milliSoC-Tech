@@ -30,6 +30,7 @@
 #include <rt_misc.h>
 #include <stdint.h>
 #include "cm7ikmcu.h"
+#include "uart_stdout.h"
 
 //
 // Build a stand-alone image
@@ -80,10 +81,29 @@ __weak void SysTick_Handler(void)
   while(1);
 }
 
-__weak void GPIO_IRQHandler(void)
+__weak void DMA0_IRQHandler(void)
 {
   while(1);
 }
+
+__weak void DMA1_IRQHandler(void)
+{
+  while(1);
+}
+__weak void DMA2_IRQHandler(void)
+{
+  while(1);
+}
+__weak void DMA3_IRQHandler(void)
+{
+  while(1);
+}
+
+__weak void DMAComb_IRQHandler(void)
+{
+  while(1);
+}
+
 
 __weak void Default_IRQHandler(void)
 {
@@ -137,19 +157,13 @@ __attribute__ ((section("vectors"))) = {
 
   // External Interrupts
 
-  (vect_t)GPIO_IRQHandler,  // External Interrupt from GPIO
-
-  // External Interrupts 1 - 32
-  // These are essentially unused, so will all
-  // take the same default handler if invoked.
-
-  // 1-3
-  (vect_t)Default_IRQHandler,
-  (vect_t)Default_IRQHandler,
-  (vect_t)Default_IRQHandler,
+  (vect_t)DMA0_IRQHandler,  // External Interrupt from DMA Channel 0 Done
+  (vect_t)DMA1_IRQHandler,  // External Interrupt from DMA Channel 1 Done
+  (vect_t)DMA2_IRQHandler,  // External Interrupt from DMA Channel 2 Done
+  (vect_t)DMA3_IRQHandler,  // External Interrupt from DMA Channel 3 Done
 
   //4-7
-  (vect_t)Default_IRQHandler,
+  (vect_t)DMAComb_IRQHandler, //DMA Combined Interrupt handler
   (vect_t)Default_IRQHandler,
   (vect_t)Default_IRQHandler,
   (vect_t)Default_IRQHandler,

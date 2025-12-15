@@ -24,6 +24,8 @@
 
 #include <stdint.h>
 #include "cm7ikmcu.h"
+#include <stdio.h>
+#include "uart_stdout.h"
 
 /*----------------------------------------------------------------------------
   Define SYSCLK

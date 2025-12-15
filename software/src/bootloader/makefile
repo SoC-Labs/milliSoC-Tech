@@ -42,7 +42,7 @@ SOFTWARE_DIR = $(SOCLABS_MILLISOC_TECH_DIR)/software
 CMSIS_DIR    = $(SOFTWARE_DIR)/lib/CMSIS
 CORE_DIR     = $(CMSIS_DIR)/include
 
-DEVICE_DIR   = $(SOFTWARE_DIR)/lib/Device/ARM/cm7ikmcu
+DEVICE_DIR   = $(SOFTWARE_DIR)/lib/Device/ARM/CM7/cm7ikmcu
 
 
 # Program file
@@ -103,7 +103,7 @@ ifeq ($(TOOL_CHAIN),ds6)
 else
   CC_TOOL   = armcc
   ASM_TOOL = armasm
-  ARM_TARGET = -O3 -Otime
+  ARM_TARGET = -O3 -Otime --c99
 endif
 
 ARM_CC_OPTIONS   = $(ARM_TARGET) -c -D_FPU -Ono_autoinline --enum_is_int -Ono_inline --thumb --apcs /interwork --fpmode=fast -g --data_reorder --diag_suppress=2874 -I $(DEVICE_DIR)/Include -I $(CORE_DIR) -I $(SOFTWARE_DIR)/lib/common/CMSDK  \
@@ -111,8 +111,8 @@ ARM_CC_OPTIONS   = $(ARM_TARGET) -c -D_FPU -Ono_autoinline --enum_is_int -Ono_in
 		   -I $(SOFTWARE_DIR)/lib/common/retarget $(USER_DEFINE)
 
 ARM_ASM_OPTIONS  = -g
-ARM_LINK_OPTIONS = "--keep=$(STARTUP_FILE).o(vectors)" "--first=$(STARTUP_FILE).o(vectors)" \
-		--rw_base 0x20000000 --ro_base 0x60400000 --map --datacompressor=off --info=inline
+ARM_LINK_OPTIONS = "--keep=$(STARTUP_FILE).o(vectors)" "--first=$(STARTUP_FILE).o(vectors)" "--entry=Reset_Handler" \
+		--rw_base 0x20000000 --ro_base 0x60400000 --map --remove --datacompressor=off --info=inline --info unused
 
 ifeq ($(TOOL_CHAIN),ds6)
 	ARM_LINK_OPTIONS += --no_scatterload_enabled
@@ -173,7 +173,7 @@ $(STARTUP_FILE).o : $(STARTUP_DIR)/$(STARTUP_FILE).c $(DEPS_LIST)
 SL_QPSI.o: $(SOFTWARE_DIR)/lib/Drivers/Source/SL_QSPI.c $(DEPS_LIST)
 	$(CC_TOOL) $(ARM_CC_OPTIONS) $(CPU_TYPE) $< -o  $@
 
-dma230.o: $(SOFTWARE_DIR)/lib/Drivers/Source/dma230.c $(DEPS_LIST)
+ada_dma_command_lib.o: $(SOFTWARE_DIR)/lib/Drivers/Source/ada_dma_command_lib.c $(DEPS_LIST)
 	$(CC_TOOL) $(ARM_CC_OPTIONS) $(CPU_TYPE) $< -o  $@
 
 retarget.o : $(SOFTWARE_DIR)/lib/common/retarget/retarget.c $(DEPS_LIST)
@@ -182,8 +182,8 @@ retarget.o : $(SOFTWARE_DIR)/lib/common/retarget/retarget.c $(DEPS_LIST)
 uart_stdout.o : $(SOFTWARE_DIR)/lib/common/retarget/uart_stdout.c $(DEPS_LIST)
 	$(CC_TOOL) $(ARM_CC_OPTIONS) $(CPU_TYPE) $< -o  $@
 
-$(BOOTLOADER).ELF : $(BOOTLOADER).o $(SYSTEM_FILE).o $(STARTUP_FILE).o retarget.o uart_stdout.o dma230.o SL_QPSI.o $(DEPS_LIST)
-	armlink $(ARM_LINK_OPTIONS) $(BOOTLOADER).o $(SYSTEM_FILE).o  $(STARTUP_FILE).o retarget.o uart_stdout.o dma230.o SL_QPSI.o -o $@
+$(BOOTLOADER).ELF : $(BOOTLOADER).o $(SYSTEM_FILE).o $(STARTUP_FILE).o retarget.o uart_stdout.o ada_dma_command_lib.o SL_QPSI.o $(DEPS_LIST)
+	armlink $(ARM_LINK_OPTIONS) $(BOOTLOADER).o $(SYSTEM_FILE).o  $(STARTUP_FILE).o retarget.o uart_stdout.o ada_dma_command_lib.o SL_QPSI.o -o $@
 
 $(BOOTLOADER).hex : $(BOOTLOADER).ELF $(DEPS_LIST)
 	fromelf --vhx --8x1 $< --output $@

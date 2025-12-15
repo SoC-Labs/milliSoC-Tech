@@ -15,7 +15,8 @@
 //
 // -----------------------------------------------------------------------------
 
-#define DMA_230_BASE    0x44000000UL
+#define ADA_DMA_S_BASE  0x44000000UL
+#define ADA_DMA_NS_BASE  0x44000000UL
 #define QSPI_CFG_BASE   0x44010000UL
 
 #define FLASH_BASE      0x60000000UL

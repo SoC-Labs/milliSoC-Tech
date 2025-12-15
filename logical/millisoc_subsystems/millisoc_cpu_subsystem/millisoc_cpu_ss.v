@@ -21,9 +21,6 @@ module millisoc_cpu_ss #(
     input wire          CLKEN,        // Clock enable for CLK clock gate
     input wire          FCLKEN,       // Clock enable for FCLK clock gate
     input wire          HCLKEN,       // Clock enable for HCLK clock gate
-    input wire          CLK1EN,       // Clock for dual-redundant CPU
-    input wire          FCLK1EN,      // Clock for dual-redundant CPU
-    input wire          HCLK1EN,      // Clock for dual-redundant CPU
     input wire          ETMCLKEN,     // Clock enable for ETM clock
     input wire          nSYSRESET,    // Soft reset (non-debug logic only)
     output wire         SYSRESETREQ,  // Request for system reset (nSYSRESET)
@@ -105,7 +102,9 @@ module millisoc_cpu_ss #(
     output wire         BREADY,
     input wire          BVALID,
     input wire [ 1:0]   BID,
-    input wire [ 1:0]   BRESP
+    input wire [ 1:0]   BRESP,
+
+    input  wire [239:0] IRQ
 
 );
 
@@ -152,9 +151,9 @@ CORTEXM7INTEGRATIONMCU #(
     .CLKEN(CLKEN),
     .FCLKEN(FCLKEN),
     .HCLKEN(HCLKEN),
-    .CLK1EN(CLK1EN),
-    .FCLK1EN(FCLK1EN),
-    .HCLK1EN(HCLK1EN),
+    .CLK1EN(1'b0),
+    .FCLK1EN(1'b0),
+    .HCLK1EN(1'b0),
     .ETMCLKEN(ETMCLKEN),
     .STCLKEN(1'b0), // No alt reference clock for systick
     .nSYSRESET(nSYSRESET),
@@ -317,7 +316,7 @@ CORTEXM7INTEGRATIONMCU #(
     .IADDR(),
     .IADBGPROT(1'b0),
     // Interrupts
-    .IRQ(240'd0),
+    .IRQ(IRQ),
     .NMI(1'b0),
     // POWER CONTROL AND SLEEP
     .SLEEPING(),
