@@ -34,45 +34,88 @@
 typedef enum IRQn
 {
 /******  Cortex M7 Processor Exceptions Numbers **************************************************/
-  NonMaskableInt_IRQn        = -14,    /*!< 2 Non Maskable Interrupt                              */
-  HardFault_IRQn	     = -13,    /*!< 3 Cortex M7 Hard Fault Interrupt                     */
-  SVCall_IRQn                = -5,     /*!< 11 Cortex M7 SV Call Interrupt                       */
-  PendSV_IRQn                = -2,     /*!< 14 Cortex M7 Pend SV Interrupt                       */
-  SysTick_IRQn               = -1,     /*!< 15 Cortex M7 System Tick Interrupt                   */
+  NonMaskableInt_IRQn         = -14,    /*!< 2 Non Maskable Interrupt                            */
+  HardFault_IRQn	          = -13,    /*!< 3 Cortex M7 Hard Fault Interrupt                    */
+  SVCall_IRQn                 = -5,     /*!< 11 Cortex M7 SV Call Interrupt                      */
+  PendSV_IRQn                 = -2,     /*!< 14 Cortex M7 Pend SV Interrupt                      */
+  SysTick_IRQn                = -1,     /*!< 15 Cortex M7 System Tick Interrupt                  */
 
 /******  CM7IKMCU Cortex M7 specific Interrupt Numbers ******************************************/
   DMA_DONE_0_IRQn             = 0,      /*!< System DMA channel 0 done Interrupt                */
   DMA_DONE_1_IRQn             = 1,      /*!< System DMA channel 1 done Interrupt                */
   DMA_DONE_3_IRQn             = 2,      /*!< System DMA channel 2 done Interrupt                */
   DMA_DONE_4_IRQn             = 3,      /*!< System DMA channel 3 done Interrupt                */
-  DMA_COMB_IRQn               = 4,      /*!< System DMA combined Interrupt                */
-  CM7IKMCU_IRQ05_IRQn         = 5,
-  CM7IKMCU_IRQ06_IRQn         = 6,
-  CM7IKMCU_IRQ07_IRQn         = 7,
-  CM7IKMCU_IRQ08_IRQn         = 8,
-  CM7IKMCU_IRQ09_IRQn         = 9,
-  CM7IKMCU_IRQ10_IRQn         = 10,
-  CM7IKMCU_IRQ11_IRQn         = 11,
-  CM7IKMCU_IRQ12_IRQn         = 12,
-  CM7IKMCU_IRQ13_IRQn         = 13,
-  CM7IKMCU_IRQ14_IRQn         = 14,
-  CM7IKMCU_IRQ15_IRQn         = 15,
-  CM7IKMCU_IRQ16_IRQn         = 16,
-  CM7IKMCU_IRQ17_IRQn         = 17,
-  CM7IKMCU_IRQ18_IRQn         = 18,
-  CM7IKMCU_IRQ19_IRQn         = 19,
-  CM7IKMCU_IRQ20_IRQn         = 20,
-  CM7IKMCU_IRQ21_IRQn         = 21,
-  CM7IKMCU_IRQ22_IRQn         = 22,
-  CM7IKMCU_IRQ23_IRQn         = 23,
-  CM7IKMCU_IRQ24_IRQn         = 24,
-  CM7IKMCU_IRQ25_IRQn         = 25,
-  CM7IKMCU_IRQ26_IRQn         = 26,
-  CM7IKMCU_IRQ27_IRQn         = 27,
-  CM7IKMCU_IRQ28_IRQn         = 28,
-  CM7IKMCU_IRQ29_IRQn         = 29,
-  CM7IKMCU_IRQ30_IRQn         = 30,
-  CM7IKMCU_IRQ31_IRQn         = 31
+  DMA_COMB_IRQn               = 4,      /*!< System DMA combined Interrupt                      */
+  QSPI_FINISHED_IRQn          = 5,      /*!< XiP QSPI finished QSPI transaction                 */
+  GPIO0_COMB_IRQn             = 6,      /*!< GPIO Port 0 combined intterupt                     */
+  GPIO1_COMB_IRQn             = 7,      /*!< GPIO Port 1 combined intterupt                     */
+  GPIO0_0_IRQn                = 8,      /*!< GPIO Port 0 Pin 0 intterupt                        */
+  GPIO0_1_IRQn                = 9,      /*!< GPIO Port 0 Pin 1 intterupt                        */
+  GPIO0_2_IRQn                = 10,     /*!< GPIO Port 0 Pin 2 intterupt                        */
+  GPIO0_3_IRQn                = 11,     /*!< GPIO Port 0 Pin 3 intterupt                        */
+  GPIO0_4_IRQn                = 12,     /*!< GPIO Port 0 Pin 4 intterupt                        */
+  GPIO0_5_IRQn                = 13,     /*!< GPIO Port 0 Pin 5 intterupt                        */
+  GPIO0_6_IRQn                = 14,     /*!< GPIO Port 0 Pin 6 intterupt                        */
+  GPIO0_7_IRQn                = 15,     /*!< GPIO Port 0 Pin 7 intterupt                        */
+  GPIO0_8_IRQn                = 16,     /*!< GPIO Port 0 Pin 8 intterupt                        */
+  GPIO0_9_IRQn                = 17,     /*!< GPIO Port 0 Pin 9 intterupt                        */
+  GPIO0_10_IRQn               = 18,     /*!< GPIO Port 0 Pin 10 intterupt                       */
+  GPIO0_11_IRQn               = 19,     /*!< GPIO Port 0 Pin 11 intterupt                       */
+  GPIO0_12_IRQn               = 20,     /*!< GPIO Port 0 Pin 12 intterupt                       */
+  GPIO0_13_IRQn               = 21,     /*!< GPIO Port 0 Pin 13 intterupt                       */
+  GPIO0_14_IRQn               = 22,     /*!< GPIO Port 0 Pin 14 intterupt                       */
+  GPIO0_15_IRQn               = 23,     /*!< GPIO Port 0 Pin 15 intterupt                       */
+  GPIO1_0_IRQn                = 24,     /*!< GPIO Port 1 Pin 0 intterupt                        */
+  GPIO1_1_IRQn                = 25,     /*!< GPIO Port 1 Pin 1 intterupt                        */
+  GPIO1_2_IRQn                = 26,     /*!< GPIO Port 1 Pin 2 intterupt                        */
+  GPIO1_3_IRQn                = 27,     /*!< GPIO Port 1 Pin 3 intterupt                        */
+  GPIO1_4_IRQn                = 28,     /*!< GPIO Port 1 Pin 4 intterupt                        */
+  GPIO1_5_IRQn                = 29,     /*!< GPIO Port 1 Pin 5 intterupt                        */
+  GPIO1_6_IRQn                = 30,     /*!< GPIO Port 1 Pin 6 intterupt                        */
+  GPIO1_7_IRQn                = 31,     /*!< GPIO Port 1 Pin 7 intterupt                        */
+  GPIO1_8_IRQn                = 32,     /*!< GPIO Port 1 Pin 8 intterupt                        */
+  GPIO1_9_IRQn                = 33,     /*!< GPIO Port 1 Pin 9 intterupt                        */
+  GPIO1_10_IRQn               = 34,     /*!< GPIO Port 1 Pin 10 intterupt                       */
+  GPIO1_11_IRQn               = 35,     /*!< GPIO Port 1 Pin 11 intterupt                       */
+  GPIO1_12_IRQn               = 36,     /*!< GPIO Port 1 Pin 12 intterupt                       */
+  GPIO1_13_IRQn               = 37,     /*!< GPIO Port 1 Pin 13 intterupt                       */
+  GPIO1_14_IRQn               = 38,     /*!< GPIO Port 1 Pin 14 intterupt                       */
+  GPIO1_15_IRQn               = 39,     /*!< GPIO Port 1 Pin 15 intterupt                       */
+  TIMER0_IRQn                 = 40,     /*!< Timer 0 interrupt                                  */
+  TIMER1_IRQn                 = 41,     /*!< Timer 1 interrupt                                  */
+  DUALTIMER1_IRQn             = 42,     /*!< Dual Timer 1 interrupt                             */
+  DUALTIMER2_IRQn             = 43,     /*!< Dual Timer 2 interrupt                             */
+  DUALTIMERCOMB_IRQn          = 44,     /*!< Dual Timer Combined interrupt                      */
+  USRT0_TX_IRQn               = 45,     /*!< USART 0 TX interrupt                               */
+  USRT0_RX_IRQn               = 46,     /*!< USART 0 RX interrupt                               */
+  USRT0_TXOF_IRQn             = 47,     /*!< USART 0 TX Overflow interrupt                      */
+  USRT0_RXOF_IRQn             = 48,     /*!< USART 0 RX Overflow interrupt                      */
+  USRT0_COMB_IRQn             = 49,     /*!< USART 0 Combined interrupt                         */
+  USRT1_TX_IRQn               = 50,     /*!< USART 1 TX interrupt                               */
+  USRT1_RX_IRQn               = 51,     /*!< USART 1 RX interrupt                               */
+  USRT1_TXOF_IRQn             = 52,     /*!< USART 1 TX Overflow interrupt                      */
+  USRT1_RXOF_IRQn             = 53,     /*!< USART 1 RX Overflow interrupt                      */
+  USRT1_COMB_IRQn             = 54,     /*!< USART 1 Combined interrupt                         */
+  UART0_TX_IRQn               = 55,     /*!< UART 0 TX interrupt                                */
+  UART0_RX_IRQn               = 56,     /*!< UART 0 RX interrupt                                */
+  UART0_TXOF_IRQn             = 57,     /*!< UART 0 TX Overflow interrupt                       */
+  UART0_RXOF_IRQn             = 58,     /*!< UART 0 RX Overflow interrupt                       */
+  UART0_COMB_IRQn             = 59,     /*!< UART 0 Combined interrupt                          */
+  UART1_TX_IRQn               = 60,     /*!< UART 1 TX interrupt                                */
+  UART1_RX_IRQn               = 61,     /*!< UART 1 RX interrupt                                */
+  UART1_TXOF_IRQn             = 62,     /*!< UART 1 TX Overflow interrupt                       */
+  UART1_RXOF_IRQn             = 63,     /*!< UART 1 RX Overflow interrupt                       */
+  UART1_COMB_IRQn             = 64,     /*!< UART 1 Combined interrupt                          */
+  WATCHDOG_IRQn               = 65,     /*!< Watchdog interrupt                                 */
+  RTC_IRQn                    = 66,     /*!< Real Time Counter interrupt                        */
+  SPI_COMB_IRQn               = 67,     /*!< SPI Combined interrupt                             */
+  SPI_RX_IRQn                 = 68,     /*!< SPI RX interrupt                                   */
+  SPI_TX_IRQn                 = 69,     /*!< SPI TX interrupt                                   */
+  SPI_RXOF_IRQn               = 70,     /*!< SPI RX Overflow interrupt                          */
+  SPI_TXOF_IRQn               = 71      /*!< SPI TX OVerflow interrupt                          */
+
+
+
 } IRQn_Type;
 
 /*
@@ -83,7 +126,7 @@ typedef enum IRQn
 
 /* Configuration of the Cortex M7 Processor and Core Peripherals */
 #define __MPU_PRESENT           1       /*!< cm7ikmcu can support an MPU                         */
-#define __NVIC_PRIO_BITS        2       /*!< cm7ikmcu Supports 2 Bits for the Priority Levels    */
+#define __NVIC_PRIO_BITS        3       /*!< cm7ikmcu Supports 2 Bits for the Priority Levels    */
 #define __VTOR_PRESENT          1       /*!< cm7ikmcu can support the VTOR                       */
 #define __Vendor_SysTickConfig  0       /*!< Set to 1 if different SysTick Config is used        */
 #define __ICACHE_PRESENT        1       /*!< Set to 1 if I-Cache is present                      */

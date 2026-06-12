@@ -7,7 +7,7 @@
 int main(){
     UartStdOutInit();
 
-    printf("Hello SoCLabs MegaSoC\n");
+    printf("Hello SoCLabs MilliSoC\n");
     TEST_PASS();
 }
 

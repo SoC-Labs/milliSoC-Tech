@@ -1,4 +1,4 @@
-interface ahb #(
+interface ahb_if #(
     parameter DATA_W=32,
     parameter ADDR_W=32
 );

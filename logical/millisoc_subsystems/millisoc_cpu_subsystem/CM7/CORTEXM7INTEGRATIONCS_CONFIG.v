@@ -56,7 +56,7 @@ parameter DCACHE = 1,
 // 0 = No cache ECC implemented
 // 1 = Cache ECC implemented
 // Note that this applies to both I and D-caches (if implemented)
-parameter CACHEECC = 1,
+parameter CACHEECC = 0,
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
@@ -94,7 +94,7 @@ parameter IRQLVL = 3,
 // 1 = Full comparator set: 4 DWT and 8 FPB comparators
 // Note that this parameter does not affect baseline debug halt and monitor mode
 // functionality which is always present
-parameter DBGLVL = 0,
+parameter DBGLVL = 1,
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------

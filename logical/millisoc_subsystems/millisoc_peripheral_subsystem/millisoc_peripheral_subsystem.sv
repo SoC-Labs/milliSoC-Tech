@@ -40,9 +40,9 @@ module millisoc_peripheral_subsystem #(
 
 
     // ADP AHB bus interface
-    ahb.master          ADP_AHB,
+    ahb_if.master          ADP_AHB,
     // Peripheral AHB bus interface
-    ahb.subordinate     PERIPH_AHB,
+    ahb_if.subordinate     PERIPH_AHB,
 
     // UART0
     input  wire         UARTRXD0,
@@ -79,6 +79,8 @@ module millisoc_peripheral_subsystem #(
     output wire         SPI_SCLK,
     output wire         SPI_MOSI,
     input  wire         SPI_MISO,
+
+    output wire         WDOGRESREQ, // Watchdog reset request
 
     // Interrupts
     output wire [71:0]  PERI_IRQS   // Peripheral interrupts to GIC
@@ -739,16 +741,16 @@ cmsdk_apb_watchdog u_apb_watchdog(
     .PWRITE(PWRITE),
     .PWDATA(PWDATA),
 
-    .WDOGCLK(),
-    .WDOGCLKEN(),
-    .WDOGRESn(),
+    .WDOGCLK(PCLK),
+    .WDOGCLKEN(1'b1),
+    .WDOGRESn(PRESETn),
 
     .ECOREVNUM(4'h0),
 
     .PRDATA(PRDATA_WATCHDOG),
 
     .WDOGINT(wdog_int),
-    .WDOGRES()
+    .WDOGRES(WDOGRESREQ)
 );
 assign PSLVERR_WATCHDOG = 1'b0;
 assign PREADY_WATCHDOG  = 1'b1;

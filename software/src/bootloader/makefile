@@ -111,7 +111,7 @@ ARM_CC_OPTIONS   = $(ARM_TARGET) -c -D_FPU -Ono_autoinline --enum_is_int -Ono_in
 		   -I $(SOFTWARE_DIR)/lib/common/retarget $(USER_DEFINE)
 
 ARM_ASM_OPTIONS  = -g
-ARM_LINK_OPTIONS = "--keep=$(STARTUP_FILE).o(vectors)" "--first=$(STARTUP_FILE).o(vectors)" "--entry=Reset_Handler" \
+ARM_LINK_OPTIONS = "--keep=$(STARTUP_FILE).o(vectors)" "--first=$(STARTUP_FILE).o(vectors)" \
 		--rw_base 0x20000000 --ro_base 0x60400000 --map --remove --datacompressor=off --info=inline --info unused
 
 ifeq ($(TOOL_CHAIN),ds6)

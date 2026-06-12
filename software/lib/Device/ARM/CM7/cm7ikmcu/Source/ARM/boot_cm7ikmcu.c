@@ -111,6 +111,275 @@ __weak void Default_IRQHandler(void)
 }
 
 
+__weak void QSPI_FINISHED_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO0_COMB_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO1_COMB_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO0_0_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO0_1_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO0_2_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO0_3_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO0_4_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO0_5_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO0_6_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO0_7_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO0_8_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO0_9_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO0_10_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO0_11_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO0_12_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO0_13_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO0_14_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO0_15_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO1_0_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO1_1_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO1_2_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO1_3_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO1_4_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO1_5_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO1_6_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO1_7_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO1_8_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO1_9_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO1_10_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO1_11_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO1_12_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO1_13_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO1_14_IRQHandler(void)
+{
+  while(1);
+}
+__weak void GPIO1_15_IRQHandler(void)
+{
+  while(1);
+}
+__weak void TIMER0_IRQHandler(void)
+{
+  while(1);
+}
+__weak void TIMER1_IRQHandler(void)
+{
+  while(1);
+}
+__weak void DUALTIMER1_IRQHandler(void)
+{
+  while(1);
+}
+__weak void DUALTIMER2_IRQHandler(void)
+{
+  while(1);
+}
+__weak void DUALTIMERCOMB_IRQHandler(void)
+{
+  while(1);
+}
+__weak void USRT0_TX_IRQHandler(void)
+{
+  while(1);
+}
+__weak void USRT0_RX_IRQHandler(void)
+{
+  while(1);
+}
+__weak void USRT0_TXOF_IRQHandler(void)
+{
+  while(1);
+}
+__weak void USRT0_RXOF_IRQHandler(void)
+{
+  while(1);
+}
+__weak void USRT0_COMB_IRQHandler(void)
+{
+  while(1);
+}
+__weak void USRT1_TX_IRQHandler(void)
+{
+  while(1);
+}
+__weak void USRT1_RX_IRQHandler(void)
+{
+  while(1);
+}
+__weak void USRT1_TXOF_IRQHandler(void)
+{
+  while(1);
+}
+__weak void USRT1_RXOF_IRQHandler(void)
+{
+  while(1);
+}
+__weak void USRT1_COMB_IRQHandler(void)
+{
+  while(1);
+}
+__weak void UART0_TX_IRQHandler(void)
+{
+  while(1);
+}
+__weak void UART0_RX_IRQHandler(void)
+{
+  while(1);
+}
+__weak void UART0_TXOF_IRQHandler(void)
+{
+  while(1);
+}
+__weak void UART0_RXOF_IRQHandler(void)
+{
+  while(1);
+}
+__weak void UART0_COMB_IRQHandler(void)
+{
+  while(1);
+}
+__weak void UART1_TX_IRQHandler(void)
+{
+  while(1);
+}
+__weak void UART1_RX_IRQHandler(void)
+{
+  while(1);
+}
+__weak void UART1_TXOF_IRQHandler(void)
+{
+  while(1);
+}
+__weak void UART1_RXOF_IRQHandler(void)
+{
+  while(1);
+}
+__weak void UART1_COMB_IRQHandler(void)
+{
+  while(1);
+}
+__weak void WATCHDOG_IRQHandler(void)
+{
+  while(1);
+}
+__weak void RTC_IRQHandler(void)
+{
+  while(1);
+}
+__weak void SPI_COMB_IRQHandler(void)
+{
+  while(1);
+}
+__weak void SPI_RX_IRQHandler(void)
+{
+  while(1);
+}
+__weak void SPI_TX_IRQHandler(void)
+{
+  while(1);
+}
+__weak void SPI_RXOF_IRQHandler(void)
+{
+  while(1);
+}
+__weak void SPI_TXOF_IRQHandler(void)
+{
+  while(1);
+}
+
 //
 // Reset Handler
 //
@@ -164,45 +433,73 @@ __attribute__ ((section("vectors"))) = {
 
   //4-7
   (vect_t)DMAComb_IRQHandler, //DMA Combined Interrupt handler
-  (vect_t)Default_IRQHandler,
-  (vect_t)Default_IRQHandler,
-  (vect_t)Default_IRQHandler,
-
-  //8-11
-  (vect_t)Default_IRQHandler,
-  (vect_t)Default_IRQHandler,
-  (vect_t)Default_IRQHandler,
-  (vect_t)Default_IRQHandler,
-
-  //12-15
-  (vect_t)Default_IRQHandler,
-  (vect_t)Default_IRQHandler,
-  (vect_t)Default_IRQHandler,
-  (vect_t)Default_IRQHandler,
-
-  //16-19
-  (vect_t)Default_IRQHandler,
-  (vect_t)Default_IRQHandler,
-  (vect_t)Default_IRQHandler,
-  (vect_t)Default_IRQHandler,
-
-  //20-23
-  (vect_t)Default_IRQHandler,
-  (vect_t)Default_IRQHandler,
-  (vect_t)Default_IRQHandler,
-  (vect_t)Default_IRQHandler,
-
-  //24-27
-  (vect_t)Default_IRQHandler,
-  (vect_t)Default_IRQHandler,
-  (vect_t)Default_IRQHandler,
-  (vect_t)Default_IRQHandler,
-
-  //28-31
-  (vect_t)Default_IRQHandler,
-  (vect_t)Default_IRQHandler,
-  (vect_t)Default_IRQHandler,
-  (vect_t)Default_IRQHandler
+  (vect_t)QSPI_FINISHED_IRQHandler,
+  (vect_t)GPIO0_COMB_IRQHandler,
+  (vect_t)GPIO1_COMB_IRQHandler,
+  (vect_t)GPIO0_0_IRQHandler,
+  (vect_t)GPIO0_1_IRQHandler,
+  (vect_t)GPIO0_2_IRQHandler,
+  (vect_t)GPIO0_3_IRQHandler,
+  (vect_t)GPIO0_4_IRQHandler,
+  (vect_t)GPIO0_5_IRQHandler,
+  (vect_t)GPIO0_6_IRQHandler,
+  (vect_t)GPIO0_7_IRQHandler,
+  (vect_t)GPIO0_8_IRQHandler,
+  (vect_t)GPIO0_9_IRQHandler,
+  (vect_t)GPIO0_10_IRQHandler,
+  (vect_t)GPIO0_11_IRQHandler,
+  (vect_t)GPIO0_12_IRQHandler,
+  (vect_t)GPIO0_13_IRQHandler,
+  (vect_t)GPIO0_14_IRQHandler,
+  (vect_t)GPIO0_15_IRQHandler,
+  (vect_t)GPIO1_0_IRQHandler,
+  (vect_t)GPIO1_1_IRQHandler,
+  (vect_t)GPIO1_2_IRQHandler,
+  (vect_t)GPIO1_3_IRQHandler,
+  (vect_t)GPIO1_4_IRQHandler,
+  (vect_t)GPIO1_5_IRQHandler,
+  (vect_t)GPIO1_6_IRQHandler,
+  (vect_t)GPIO1_7_IRQHandler,
+  (vect_t)GPIO1_8_IRQHandler,
+  (vect_t)GPIO1_9_IRQHandler,
+  (vect_t)GPIO1_10_IRQHandler,
+  (vect_t)GPIO1_11_IRQHandler,
+  (vect_t)GPIO1_12_IRQHandler,
+  (vect_t)GPIO1_13_IRQHandler,
+  (vect_t)GPIO1_14_IRQHandler,
+  (vect_t)GPIO1_15_IRQHandler,
+  (vect_t)TIMER0_IRQHandler,
+  (vect_t)TIMER1_IRQHandler,
+  (vect_t)DUALTIMER1_IRQHandler,
+  (vect_t)DUALTIMER2_IRQHandler,
+  (vect_t)DUALTIMERCOMB_IRQHandler,
+  (vect_t)USRT0_TX_IRQHandler,
+  (vect_t)USRT0_RX_IRQHandler,
+  (vect_t)USRT0_TXOF_IRQHandler,
+  (vect_t)USRT0_RXOF_IRQHandler,
+  (vect_t)USRT0_COMB_IRQHandler,
+  (vect_t)USRT1_TX_IRQHandler,
+  (vect_t)USRT1_RX_IRQHandler,
+  (vect_t)USRT1_TXOF_IRQHandler,
+  (vect_t)USRT1_RXOF_IRQHandler,
+  (vect_t)USRT1_COMB_IRQHandler,
+  (vect_t)UART0_TX_IRQHandler,
+  (vect_t)UART0_RX_IRQHandler,
+  (vect_t)UART0_TXOF_IRQHandler,
+  (vect_t)UART0_RXOF_IRQHandler,
+  (vect_t)UART0_COMB_IRQHandler,
+  (vect_t)UART1_TX_IRQHandler,
+  (vect_t)UART1_RX_IRQHandler,
+  (vect_t)UART1_TXOF_IRQHandler,
+  (vect_t)UART1_RXOF_IRQHandler,
+  (vect_t)UART1_COMB_IRQHandler,
+  (vect_t)WATCHDOG_IRQHandler,
+  (vect_t)RTC_IRQHandler,
+  (vect_t)SPI_COMB_IRQHandler,
+  (vect_t)SPI_RX_IRQHandler,
+  (vect_t)SPI_TX_IRQHandler,
+  (vect_t)SPI_RXOF_IRQHandler,
+  (vect_t)SPI_TXOF_IRQHandler
 };
 
 

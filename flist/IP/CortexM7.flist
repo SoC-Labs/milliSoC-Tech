@@ -1,3 +1,6 @@
++incdir+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM7
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM7/millisoc_cpu_ss.v
+
 
 $(CORTEX_M7_LOGICAL_DIR)/cortexm7_integration/verilog/CORTEXM7INTEGRATIONMCU.v
 $(CORTEX_M7_LOGICAL_DIR)/cortexm7_integration/verilog/CORTEXM7INTEGRATIONCS.v

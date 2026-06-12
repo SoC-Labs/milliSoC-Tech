@@ -1,3 +1,24 @@
+//-----------------------------------------------------------------------------
+// milliSoC System
+// A joint work commissioned on behalf of SoC Labs, under Arm Academic Access license.
+//
+// Contributors
+//
+// Daniel Newbrook (d.newbrook@soton.ac.uk)
+//
+// Copyright � 2021-5, SoC Labs (www.soclabs.org)
+//-----------------------------------------------------------------------------
+// Purpose:
+//  Top level system for milliSoC, instantiates all subsystems
+//
+//-----------------------------------------------------------------------------
+// Modules instantiated:
+//  millisoc_cpu_ss                 (u_millisoc_cpu_ss)
+//  ada_top_sldma350                (u_dma350)
+//  millisoc_peripheral_subsystem   (u_millisoc_peripheral_subsystem)
+//  top_ahb_qspi                    (u_ahb_qspi)
+//  ROM_wrapper                     (u_ROM_wrapper)
+//  nic400_millisoc_main            (u_nic400_millisoc_main)
 
 module millisoc_system(
     input  wire     FCLK,
@@ -63,129 +84,34 @@ wire  HRESETn;
 wire  PRESETn;
 
 // - APB for DMA
-wire        PCLKEN_DMA;
-wire [31:0] PADDR_DMA_CFG;
-wire [31:0] PWDATA_DMA_CFG;
-wire        PWRITE_DMA_CFG;
-wire [2:0]  PPROT_DMA_CFG;
-wire [3:0]  PSTRB_DMA_CFG;
-wire        PENABLE_DMA_CFG;
-wire        PSELx_DMA_CFG;
-wire [31:0] PRDATA_DMA_CFG;
-wire        PSLVERR_DMA_CFG;
-wire        PREADY_DMA_CFG;
+apb4_if DMA_CFG_APB();
+wire    PCLKEN_DMA;
 
 // - AXI from DMA to System Bus
-axi4 #(.DATA_W(64), .ID_W(), .ADDR_W(32)) DMA_AXI();
+axi4_if #(.DATA_W(64), .ID_W(), .ADDR_W(32)) DMA_AXI();
 wire [3:0]  DMA_awqos;
 wire [3:0]  DMA_arqos;
 
-// - AHB to QSPI
-wire        HSELx_QSPI;
-wire [31:0] HADDR_QSPI;
-wire [1:0]  HTRANS_QSPI;
-wire        HWRITE_QSPI;
-wire [2:0]  HSIZE_QSPI;
-wire [2:0]  HBURST_QSPI;
-wire [3:0]  HPROT_QSPI;
-wire [31:0] HWDATA_QSPI;
-wire [31:0] HRDATA_QSPI;
-wire        HREADYOUT_QSPI;
-wire        HREADY_QSPI;
-wire        HRESP_QSPI;
+ahb_if #(.DATA_W(32), .ADDR_W(32)) QSPI_AHB(); // - AHB to QSPI
+apb4_if QSPI_CFG_APB(); // - APB to QSPI
 
-// - APB to QSPI
-wire [31:0] PADDR_QSPI_CFG;
-wire [31:0] PWDATA_QSPI_CFG;
-wire        PWRITE_QSPI_CFG;
-wire [2:0]  PPROT_QSPI_CFG;
-wire [3:0]  PSTRB_QSPI_CFG;
-wire        PENABLE_QSPI_CFG;
-wire        PSELx_QSPI_CFG;
-wire [31:0] PRDATA_QSPI_CFG;
-wire        PSLVERR_QSPI_CFG;
-wire        PREADY_QSPI_CFG;
+apb4_if SYS_CTRL_APB();
 
 // - AHB to ROM
-wire        HSELx_ROM;
-wire [31:0] HADDR_ROM;
-wire [1:0]  HTRANS_ROM;
-wire        HWRITE_ROM;
-wire [2:0]  HSIZE_ROM;
-wire [2:0]  HBURST_ROM;
-wire [3:0]  HPROT_ROM;
-wire [63:0] HWDATA_ROM;
-wire [63:0] HRDATA_ROM;
-wire        HREADYOUT_ROM;
-wire        HREADY_ROM;
-wire        HRESP_ROM;
+ahb_if #(.DATA_W(64), .ADDR_W(32)) ROM_AHB();
 
 // - AHB to peripheral subsystem
-ahb #(.DATA_W(32), .ADDR_W(32)) ADP_AHB();
-ahb #(.DATA_W(32), .ADDR_W(32)) PERIPH_AHB();
+ahb_if #(.DATA_W(32), .ADDR_W(32)) ADP_AHB();
+ahb_if #(.DATA_W(32), .ADDR_W(32)) PERIPH_AHB();
 
 assign PERIPH_AHB.HSEL=1'b1;
 assign PERIPH_AHB.HREADY=1'b1;
 // - AHB to CPU
-wire        HSELx_CPU_S;
-wire [31:0] HADDR_CPU_S;
-wire [1:0]  HTRANS_CPU_S;
-wire        HWRITE_CPU_S;
-wire [2:0]  HSIZE_CPU_S;
-wire [2:0]  HBURST_CPU_S;
-wire [3:0]  HPROT_CPU_S;
-wire [31:0] HWDATA_CPU_S;
-wire [31:0] HRDATA_CPU_S;
-wire        HREADYOUT_CPU_S;
-wire        HREADY_CPU_S;
-wire        HRESP_CPU_S;
-
+ahb_if #(.DATA_W(32), .ADDR_W(32)) CPU_S_AHB();
 
 // - AXI from CPU to NIC400
 wire         CPU_ACLKEN;
-wire         CPU_ARVALID;
-wire [31:0]  CPU_ARADDR;
-wire [ 2:0]  CPU_ARID;
-wire [ 1:0]  CPU_ARBURST;
-wire [ 2:0]  CPU_ARLEN;
-wire [ 1:0]  CPU_ARSIZE;
-wire         CPU_ARLOCK;
-wire [ 3:0]  CPU_ARCACHE;
-wire [ 2:0]  CPU_ARPROT;
-wire         CPU_ARMASTER;
-wire [ 3:0]  CPU_ARINNER;
-wire         CPU_ARSHARE;
-wire         CPU_ARREADY;
-wire         CPU_AWVALID;
-wire [31:0]  CPU_AWADDR;
-wire [ 1:0]  CPU_AWID;
-wire [ 1:0]  CPU_AWBURST;
-wire [ 2:0]  CPU_AWLEN;
-wire [ 1:0]  CPU_AWSIZE;
-wire         CPU_AWLOCK;
-wire [ 3:0]  CPU_AWCACHE;
-wire [ 2:0]  CPU_AWPROT;
-wire         CPU_AWMASTER;
-wire [ 3:0]  CPU_AWINNER;
-wire         CPU_AWSHARE;
-wire         CPU_AWSPARSE;
-wire         CPU_AWREADY;
-wire         CPU_RREADY;
-wire         CPU_RVALID;
-wire [ 2:0]  CPU_RID;
-wire         CPU_RLAST;
-wire [63:0]  CPU_RDATA;
-wire [ 1:0]  CPU_RRESP;
-wire         CPU_WVALID;
-wire [ 1:0]  CPU_WID;
-wire [63:0]  CPU_WDATA;
-wire [ 7:0]  CPU_WSTRB;
-wire         CPU_WLAST;
-wire         CPU_WREADY;
-wire         CPU_BREADY;
-wire         CPU_BVALID;
-wire [ 1:0]  CPU_BID;
-wire [ 1:0]  CPU_BRESP;
+axi4_if #(.DATA_W(64), .ID_W(3), .ADDR_W(32)) CPU_AXI();
 
 // - Resets and clock gates for CPU
 wire        CLKEN;
@@ -202,16 +128,20 @@ wire        SWCLKTCK;
 wire        TRACECLKIN;
 wire        TRESETn;
 wire        ARESETn;
-
+wire        WDOGRESREQ;
 
 // Interrupts
 wire [239:0]    CPU_IRQs;
 wire [3:0]      SYS_DMA_DONE_IRQ;
 wire            SYS_DMA_COMB_IRQ;
+wire            IRQ_QSPI_FINISHED;
+wire [65:0]     PERI_IRQS;
 
-assign CPU_IRQs[3:0]=SYS_DMA_DONE_IRQ[3:0];
-assign CPU_IRQs[4]=SYS_DMA_COMB_IRQ;
-assign CPU_IRQs[239:3]=235'd0;
+assign CPU_IRQs[3:0]=   SYS_DMA_DONE_IRQ[3:0];
+assign CPU_IRQs[4]=     SYS_DMA_COMB_IRQ;
+assign CPU_IRQs[5]=     IRQ_QSPI_FINISHED;
+assign CPU_IRQs[71:6]=  PERI_IRQS;
+assign CPU_IRQs[239:72]=168'd0;
 
 // Tie offs (may be used later)
 assign PCLKEN_DMA = 1'b1;
@@ -219,7 +149,6 @@ assign CLKEN = 1'b1;
 assign FCLKEN = 1'b1;
 assign HCLKEN = 1'b1;
 assign ETMCLKEN = 1'b1;
-assign nSYSRESET = nPORESET;
 assign nDBGETMRESET = nPORESET;
 assign TRESETn = nPORESET;
 assign CPUWAIT = 1'b0;
@@ -264,67 +193,75 @@ millisoc_cpu_ss u_millisoc_cpu_ss (
     .HRDATAP(PERIPH_AHB.HRDATA),
     .EXRESPP(),
 
-    .HREADYOUTS(HREADYOUT_CPU_S),
-    .HRESPS(HRESP_CPU_S),
-    .HRDATAS(HRDATA_CPU_S),
-    .HREADYS(HREADY_CPU_S),
-    .HSELS(HSELx_CPU_S),
-    .HTRANSS(HTRANS_CPU_S),
-    .HWRITES(HWRITE_CPU_S),
-    .HSIZES(HSIZE_CPU_S),
-    .HBURSTS(HBURST_CPU_S),
-    .HPROTS(HPROT_CPU_S),
-    .HADDRS(HADDR_CPU_S),
-    .HWDATAS(HWDATA_CPU_S),
+    .HREADYOUTS(CPU_S_AHB.HREADYOUT),
+    .HRESPS(CPU_S_AHB.HRESP),
+    .HRDATAS(CPU_S_AHB.HRDATA),
+    .HREADYS(CPU_S_AHB.HREADY),
+    .HSELS(CPU_S_AHB.HSEL),
+    .HTRANSS(CPU_S_AHB.HTRANS),
+    .HWRITES(CPU_S_AHB.HWRITE),
+    .HSIZES(CPU_S_AHB.HSIZE),
+    .HBURSTS(CPU_S_AHB.HBURST),
+    .HPROTS(CPU_S_AHB.HPROT),
+    .HADDRS(CPU_S_AHB.HADDR),
+    .HWDATAS(CPU_S_AHB.HWDATA),
 
     .ACLKEN(CPU_ACLKEN),
-    .ARVALID(CPU_ARVALID),
-    .ARADDR(CPU_ARADDR),
-    .ARID(CPU_ARID),
-    .ARBURST(CPU_ARBURST),
-    .ARLEN(CPU_ARLEN),
-    .ARSIZE(CPU_ARSIZE),
-    .ARLOCK(CPU_ARLOCK),
-    .ARCACHE(CPU_ARCACHE),
-    .ARPROT(CPU_ARPROT),
-    .ARMASTER(CPU_ARMASTER),
-    .ARINNER(CPU_ARINNER),
-    .ARSHARE(CPU_ARSHARE),
-    .ARREADY(CPU_ARREADY),
-    .AWVALID(CPU_AWVALID),
-    .AWADDR(CPU_AWADDR),
-    .AWID(CPU_AWID),
-    .AWBURST(CPU_AWBURST),
-    .AWLEN(CPU_AWLEN),
-    .AWSIZE(CPU_AWSIZE),
-    .AWLOCK(CPU_AWLOCK),
-    .AWCACHE(CPU_AWCACHE),
-    .AWPROT(CPU_AWPROT),
-    .AWMASTER(CPU_AWMASTER),
-    .AWINNER(CPU_AWINNER),
-    .AWSHARE(CPU_AWSHARE),
-    .AWSPARSE(CPU_AWSPARSE),
-    .AWREADY(CPU_AWREADY),
-    .RREADY(CPU_RREADY),
-    .RVALID(CPU_RVALID),
-    .RID(CPU_RID),
-    .RLAST(CPU_RLAST),
-    .RDATA(CPU_RDATA),
-    .RRESP(CPU_RRESP),
-    .WVALID(CPU_WVALID),
-    .WID(CPU_WID),
-    .WDATA(CPU_WDATA),
-    .WSTRB(CPU_WSTRB),
-    .WLAST(CPU_WLAST),
-    .WREADY(CPU_WREADY),
-    .BREADY(CPU_BREADY),
-    .BVALID(CPU_BVALID),
-    .BID(CPU_BID),
-    .BRESP(CPU_BRESP),
+    .ARVALID(CPU_AXI.ARVALID),
+    .ARADDR(CPU_AXI.ARADDR),
+    .ARID(CPU_AXI.ARID),
+    .ARBURST(CPU_AXI.ARBURST),
+    .ARLEN(CPU_AXI.ARLEN),
+    .ARSIZE(CPU_AXI.ARSIZE),
+    .ARLOCK(CPU_AXI.ARLOCK),
+    .ARCACHE(CPU_AXI.ARCACHE),
+    .ARPROT(CPU_AXI.ARPROT),
+    .ARMASTER(),
+    .ARINNER(),
+    .ARSHARE(),
+    .ARREADY(CPU_AXI.ARREADY),
+    .AWVALID(CPU_AXI.AWVALID),
+    .AWADDR(CPU_AXI.AWADDR),
+    .AWID(CPU_AXI.AWID),
+    .AWBURST(CPU_AXI.AWBURST),
+    .AWLEN(CPU_AXI.AWLEN),
+    .AWSIZE(CPU_AXI.AWSIZE),
+    .AWLOCK(CPU_AXI.AWLOCK),
+    .AWCACHE(CPU_AXI.AWCACHE),
+    .AWPROT(CPU_AXI.AWPROT),
+    .AWMASTER(),
+    .AWINNER(),
+    .AWSHARE(),
+    .AWSPARSE(),
+    .AWREADY(CPU_AXI.AWREADY),
+    .RREADY(CPU_AXI.RREADY),
+    .RVALID(CPU_AXI.RVALID),
+    .RID(CPU_AXI.RID),
+    .RLAST(CPU_AXI.RLAST),
+    .RDATA(CPU_AXI.RDATA),
+    .RRESP(CPU_AXI.RRESP),
+    .WVALID(CPU_AXI.WVALID),
+    .WID(),
+    .WDATA(CPU_AXI.WDATA),
+    .WSTRB(CPU_AXI.WSTRB),
+    .WLAST(CPU_AXI.WLAST),
+    .WREADY(CPU_AXI.WREADY),
+    .BREADY(CPU_AXI.BREADY),
+    .BVALID(CPU_AXI.BVALID),
+    .BID(CPU_AXI.BID),
+    .BRESP(CPU_AXI.BRESP),
 
     .IRQ(CPU_IRQs)
 );
 
+millisoc_sys_ctrl u_millisoc_sys_ctrl(
+    .pclk(FCLK),
+    .nporeset(nPORESET),
+    .sys_ctrl_apb(SYS_CTRL_APB),
+    .sysresetreq(SYSRESETREQ),
+    .watchdogreq(WDOGRESREQ),
+    .nsysreset(nSYSRESET)
+);
 
 ada_top_sldma350 u_dma350 (
     .clk(ACLK),
@@ -346,16 +283,16 @@ ada_top_sldma350 u_dma350 (
     .pwakeup(1'b1),
     .pdebug(1'b0),
 
-    .psel(PSELx_DMA_CFG),
-    .penable(PENABLE_DMA_CFG),
-    .pprot(PPROT_DMA_CFG),
-    .pwrite(PWRITE_DMA_CFG),
-    .paddr(PADDR_DMA_CFG),
-    .pwdata(PWDATA_DMA_CFG),
-    .pstrb(PSTRB_DMA_CFG),
-    .pready(PREADY_DMA_CFG),
-    .pslverr(PSLVERR_DMA_CFG),
-    .prdata(PRDATA_DMA_CFG),
+    .psel(DMA_CFG_APB.psel),
+    .penable(DMA_CFG_APB.penable),
+    .pprot(DMA_CFG_APB.pprot),
+    .pwrite(DMA_CFG_APB.pwrite),
+    .paddr(DMA_CFG_APB.paddr),
+    .pwdata(DMA_CFG_APB.pwdata),
+    .pstrb(DMA_CFG_APB.pstrb),
+    .pready(DMA_CFG_APB.pready),
+    .pslverr(DMA_CFG_APB.pslverr),
+    .prdata(DMA_CFG_APB.prdata),
 
     .awakeup_m0(),
 
@@ -502,7 +439,9 @@ millisoc_peripheral_subsystem u_millisoc_peripheral_subsystem (
     .SPI_MOSI(SPI_MOSI),
     .SPI_MISO(SPI_MISO),
 
-    .PERI_IRQS()
+    .WDOGRESREQ(WDOGRESREQ),
+
+    .PERI_IRQS(PERI_IRQS)
 );
 
 top_ahb_qspi u_ahb_qspi(
@@ -511,29 +450,29 @@ top_ahb_qspi u_ahb_qspi(
     .PCLK(PCLK),
     .PRESETn(PRESETn),
 
-    .HADDR(HADDR_QSPI),
-    .HTRANS(HTRANS_QSPI),
-    .HWRITE(HWRITE_QSPI),
-    .HSIZE(HSIZE_QSPI),
-    .HBURST(HBURST_QSPI),
-    .HPROT(HPROT_QSPI),
-    .HWDATA(HWDATA_QSPI),
-    .HSELx(HSELx_QSPI),
-    .HRDATA(HRDATA_QSPI),
-    .HREADY(HREADY_QSPI),
-    .HREADYOUT(HREADYOUT_QSPI),
-    .HRESP(HRESP_QSPI),
+    .HADDR(QSPI_AHB.HADDR),
+    .HTRANS(QSPI_AHB.HTRANS),
+    .HWRITE(QSPI_AHB.HWRITE),
+    .HSIZE(QSPI_AHB.HSIZE),
+    .HBURST(QSPI_AHB.HBURST),
+    .HPROT(QSPI_AHB.HPROT),
+    .HWDATA(QSPI_AHB.HWDATA),
+    .HSELx(QSPI_AHB.HSEL),
+    .HRDATA(QSPI_AHB.HRDATA),
+    .HREADY(QSPI_AHB.HREADY),
+    .HREADYOUT(QSPI_AHB.HREADYOUT),
+    .HRESP(QSPI_AHB.HRESP),
 
-    .PADDR(PADDR_QSPI_CFG[15:0]),
-    .PPROT(PPROT_QSPI_CFG),
-    .PSEL(PSELx_QSPI_CFG),
-    .PENABLE(PENABLE_QSPI_CFG),
-    .PWRITE(PWRITE_QSPI_CFG),
-    .PWDATA(PWDATA_QSPI_CFG),
-    .PSTRB(PSTRB_QSPI_CFG),
-    .PRDATA(PRDATA_QSPI_CFG),
-    .PREADY(PREADY_QSPI_CFG),
-    .PSLVERR(PSLVERR_QSPI_CFG),
+    .PADDR(QSPI_CFG_APB.paddr[15:0]),
+    .PPROT(QSPI_CFG_APB.pprot),
+    .PSEL(QSPI_CFG_APB.psel),
+    .PENABLE(QSPI_CFG_APB.penable),
+    .PWRITE(QSPI_CFG_APB.pwrite),
+    .PWDATA(QSPI_CFG_APB.pwdata),
+    .PSTRB(QSPI_CFG_APB.pstrb),
+    .PRDATA(QSPI_CFG_APB.prdata),
+    .PREADY(QSPI_CFG_APB.pready),
+    .PSLVERR(QSPI_CFG_APB.pslverr),
 
     .QSPI_SCLK(QSPI_SCLK),
     .QSPI_nCS(QSPI_nCS),
@@ -541,85 +480,85 @@ top_ahb_qspi u_ahb_qspi(
     .QSPI_IO_i(QSPI_IO_i),
     .QSPI_IO_e(QSPI_IO_e),
 
-    .IRQ_QSPI_FINISHED()
+    .IRQ_QSPI_FINISHED(IRQ_QSPI_FINISHED)
 );
 
 ROM_wrapper u_ROM_wrapper(
     .HCLK(FCLK),
 
-    .HSEL(HSELx_ROM),
-    .HADDR(HADDR_ROM[14:0]),
-    .HTRANS(HTRANS_ROM),
-    .HSIZE(HSIZE_ROM),
-    .HWRITE(HWRITE_ROM),
-    .HWDATA(HWDATA_ROM),
-    .HREADY(HREADY_ROM),
-    .HREADYOUT(HREADYOUT_ROM),
-    .HRDATA(HRDATA_ROM),
-    .HRESP(HRESP_ROM)
+    .HSEL(ROM_AHB.HSEL),
+    .HADDR(ROM_AHB.HADDR[14:0]),
+    .HTRANS(ROM_AHB.HTRANS),
+    .HSIZE(ROM_AHB.HSIZE),
+    .HWRITE(ROM_AHB.HWRITE),
+    .HWDATA(ROM_AHB.HWDATA),
+    .HREADY(ROM_AHB.HREADY),
+    .HREADYOUT(ROM_AHB.HREADYOUT),
+    .HRDATA(ROM_AHB.HRDATA),
+    .HRESP(ROM_AHB.HRESP)
 );
 
 nic400_millisoc_main u_nic400_millisoc_main (
-    .HSELx_CPU_S(HSELx_CPU_S),
-    .HADDR_CPU_S(HADDR_CPU_S),
-    .HTRANS_CPU_S(HTRANS_CPU_S),
-    .HWRITE_CPU_S(HWRITE_CPU_S),
-    .HSIZE_CPU_S(HSIZE_CPU_S),
-    .HBURST_CPU_S(HBURST_CPU_S),
-    .HPROT_CPU_S(HPROT_CPU_S),
-    .HWDATA_CPU_S(HWDATA_CPU_S),
-    .HRDATA_CPU_S(HRDATA_CPU_S),
-    .HREADYOUT_CPU_S(HREADYOUT_CPU_S),
-    .HREADY_CPU_S(HREADY_CPU_S),
-    .HRESP_CPU_S(HRESP_CPU_S),
+    .HSELx_CPU_S(CPU_S_AHB.HSEL),
+    .HADDR_CPU_S(CPU_S_AHB.HADDR),
+    .HTRANS_CPU_S(CPU_S_AHB.HTRANS),
+    .HWRITE_CPU_S(CPU_S_AHB.HWRITE),
+    .HSIZE_CPU_S(CPU_S_AHB.HSIZE),
+    .HBURST_CPU_S(CPU_S_AHB.HBURST),
+    .HPROT_CPU_S(CPU_S_AHB.HPROT),
+    .HWDATA_CPU_S(CPU_S_AHB.HWDATA),
+    .HRDATA_CPU_S(CPU_S_AHB.HRDATA),
+    .HREADYOUT_CPU_S(CPU_S_AHB.HREADYOUT),
+    .HREADY_CPU_S(CPU_S_AHB.HREADY),
+    .HRESP_CPU_S(CPU_S_AHB.HRESP),
 
-    .HSELx_QSPI(HSELx_QSPI),
-    .HADDR_QSPI(HADDR_QSPI),
-    .HTRANS_QSPI(HTRANS_QSPI),
-    .HWRITE_QSPI(HWRITE_QSPI),
-    .HSIZE_QSPI(HSIZE_QSPI),
-    .HBURST_QSPI(HBURST_QSPI),
-    .HPROT_QSPI(HPROT_QSPI),
-    .HWDATA_QSPI(HWDATA_QSPI),
-    .HRDATA_QSPI(HRDATA_QSPI),
-    .HREADYOUT_QSPI(HREADYOUT_QSPI),
-    .HREADY_QSPI(HREADY_QSPI),
-    .HRESP_QSPI(HRESP_QSPI),
+    .HSELx_QSPI(QSPI_AHB.HSEL),
+    .HADDR_QSPI(QSPI_AHB.HADDR),
+    .HTRANS_QSPI(QSPI_AHB.HTRANS),
+    .HWRITE_QSPI(QSPI_AHB.HWRITE),
+    .HSIZE_QSPI(QSPI_AHB.HSIZE),
+    .HBURST_QSPI(QSPI_AHB.HBURST),
+    .HPROT_QSPI(QSPI_AHB.HPROT),
+    .HWDATA_QSPI(QSPI_AHB.HWDATA),
+    .HRDATA_QSPI(QSPI_AHB.HRDATA),
+    .HREADYOUT_QSPI(QSPI_AHB.HREADYOUT),
+    .HREADY_QSPI(QSPI_AHB.HREADY),
+    .HRESP_QSPI(QSPI_AHB.HRESP),
 
-    .HSELx_ROM(HSELx_ROM),
-    .HADDR_ROM(HADDR_ROM),
-    .HTRANS_ROM(HTRANS_ROM),
-    .HWRITE_ROM(HWRITE_ROM),
-    .HSIZE_ROM(HSIZE_ROM),
-    .HBURST_ROM(),
-    .HPROT_ROM(),
-    .HWDATA_ROM(HWDATA_ROM),
-    .HRDATA_ROM(HRDATA_ROM),
-    .HREADYOUT_ROM(HREADYOUT_ROM),
-    .HREADY_ROM(HREADY_ROM),
-    .HRESP_ROM(HRESP_ROM),
+    .HSELx_ROM(ROM_AHB.HSEL),
+    .HADDR_ROM(ROM_AHB.HADDR),
+    .HTRANS_ROM(ROM_AHB.HTRANS),
+    .HWRITE_ROM(ROM_AHB.HWRITE),
+    .HSIZE_ROM(ROM_AHB.HSIZE),
+    .HBURST_ROM(ROM_AHB.HBURST),
+    .HPROT_ROM(ROM_AHB.HPROT),
+    .HWDATA_ROM(ROM_AHB.HWDATA),
+    .HRDATA_ROM(ROM_AHB.HRDATA),
+    .HREADYOUT_ROM(ROM_AHB.HREADYOUT),
+    .HREADY_ROM(ROM_AHB.HREADY),
+    .HRESP_ROM(ROM_AHB.HRESP),
 
-    .PADDR_DMA_CFG(PADDR_DMA_CFG),
-    .PWDATA_DMA_CFG(PWDATA_DMA_CFG),
-    .PWRITE_DMA_CFG(PWRITE_DMA_CFG),
-    .PPROT_DMA_CFG(PPROT_DMA_CFG),
-    .PSTRB_DMA_CFG(PSTRB_DMA_CFG),
-    .PENABLE_DMA_CFG(PENABLE_DMA_CFG),
-    .PSELx_DMA_CFG(PSELx_DMA_CFG),
-    .PRDATA_DMA_CFG(PRDATA_DMA_CFG),
-    .PSLVERR_DMA_CFG(PSLVERR_DMA_CFG),
-    .PREADY_DMA_CFG(PREADY_DMA_CFG),
+    .PADDR_DMA_CFG(DMA_CFG_APB.paddr),
+    .PWDATA_DMA_CFG(DMA_CFG_APB.pwdata),
+    .PWRITE_DMA_CFG(DMA_CFG_APB.pwrite),
+    .PPROT_DMA_CFG(DMA_CFG_APB.pprot),
+    .PSTRB_DMA_CFG(DMA_CFG_APB.pstrb),
+    .PENABLE_DMA_CFG(DMA_CFG_APB.penable),
+    .PSELx_DMA_CFG(DMA_CFG_APB.psel),
+    .PRDATA_DMA_CFG(DMA_CFG_APB.prdata),
+    .PSLVERR_DMA_CFG(DMA_CFG_APB.pslverr),
+    .PREADY_DMA_CFG(DMA_CFG_APB.pready),
 
-    .PADDR_QSPI_CFG(PADDR_QSPI_CFG),
-    .PWDATA_QSPI_CFG(PWDATA_QSPI_CFG),
-    .PWRITE_QSPI_CFG(PWRITE_QSPI_CFG),
-    .PPROT_QSPI_CFG(PPROT_QSPI_CFG),
-    .PSTRB_QSPI_CFG(PSTRB_QSPI_CFG),
-    .PENABLE_QSPI_CFG(PENABLE_QSPI_CFG),
-    .PSELx_QSPI_CFG(PSELx_QSPI_CFG),
-    .PRDATA_QSPI_CFG(PRDATA_QSPI_CFG),
-    .PSLVERR_QSPI_CFG(PSLVERR_QSPI_CFG),
-    .PREADY_QSPI_CFG(PREADY_QSPI_CFG),
+    .PADDR_QSPI_CFG(QSPI_CFG_APB.paddr),
+    .PWDATA_QSPI_CFG(QSPI_CFG_APB.pwdata),
+    .PWRITE_QSPI_CFG(QSPI_CFG_APB.pwrite),
+    .PPROT_QSPI_CFG(QSPI_CFG_APB.pprot),
+    .PSTRB_QSPI_CFG(QSPI_CFG_APB.pstrb),
+    .PENABLE_QSPI_CFG(QSPI_CFG_APB.penable),
+    .PSELx_QSPI_CFG(QSPI_CFG_APB.psel),
+    .PRDATA_QSPI_CFG(QSPI_CFG_APB.prdata),
+    .PSLVERR_QSPI_CFG(QSPI_CFG_APB.pslverr),
+    .PREADY_QSPI_CFG(QSPI_CFG_APB.pready),
 
     .HADDR_ADP(ADP_AHB.HADDR),
     .HTRANS_ADP(ADP_AHB.HTRANS),
@@ -632,41 +571,41 @@ nic400_millisoc_main u_nic400_millisoc_main (
     .HREADY_ADP(ADP_AHB.HREADY),
     .HRESP_ADP(ADP_AHB.HRESP),
 
-    .AWID_CM7(CPU_AWID),
-    .AWADDR_CM7(CPU_AWADDR),
-    .AWLEN_CM7(CPU_AWLEN),
-    .AWSIZE_CM7(CPU_AWSIZE),
-    .AWBURST_CM7(CPU_AWBURST),
-    .AWLOCK_CM7(CPU_AWLOCK),
-    .AWCACHE_CM7(CPU_AWCACHE),
-    .AWPROT_CM7(CPU_AWPROT),
-    .AWVALID_CM7(CPU_AWVALID),
-    .AWREADY_CM7(CPU_AWREADY),
-    .WDATA_CM7(CPU_WDATA),
-    .WSTRB_CM7(CPU_WSTRB),
-    .WLAST_CM7(CPU_WLAST),
-    .WVALID_CM7(CPU_WVALID),
-    .WREADY_CM7(CPU_WREADY),
-    .BID_CM7(CPU_BID),
-    .BRESP_CM7(CPU_BRESP),
-    .BVALID_CM7(CPU_BVALID),
-    .BREADY_CM7(CPU_BREADY),
-    .ARID_CM7(CPU_ARID),
-    .ARADDR_CM7(CPU_ARADDR),
-    .ARLEN_CM7(CPU_ARLEN),
-    .ARSIZE_CM7(CPU_ARSIZE),
-    .ARBURST_CM7(CPU_ARBURST),
-    .ARLOCK_CM7(CPU_ARLOCK),
-    .ARCACHE_CM7(CPU_ARCACHE),
-    .ARPROT_CM7(CPU_ARPROT),
-    .ARVALID_CM7(CPU_ARVALID),
-    .ARREADY_CM7(CPU_ARREADY),
-    .RID_CM7(CPU_RID),
-    .RDATA_CM7(CPU_RDATA),
-    .RRESP_CM7(CPU_RRESP),
-    .RLAST_CM7(CPU_RLAST),
-    .RVALID_CM7(CPU_RVALID),
-    .RREADY_CM7(CPU_RREADY),
+    .AWID_CM7(CPU_AXI.AWID),
+    .AWADDR_CM7(CPU_AXI.AWADDR),
+    .AWLEN_CM7(CPU_AXI.AWLEN),
+    .AWSIZE_CM7(CPU_AXI.AWSIZE),
+    .AWBURST_CM7(CPU_AXI.AWBURST),
+    .AWLOCK_CM7(CPU_AXI.AWLOCK),
+    .AWCACHE_CM7(CPU_AXI.AWCACHE),
+    .AWPROT_CM7(CPU_AXI.AWPROT),
+    .AWVALID_CM7(CPU_AXI.AWVALID),
+    .AWREADY_CM7(CPU_AXI.AWREADY),
+    .WDATA_CM7(CPU_AXI.WDATA),
+    .WSTRB_CM7(CPU_AXI.WSTRB),
+    .WLAST_CM7(CPU_AXI.WLAST),
+    .WVALID_CM7(CPU_AXI.WVALID),
+    .WREADY_CM7(CPU_AXI.WREADY),
+    .BID_CM7(CPU_AXI.BID),
+    .BRESP_CM7(CPU_AXI.BRESP),
+    .BVALID_CM7(CPU_AXI.BVALID),
+    .BREADY_CM7(CPU_AXI.BREADY),
+    .ARID_CM7(CPU_AXI.ARID),
+    .ARADDR_CM7(CPU_AXI.ARADDR),
+    .ARLEN_CM7(CPU_AXI.ARLEN),
+    .ARSIZE_CM7(CPU_AXI.ARSIZE),
+    .ARBURST_CM7(CPU_AXI.ARBURST),
+    .ARLOCK_CM7(CPU_AXI.ARLOCK),
+    .ARCACHE_CM7(CPU_AXI.ARCACHE),
+    .ARPROT_CM7(CPU_AXI.ARPROT),
+    .ARVALID_CM7(CPU_AXI.ARVALID),
+    .ARREADY_CM7(CPU_AXI.ARREADY),
+    .RID_CM7(CPU_AXI.RID),
+    .RDATA_CM7(CPU_AXI.RDATA),
+    .RRESP_CM7(CPU_AXI.RRESP),
+    .RLAST_CM7(CPU_AXI.RLAST),
+    .RVALID_CM7(CPU_AXI.RVALID),
+    .RREADY_CM7(CPU_AXI.RREADY),
 
     .AWID_DMA(DMA_AXI.AWID),
     .AWADDR_DMA(DMA_AXI.AWADDR),

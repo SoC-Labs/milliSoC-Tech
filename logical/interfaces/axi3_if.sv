@@ -1,4 +1,4 @@
-interface axi3 #(
+interface axi3_if #(
     parameter DATA_W=32,
     parameter ID_W=6,
     parameter ADDR_W=32
