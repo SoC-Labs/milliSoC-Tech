@@ -12,3 +12,4 @@ software/src/*/*.o
 software/src/*/*.ELF
 software/src/*/*.bin
 
+logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical

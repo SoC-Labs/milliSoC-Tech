@@ -1,0 +1,417 @@
+#-------------------------------------------------------------------------------
+# The confidential and proprietary information contained in this file may
+# only be used by a person authorised under and to the extent permitted
+# by a subsisting licensing agreement from Arm Limited or its affiliates.
+#
+#            (C) COPYRIGHT 2019-2022 Arm Limited or its affiliates.
+#                ALL RIGHTS RESERVED
+#
+# This entire notice must be reproduced on all copies of this file
+# and copies of this file may only be made by a person if such person is
+# permitted to do so under the terms of a subsisting license agreement
+# from Arm Limited or its affiliates.
+#
+#            Release Information : Cortex-M85-r1p0-00rel0
+#
+#-------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# unique parameter
+#-------------------------------------------------------------------------------
+# Specifies an extensions to the following files
+# OLYMPUS.sv                => OLYMPUSstring.sv
+# OLYMPUS_CONFIG.sv         => OLYMPUS_CONFIGstring.sv
+# OLYMPUS_MCU.sv            => OLYMPUS_MCUstring.sv
+# Cortex_M85_configured.xml => Cortex_M85_string.xml
+# If value = "blank"  No change made is made to the file names
+# Any other value add the string to the file names as show above
+UNIQUE: blank
+
+#-------------------------------------------------------------------------------
+# OLYMPUS_CONFIG.sv parameters
+#-------------------------------------------------------------------------------
+
+# Specifies whether floating point
+# hardware is included
+# FALSE: No FPU
+# TRUE:  Include single precision FPU
+#
+FPU: TRUE
+
+# When FPU = FALSE
+# No floating-point hardware is included;
+# 0: MVE not included
+# 1: Integer subset of MVE included
+# When FPU = TRUE
+# Integer, half and single precision floating point included;
+# 0: MVE not included
+# 2: Integer and half and single precision
+#
+MVE: 2
+
+# Specifies whether the external coprocessor interface is included
+# FALSE: Coprocessor interface not included
+# TRUE:  Coprocessor interface included
+#
+CPIF: TRUE
+
+# Specifies the number of non-secure MPU regions included
+# 0:  No MPU regions
+# 4:  4  MPU regions
+# 8:  8  MPU regions
+# 12: 12 MPU regions
+# 16: 16 MPU regions
+# All non-secure MPU regions can be disabled by the input signal MPUNSDISABLE
+#
+MPU_NS: 8
+
+# Specifies the number of secure MPU regions included
+# 0:  No MPU regions
+# 4:  4  MPU regions
+# 8:  8  MPU regions
+# 12: 12 MPU regions
+# 16: 16 MPU regions
+# All secure MPU regions can be disabled using the input signal MPUSDISABLE
+#
+MPU_S: 8
+
+# Specifies the number of SAU regions included
+# 0: No SAU regions
+# 4: 4  SAU regions
+# 8: 8  SAU regions
+# Note:
+# * If SAU is set to 0 the memory regions can be specified by an external component using the
+#   External Attribution Interface
+# All SAU regions can be disabled using the input signal SAUDISABLE
+#
+SAU: 4
+
+# Specifies whether the instruction cache controller is included in the processor, and, if included
+# the size of the cache
+# No:   No   instruction cache
+# 4KB:  4KB  instruction cache
+# 8KB:  8KB  instruction cache
+# 16KB: 16KB instruction cache
+# 32KB: 32KB instruction cache
+# 64KB: 64KB instruction cache
+#
+ICACHESZ: 16KB
+
+# Specifies both the M-AXI configuration and the inclusion and size of the Data cache controller in the processor
+# No:    No  data cache
+# 4KB:   4KB data cache
+# 8KB:   8KB data cache
+# 16KB: 16KB data cache
+# 32KB: 32KB data cache
+# 64KB: 64KB data cache
+#
+DCACHESZ: 16KB
+
+# Instruction and Data cache ID Unique identifier for instruction and data cache RAM implementation
+# This parameter allows multiple instances of the Cortex-M85 processor to use different library cells for the embedded cache RAM
+# max: 255
+# min: 0
+#
+IDCACHEID: 0
+
+# Specifies whether the processor supports Error detection and correction in the L1 Data and Instruction cache
+# (when configured) and the TCM
+# FALSE: ECC not included
+# TRUE:  ECC included
+#
+ECC: FALSE
+
+# Specifies the number of external
+# interrupts included. Interrupt numbers
+# are IRQ0 to IRQ(NUMIRQ-1)
+# max: 480
+# min: 1
+#
+NUMIRQ: 240
+
+# Specifies the number of exception priority bits
+# min: 3
+# max: 8
+#
+IRQLVL: 3
+
+# Disables support for individual interrupts, allowing a range of non-contiguous interrupts
+# IRQDIS[i] = indicates that IRQ[i] is not present
+#
+IRQDIS: 0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+
+# Specifies the number of debug resources included
+# 1: Reduced set: 2 DWT and 4 BPU comparators
+# 2: Full set: 4 DWT and 8 BPU comparators
+# Debug Monitor mode is always supported
+#
+DBGLVL: 2
+
+# Specifies the level of instrumentation trace supported
+# FALSE: No ITM Trace included,
+# TRUE:  ITM trace included
+#
+ITM: TRUE
+
+# Specifies support for ETM trace
+# FALSE: No ETM trace included
+# TRUE:  ETM included
+# If ETM is set to TRUE the partner must have licensed the ETM unit.
+#
+ETM: FALSE
+
+# Specifies whether the Internal Wake-up Interrupt Controller (IWIC) is included
+# FALSE: IWIC not included
+# TRUE:  IWIC included
+#
+IWIC: TRUE
+
+# Specifies the number of IRQ lines # supported by the WIC. The value always
+# includes the three internal events NMI, RXEV and Debug
+# max: $NUMIRQ+3
+# min: 4
+#
+WICLINES: $NUMIRQ+3
+
+# Specifies whether Bus protection is supported on the M-AXI, P-AHB, EPPB and S-AXI interfaces on the processor
+# FALSE: Bus protection not included
+# TRUE:  Bus protection included
+#
+BUSPROT: FALSE
+
+# Specifies whether the processor is configured for dual-redundant lockstep operation
+# Note:
+# * LOCKSTEP and FLOPPARITY MUST NOT both be set TRUE
+# * The RAR parameter must be set to TRUE if the LOCKSTEP parameter is set to TRUE
+# FALSE: Regular processor operation
+# TRUE:  Dual-redundant lockstep operation
+#
+LOCKSTEP: FALSE
+
+# Specified whether the processor is configured with parity generation and checks on flip-flops in non-debug logic
+# Note:
+# * LOCKSTEP and FLOPPARITY MUST NOT both be set TRUE
+# * The RAR parameter must be set to TRUE if the FLOPPARITY parameter is set to TRUE
+# FALSE: No parity on flip-flops
+# TRUE:  Include parity on flip-flops
+#
+FLOPPARITY: FALSE
+
+# Specifies whether the processor is configured with ITCM Security gate unit
+# FALSE: TCM Gate Unit not included
+# TRUE:  TCM Gate Unit included
+#
+ITGU: FALSE
+
+# ITCM gate unit block size
+# Size in bytes = 2^(ITGUBLKSZ+5)
+# Minimum block size: 32 bytes
+# Maximum block size: 1 MB
+# Min: 0
+# Max: 15
+#
+ITGUBLKSZ: 3
+
+# Maximum number of ITCM gate unit blocks
+# Number of blocks = 2^ITGUMAXBLKS
+# Min: 1
+# Max: 9
+ITGUMAXBLKS: 1
+
+# Specifies whether the processor is configured with DTCM Security gate unit
+# FALSE: TCM Gate Unit not included
+# TRUE:  TCM Gate Unit included
+#
+DTGU: FALSE
+
+# DTCM gate unit block size
+# Size in bytes = 2^(DTGUBLKSZ+5)
+# Minimum block size: 32 bytes
+# Maximum block size: 1 MB
+# Min: 0
+# Max: 15
+#
+DTGUBLKSZ: 3
+
+# Maximum number of DTCM gate unit blocks
+# Number of blocks = 2^DTGUMAXBLKS
+# Min 1
+# Max 9
+#
+DTGUMAXBLKS: 1
+
+# Specifies whether the Programmable MBIST Controller (PMC-100) is included
+# FALSE: PMC-100 not included
+# TRUE:  PMC-100 included
+# Note: PMC-100 is delivered as part of the optional licensable Safety package
+#
+PMC: FALSE
+
+# Specifies the number of programmable registers implemented in the PMC
+# 0,1:   Reserved
+# 2..32: Number of registers
+# Note: This parameter is not used when the PMC is not included
+#
+PMCPROGSIZE: 14
+
+# Specifies whether all synchronous state or only architecturally required state is reset
+# FALSE: Only reset state required by the architecture
+# TRUE:  Reset all synchronous state
+# Note:
+# * When the RAR parameter is TRUE all flops in the design will include an explicit reset
+# * The RAR parameter must be set to TRUE if the FLOPPARITY parameter is set to TRUE
+# * The RAR parameter must be set to TRUE if the LOCKSTEP parameter is set to TRUE
+#
+RAR: FALSE
+
+# Specifies whether the instruction for
+# this coprocessor is redirected to the CDE modules
+# FALSE: CDE modules not used
+# TRUE:  CDE modules used
+CDEMAPPEDONCP0: FALSE
+CDEMAPPEDONCP1: FALSE
+CDEMAPPEDONCP2: FALSE
+CDEMAPPEDONCP3: FALSE
+CDEMAPPEDONCP4: FALSE
+CDEMAPPEDONCP5: FALSE
+CDEMAPPEDONCP6: FALSE
+CDEMAPPEDONCP7: FALSE
+
+# RTL identification used for System with
+# multi Cortex-M85 or to differentiate CDE RTL version.
+# Note: Do not use values 32, 33 and 34 with the CDE examples
+# 0,1,2..255
+CDERTLID: 0
+
+# Specified inclusion of PACBTI extension
+# 0: PACBTI not included
+# 1: PACBTI included
+PACBTI: FALSE
+#-------------------------------------------------------------------------------
+# OLYMPUS_MCU.sv parameters
+#-------------------------------------------------------------------------------
+# Base address of the MCU level CoreSight ROM table
+# Notes:
+# The base address must be aligned to a 4KB address region i.e. MCUROMADDR[11:0] == 0x000
+# The address must be in the EPPB address region of the memory map
+#
+MCUROMADDR: 0xE00FE000
+
+# Specifies whether the MCU level includes the External Wakeup Interrupt Controller
+# FALSE: EWIC not present
+# TRUE:  EWIC present
+#
+EWIC: FALSE
+
+# Specifies whether the MCU level is configured with the CoreSight Embedded Trace Buffer, ETB
+# Note: The CoreSight ETB is a separate licensable product from Arm
+# FALSE: ETB not present
+# TRUE:  ETB present
+#
+ETB: FALSE
+
+# Specifies debug port select capability
+# 0: JTAG only selected (JTAG-DP)
+# 1: Serial Wire only selected (SW-DP)
+# 2: Dynamic switching selected (SWJ-DP)
+#
+DPSEL: 2
+
+# ECOREVNUM for MCU CoreSight Components (ROM Table,
+# DAP, TPIU and ETB) and EWIC module.
+# The assigned values are reflected in PIDR3.REVAND
+# field of the corresponding block
+#   19:16 = css600_apbrom
+#   15:12 = olympus_dap
+#   11:8  = olympus_tpiu
+#   7:4   = css600_tmc_etb
+#   3:0   = olympus_ewic
+#
+MCU_ECOREVNUM: 0x00000
+
+# JEP106 identification code for SoC design
+# Reflected in MCU ROM table PIDR1 and PIDR2
+#
+JEPID: 0x00
+
+# JEP106 continuation code for SoC design
+# Reflected in MCU ROM table PIDR4
+#
+JEPCONT: 0x0
+
+# Part number for SoC design
+# Reflected in MCU ROM table PIDR0 and PIDR1
+#
+PARTNO: 0x000
+
+# JEP Target revision used by the DAP
+#
+TREVISION: 0x0
+
+# Specifies whether the MCU level is configured with the SBIST Controller
+# FALSE: SBIST Controller not present
+# TRUE:  SBIST Controller present
+#
+SBISTC: FALSE
+
+# Specifies the reset value SBIST deadlock counter
+# Time out clock cycles = SBIST_DL_CYCLES * 32
+# max: 0xFFFF
+# min: 0
+#
+SBIST_DL_CYCLES: 0xA0
+
+# Sets FCTLT register at reset in SBIST controller
+# FALSE: Idle (Deadlock counter disabled)
+# TRUE:  Init (Deadlock counter counts down to zero)
+# Must be set to FALSE for correct operation of the Execution Testbench
+# The Software Test Library (STL) can set to TRUE for additional coverage
+#
+SBIST_DL_RESET: FALSE
+
+# Specifies which Trace Port Interface Unit (TPIU)
+# FALSE: TPIU  - Configurable 1, 2 or 4-bit parallel
+# TRUE:  TPIUM - Configurable 1, 2, 4, 8, 12 or 16-bit parallel
+#
+TPIUM: FALSE
+
+# TPIUM synchronizer depth
+# 2 : 2-stage synchronizer.
+# 3 : 3-stage synchronizer.
+#
+FF_SYNC_DEPTH: 2
+
+# Configures the width of the TPIUM tracedata
+# Legal values are 4, 8, 12, 16
+# Note: Execution TB checks only works with width of 4
+#
+TRACEPORT_DATA_WIDTH: 4
+
+#-------------------------------------------------------------------------------
+# Parameters required to configure the MBIF generation
+# They will be used to configure all locations that used the TCM parameters
+#-------------------------------------------------------------------------------
+
+# Size of the data TCM region encoded as:
+# CFGDTCMSZ =  No: No DTCM implemented
+# CFGDTCMSZ = 4KB, 8KB, 16KB, 32KB, 64KB, 128KB, 256KB, 512KB, 1MB, 2MB, 4MB, 8MB, 16MB
+#
+CFGDTCMSZ: 64KB
+
+# Size of the instruction TCM region encoded as:
+# CFGITCMSZ =  No: No ITCM implemented
+# CFGITCMSZ = 4KB, 8KB, 16KB, 32KB, 64KB, 128KB, 256KB, 512KB, 1MB, 2MB, 4MB, 8MB, 16MB
+#
+CFGITCMSZ: 64KB
+
+# Number of ITCM wait cycles:
+# 0:   No wait cycles
+# 1-7: Number of wait cycles
+#
+ITCMWAIT: 0
+
+# Number of DTCM wait cycles:
+# 0:   No wait cycles
+# 1-7: Number of wait cycles
+#
+DTCMWAIT: 0

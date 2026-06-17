@@ -1,0 +1,49 @@
+//------------------------------------------------------------------------------
+// The confidential and proprietary information contained in this file may
+// only be used by a person authorised under and to the extent permitted
+// by a subsisting licensing agreement from Arm Limited or its affiliates.
+//
+// (C) COPYRIGHT 2019-2022 Arm Limited or its affiliates.
+// ALL RIGHTS RESERVED
+//
+// This entire notice must be reproduced on all copies of this file
+// and copies of this file may only be made by a person if such person is
+// permitted to do so under the terms of a subsisting license agreement
+// from Arm Limited or its affiliates.
+//
+//  Release Information : Cortex-M85-r1p0-00rel0
+//------------------------------------------------------------------------------
+
+// -----------------------------------------------------------------------------
+//  Purpose : Olympus execution_tb verilog command file.
+// -----------------------------------------------------------------------------
+
+// ============= Verilog library extensions ===========
++libext+.sv+.vlib
+
+// ============= Include file search path =============
+
+// +incdir+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/testbench/execution_tb/verilog
+// -y      $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/testbench/execution_tb/verilog
+
+// +incdir+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/testbench/execution_tb/verilog/example_sys
+// -y      $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/testbench/execution_tb/verilog/example_sys
+
++incdir+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/testbench/execution_tb/verilog/models
+-y      $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/testbench/execution_tb/verilog/models
+
++incdir+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/models/cells/generic
+-y      $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/models/cells/generic
+
+// OLYMPUS_CONFIG.v
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus/verilog
+
+// MCU layer
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_aab/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_aab/verilog
+
+
+
+
+
+

@@ -1,0 +1,215 @@
+//------------------------------------------------------------------------------
+// The confidential and proprietary information contained in this file may
+// only be used by a person authorised under and to the extent permitted
+// by a subsisting licensing agreement from Arm Limited or its affiliates.
+//
+// (C) COPYRIGHT 2019-2022 Arm Limited or its affiliates.
+// ALL RIGHTS RESERVED
+//
+// This entire notice must be reproduced on all copies of this file
+// and copies of this file may only be made by a person if such person is
+// permitted to do so under the terms of a subsisting license agreement
+// from Arm Limited or its affiliates.
+//
+//  Release Information : Cortex-M85-r1p0-00rel0
+//------------------------------------------------------------------------------
+
+// -----------------------------------------------------------------------------
+//  Purpose : Olympus Execution testbench RTL verilog command file.
+// -----------------------------------------------------------------------------
+
+// Set the following defines to your requirements:
+
+// Set to capture ITCM transfers and print to the log file
+//+define+OLYMPUS_TCM_DEBUG
+
+// Uncomment if using power aware simulations on a PG Netlist
+// This define overrides the following domain specific PG and RET defines
+//+define+ARM_PG_ON
+
+// Uncomment to select power controls to power domains
+//+define+ARM_EPU_PG_ON
+//+define+ARM_DEBUG_PG_ON
+//+define+ARM_RAMS_PG_ON
+
+// Uncomment to select retention power controls for all power domains
+//+define+ARM_RET_ON
+
+// Enable debug messages on ITCM accesses
+//+define+OLYMPUS_TCM_DEBUG
+
+// Uncomment to enable VCD generation
+//+define+ARM_OLYMPUS_EXECTB_VCD
+
+// Uncomment to enable VCD generation with sections
+//+define+START_STOP_SECTIONS
+
+// ============= Verilog library extensions ===========
++libext+.v+.sv+.vlib
+
+// ============= Package files ========================
+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/shared/verilog/olympus_pkg.sv
+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/shared/verilog/olympus_ecc_pkg.sv
+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_dcu/verilog/olympus_dcu_pkg.sv
+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_biu/verilog/olympus_biu_pkg.sv
+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_lsu/verilog/olympus_lsu_pkg.sv
+///home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_etm/verilog/olympus_etm_pkg.sv
+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_mau/verilog/olympus_mau_pkg.sv
+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_nvic/verilog/olympus_nvic_pkg.sv
+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_core/verilog/olympus_core_pkg.sv
+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_core/verilog/olympus_dpu_pkg.sv
+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_epu/verilog/olympus_epu_pkg.sv
+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_tcu/verilog/olympus_tcu_pkg.sv
+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_stb/verilog/olympus_stb_pkg.sv
+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_ewic/verilog/olympus_ewic_pkg.sv
+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_sbist/verilog/olympus_sbist_pkg.sv
+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_dcls/verilog/olympus_dcls_pkg.sv
+
+// ============= Include file search path =============
+// Blocks directories
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_biu/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_biu/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_bpu/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_bpu/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_core/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_core/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_cpc/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_cpc/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_dcu/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_dcu/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_dpc/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_dpc/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_dbg/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_dbg/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_dwt/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_dwt/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_epu/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_epu/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_pmu/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_pmu/verilog
+//+incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_etm/verilog
+//-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_etm/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_icu/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_icu/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_itm/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_itm/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_lsu/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_lsu/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_piu/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_piu/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_ras/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_ras/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_watchcat/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_watchcat/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_mau/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_mau/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_miu/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_miu/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_nvic/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_nvic/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_scb/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_scb/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_stb/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_stb/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_tcu/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_tcu/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_tpiu/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_tpiu/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_tpium/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_tpium/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_mcu/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_mcu/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_cti/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_cti/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_ewic/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_ewic/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_sbist/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_sbist/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_pmc/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_pmc/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_mem/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_mem/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_dcls/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_dcls/verilog
+
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus/verilog
+
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/shared/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/shared/verilog
+
+// Cells
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/models/cells/generic
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/models/cells/generic
+
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/models/rams/generic
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/models/rams/generic
+
++incdir+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/testbench/execution_tb/verilog/models
+-y      $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/testbench/execution_tb/verilog/models
+
+// Generic CDE
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/models/modules
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/models/modules
+
+//DAP
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/daplite2/logical/daplite2_m/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/daplite2/logical/daplite2_m/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/daplite2/logical/shared/css600_or_tree/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/daplite2/logical/shared/css600_or_tree/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/daplite2/logical/shared/css600_ecorevnum/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/daplite2/logical/shared/css600_ecorevnum/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/daplite2/logical/shared/css600_lpislave/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/daplite2/logical/shared/css600_lpislave/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/daplite2/logical/shared/css600_pulseasyncbridge/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/daplite2/logical/shared/css600_pulseasyncbridge/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/daplite2/logical/shared/css600_claimtags/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/daplite2/logical/shared/css600_claimtags/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/daplite2/logical/shared/css600_one_hot_mux/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/daplite2/logical/shared/css600_one_hot_mux/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/daplite2/logical/models/cells/generic
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/daplite2/logical/models/cells/generic
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/daplite2/logical/css600_dp/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/daplite2/logical/css600_dp/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/daplite2/logical/css600_ahbap/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/daplite2/logical/css600_ahbap/verilog
++incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/daplite2/logical/css600_apbrom/verilog
+-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/daplite2/logical/css600_apbrom/verilog
+
+//PMC-100 Sources
+// /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/pmc100/logical/pmc100/verilog/pmc100_pkg.sv
+// +incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/pmc100/logical/pmc100/verilog
+// -y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/pmc100/logical/pmc100/verilog
+// -y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/pmc100/logical/models/cells/generic
+
+//TPIUM Sources
+// +incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/tpium/logical/tpium/verilog
+// -y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/tpium/logical/tpium/verilog
+// +incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/tpium/logical/models/cells/generic
+// -y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/tpium/logical/models/cells/generic
+
+
+//CoreSight-600 Sources
+//+incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/css600/logical/css600_atbreplicator/verilog
+//-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/css600/logical/css600_atbreplicator/verilog
+//+incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/css600/logical/css600_atbupsizer/verilog
+//-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/css600/logical/css600_atbupsizer/verilog
+//+incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/css600/logical/css600_tmc/verilog
+//-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/css600/logical/css600_tmc/verilog
+//+incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/css600/logical/models/cells/generic
+//-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/css600/logical/models/cells/generic
+//+incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/css600/logical/models/rams/generic
+//-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/css600/logical/models/rams/generic
+//+incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/css600/logical/shared/css600_claimtags/verilog
+//-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/css600/logical/shared/css600_claimtags/verilog
+//+incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/css600/logical/shared/css600_ecorevnum/verilog
+//-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/css600/logical/shared/css600_ecorevnum/verilog
+//+incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/css600/logical/shared/css600_or_tree/verilog
+//-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/css600/logical/shared/css600_or_tree/verilog
+//+incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/css600/logical/shared/css600_trace_formatter/verilog
+//-y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/css600/logical/shared/css600_trace_formatter/verilog
+
+
++incdir+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/millisoc_cpu_ss.v
+
