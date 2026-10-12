@@ -18,10 +18,10 @@ module dtcm (
 );
 
 bit_ram #(
-    .addr_bits(21),
-    .data_bits(8),
-    .reset(0),
-    .reset_high(0)
+    .ADDR_BITS(21),
+    .DATA_BITS(8),
+    .RESET(0),
+    .RESET_HIGH(0)
 ) u_dtcm0_ram_0 (
     .clk(CLK),
     .addr_i(D0TCMADDR),
@@ -31,10 +31,10 @@ bit_ram #(
     .we_i({8{D0TCMWR&D0TCMBYTEWR[0]}})
 );
 bit_ram #(
-    .addr_bits(21),
-    .data_bits(8),
-    .reset(0),
-    .reset_high(0)
+    .ADDR_BITS(21),
+    .DATA_BITS(8),
+    .RESET(0),
+    .RESET_HIGH(0)
 ) u_dtcm0_ram_1 (
     .clk(CLK),
     .addr_i(D0TCMADDR),
@@ -44,10 +44,10 @@ bit_ram #(
     .we_i({8{D0TCMWR&D0TCMBYTEWR[1]}})
 );
 bit_ram #(
-    .addr_bits(21),
-    .data_bits(8),
-    .reset(0),
-    .reset_high(0)
+    .ADDR_BITS(21),
+    .DATA_BITS(8),
+    .RESET(0),
+    .RESET_HIGH(0)
 ) u_dtcm0_ram_2 (
     .clk(CLK),
     .addr_i(D0TCMADDR),
@@ -57,10 +57,10 @@ bit_ram #(
     .we_i({8{D0TCMWR&D0TCMBYTEWR[2]}})
 );
 bit_ram #(
-    .addr_bits(21),
-    .data_bits(8),
-    .reset(0),
-    .reset_high(0)
+    .ADDR_BITS(21),
+    .DATA_BITS(8),
+    .RESET(0),
+    .RESET_HIGH(0)
 ) u_dtcm0_ram_3 (
     .clk(CLK),
     .addr_i(D0TCMADDR),
@@ -70,10 +70,10 @@ bit_ram #(
     .we_i({8{D0TCMWR&D0TCMBYTEWR[3]}})
 );
 bit_ram #(
-    .addr_bits(21),
-    .data_bits(8),
-    .reset(0),
-    .reset_high(0)
+    .ADDR_BITS(21),
+    .DATA_BITS(8),
+    .RESET(0),
+    .RESET_HIGH(0)
 ) u_dtcm1_ram_0 (
     .clk(CLK),
     .addr_i(D1TCMADDR),
@@ -83,10 +83,10 @@ bit_ram #(
     .we_i({8{D1TCMWR&D1TCMBYTEWR[0]}})
 );
 bit_ram #(
-    .addr_bits(21),
-    .data_bits(8),
-    .reset(0),
-    .reset_high(0)
+    .ADDR_BITS(21),
+    .DATA_BITS(8),
+    .RESET(0),
+    .RESET_HIGH(0)
 ) u_dtcm1_ram_1 (
     .clk(CLK),
     .addr_i(D1TCMADDR),
@@ -96,10 +96,10 @@ bit_ram #(
     .we_i({8{D1TCMWR&D1TCMBYTEWR[1]}})
 );
 bit_ram #(
-    .addr_bits(21),
-    .data_bits(8),
-    .reset(0),
-    .reset_high(0)
+    .ADDR_BITS(21),
+    .DATA_BITS(8),
+    .RESET(0),
+    .RESET_HIGH(0)
 ) u_dtcm1_ram_2 (
     .clk(CLK),
     .addr_i(D1TCMADDR),
@@ -109,10 +109,10 @@ bit_ram #(
     .we_i({8{D1TCMWR&D1TCMBYTEWR[2]}})
 );
 bit_ram #(
-    .addr_bits(21),
-    .data_bits(8),
-    .reset(0),
-    .reset_high(0)
+    .ADDR_BITS(21),
+    .DATA_BITS(8),
+    .RESET(0),
+    .RESET_HIGH(0)
 ) u_dtcm1_ram_3 (
     .clk(CLK),
     .addr_i(D1TCMADDR),

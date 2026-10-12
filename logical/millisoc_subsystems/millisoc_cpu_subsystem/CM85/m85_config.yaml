@@ -53,7 +53,7 @@ MVE: 2
 # FALSE: Coprocessor interface not included
 # TRUE:  Coprocessor interface included
 #
-CPIF: TRUE
+CPIF: FALSE
 
 # Specifies the number of non-secure MPU regions included
 # 0:  No MPU regions

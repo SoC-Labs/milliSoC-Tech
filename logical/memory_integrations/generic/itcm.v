@@ -12,10 +12,10 @@ module itcm (
 );
 
 bit_ram #(
-    .addr_bits(21),
-    .data_bits(8),
-    .reset(0),
-    .reset_high(0)
+    .ADDR_BITS(21),
+    .DATA_BITS(8),
+    .RESET(0),
+    .RESET_HIGH(0)
 ) u_itcm_ram (
     .clk(CLK),
     .addr_i(ITCMADDR),
@@ -25,10 +25,10 @@ bit_ram #(
     .we_i({8{ITCMWR&ITCMBYTEWR[0]}})
 );
 bit_ram #(
-    .addr_bits(21),
-    .data_bits(8),
-    .reset(0),
-    .reset_high(0)
+    .ADDR_BITS(21),
+    .DATA_BITS(8),
+    .RESET(0),
+    .RESET_HIGH(0)
 ) u_itcm_ram_1 (
     .clk(CLK),
     .addr_i(ITCMADDR),
@@ -38,10 +38,10 @@ bit_ram #(
     .we_i({8{ITCMWR&ITCMBYTEWR[1]}})
 );
 bit_ram #(
-    .addr_bits(21),
-    .data_bits(8),
-    .reset(0),
-    .reset_high(0)
+    .ADDR_BITS(21),
+    .DATA_BITS(8),
+    .RESET(0),
+    .RESET_HIGH(0)
 ) u_itcm_ram_2 (
     .clk(CLK),
     .addr_i(ITCMADDR),
@@ -51,10 +51,10 @@ bit_ram #(
     .we_i({8{ITCMWR&ITCMBYTEWR[2]}})
 );
 bit_ram #(
-    .addr_bits(21),
-    .data_bits(8),
-    .reset(0),
-    .reset_high(0)
+    .ADDR_BITS(21),
+    .DATA_BITS(8),
+    .RESET(0),
+    .RESET_HIGH(0)
 ) u_itcm_ram_3 (
     .clk(CLK),
     .addr_i(ITCMADDR),
@@ -64,10 +64,10 @@ bit_ram #(
     .we_i({8{ITCMWR&ITCMBYTEWR[3]}})
 );
 bit_ram #(
-    .addr_bits(21),
-    .data_bits(8),
-    .reset(0),
-    .reset_high(0)
+    .ADDR_BITS(21),
+    .DATA_BITS(8),
+    .RESET(0),
+    .RESET_HIGH(0)
 ) u_itcm_ram_4 (
     .clk(CLK),
     .addr_i(ITCMADDR),
@@ -77,10 +77,10 @@ bit_ram #(
     .we_i({8{ITCMWR&ITCMBYTEWR[4]}})
 );
 bit_ram #(
-    .addr_bits(21),
-    .data_bits(8),
-    .reset(0),
-    .reset_high(0)
+    .ADDR_BITS(21),
+    .DATA_BITS(8),
+    .RESET(0),
+    .RESET_HIGH(0)
 ) u_itcm_ram_5 (
     .clk(CLK),
     .addr_i(ITCMADDR),
@@ -90,10 +90,10 @@ bit_ram #(
     .we_i({8{ITCMWR&ITCMBYTEWR[5]}})
 );
 bit_ram #(
-    .addr_bits(21),
-    .data_bits(8),
-    .reset(0),
-    .reset_high(0)
+    .ADDR_BITS(21),
+    .DATA_BITS(8),
+    .RESET(0),
+    .RESET_HIGH(0)
 ) u_itcm_ram_6 (
     .clk(CLK),
     .addr_i(ITCMADDR),
@@ -103,10 +103,10 @@ bit_ram #(
     .we_i({8{ITCMWR&ITCMBYTEWR[6]}})
 );
 bit_ram #(
-    .addr_bits(21),
-    .data_bits(8),
-    .reset(0),
-    .reset_high(0)
+    .ADDR_BITS(21),
+    .DATA_BITS(8),
+    .RESET(0),
+    .RESET_HIGH(0)
 ) u_itcm_ram_7 (
     .clk(CLK),
     .addr_i(ITCMADDR),

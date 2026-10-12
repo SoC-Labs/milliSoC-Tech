@@ -7,9 +7,8 @@ $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_system/millisoc_system.sv
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_peripheral_subsystem/millisoc_peripheral_subsystem.sv
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_peripheral_subsystem/millisoc_peripheral_addr_decode.v
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_peripheral_subsystem/millisoc_peripheral_debug.v
-$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_peripheral_subsystem/extio8x4_axis_initiator.v
-$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_peripheral_subsystem/extio8x4_ifsm.v
-$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_peripheral_subsystem/extio8x4_sync.v
+
+-f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/HOSTIO.flist
 
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/interfaces/ahb_if.sv
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/interfaces/axi4_if.sv

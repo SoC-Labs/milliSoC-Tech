@@ -33,7 +33,7 @@ module millisoc_cpu_ss #(
     // AHBS (AMBA3 AHB-LITE)
     output wire         HREADYOUTS,
     output wire         HRESPS,
-    output wire [31:0]  HRDATAS,
+    output wire [63:0]  HRDATAS,
     input wire          HREADYS,
     input wire          HSELS,
     input wire [ 1:0]   HTRANSS,
@@ -42,15 +42,16 @@ module millisoc_cpu_ss #(
     input wire [ 2:0]   HBURSTS,
     input wire [ 3:0]   HPROTS,
     input wire [31:0]   HADDRS,
-    input wire [31:0]   HWDATAS,
+    input wire [63:0]   HWDATAS,
 
+    // AXI 
     input wire          ACLKEN,
     output wire         ARVALID,
     output wire [31:0]  ARADDR,
     output wire [ 2:0]  ARID,
     output wire [ 1:0]  ARBURST,
-    output wire [ 2:0]  ARLEN,
-    output wire [ 1:0]  ARSIZE,
+    output wire [ 7:0]  ARLEN,
+    output wire [ 2:0]  ARSIZE,
     output wire         ARLOCK,
     output wire [ 3:0]  ARCACHE,
     output wire [ 2:0]  ARPROT,
@@ -60,10 +61,10 @@ module millisoc_cpu_ss #(
     input wire          ARREADY,
     output wire         AWVALID,
     output wire [31:0]  AWADDR,
-    output wire [ 1:0]  AWID,
+    output wire [ 2:0]  AWID,
     output wire [ 1:0]  AWBURST,
-    output wire [ 2:0]  AWLEN,
-    output wire [ 1:0]  AWSIZE,
+    output wire [ 7:0]  AWLEN,
+    output wire [ 2:0]  AWSIZE,
     output wire         AWLOCK,
     output wire [ 3:0]  AWCACHE,
     output wire [ 2:0]  AWPROT,
@@ -79,22 +80,69 @@ module millisoc_cpu_ss #(
     input wire [63:0]   RDATA,
     input wire [ 1:0]   RRESP,
     output wire         WVALID,
-    output wire [ 1:0]  WID,
+    output wire [ 2:0]  WID,
     output wire [63:0]  WDATA,
     output wire [ 7:0]  WSTRB,
     output wire         WLAST,
     input wire          WREADY,
     output wire         BREADY,
     input wire          BVALID,
-    input wire [ 1:0]   BID,
+    input wire [ 2:0]   BID,
     input wire [ 1:0]   BRESP,
 
     input  wire [239:0] IRQ
 );
 
+// Internal Wires
+// - Timestamp
+reg [63:0]   TSVALUEB;
+// - ITCM
+wire         ITCMCS;
+wire [23:3]  ITCMADDR;
+wire         ITCMWR;
+wire [ 7:0]  ITCMBYTEWR;
+wire [ 3:0]  ITCMMASTER;
+wire [63:0]  ITCMWDATA;
+wire [63:0]  ITCMRDATA;
+// - DTCM
+wire         D0TCMCS;
+wire [23:3]  D0TCMADDR;
+wire         D0TCMWR;
+wire [ 3:0]  D0TCMBYTEWR;
+wire [31:0]  D0TCMWDATA;
+wire [31:0]  D0TCMRDATA;
+wire [3:0]   D0TCMMASTER;
 
+wire         D1TCMCS;
+wire [23:3]  D1TCMADDR;
+wire         D1TCMWR;
+wire [ 3:0]  D1TCMBYTEWR;
+wire [31:0]  D1TCMWDATA;
+wire [31:0]  D1TCMRDATA;
+wire [3:0]   D1TCMMASTER;
 
-OLYMPUS_MCU u_cortexm85(
+wire         D2TCMCS;
+wire [23:3]  D2TCMADDR;
+wire         D2TCMWR;
+wire [ 3:0]  D2TCMBYTEWR;
+wire [31:0]  D2TCMWDATA;
+wire [31:0]  D2TCMRDATA;
+wire [3:0]   D2TCMMASTER;
+
+wire         D3TCMCS;
+wire [23:3]  D3TCMADDR;
+wire         D3TCMWR;
+wire [ 3:0]  D3TCMBYTEWR;
+wire [31:0]  D3TCMWDATA;
+wire [31:0]  D3TCMRDATA;
+wire [3:0]   D3TCMMASTER;
+
+assign AWID[2]=1'b0;
+assign WID[2]=1'b0;
+
+OLYMPUS_MCU #(
+    .BUSPROT(0)
+    ) u_cortexm85 (
     // Clock and Resets
     .CLKIN(FCLK),
     .CLKINDCLS(FCLK),
@@ -117,20 +165,21 @@ OLYMPUS_MCU u_cortexm85(
     .NTRST(),
 
     // AXI inputs
-    .DFTCGEN(),
-    .ACLKEN(),
-    .ARREADY(),
-    .RVALID(),
-    .RID(),
-    .RDATA(),
-    .RLAST(),
-    .RRESP(),
-    .RPOISON(),
-    .AWREADY(),
-    .WREADY(),
-    .BVALID(),
-    .BID(),
-    .BRESP(),
+    .DFTCGEN(1'b0),
+    .ACLKEN(ACLKEN),
+    .ARREADY(ARREADY),
+    .RVALID(RVALID),
+    .RID(RID),
+    .RDATA(RDATA),
+    .RLAST(RLAST),
+    .RRESP(RRESP),
+    .RPOISON(1'b0),
+    .AWREADY(AWREADY),
+    .WREADY(WREADY),
+    .BVALID(BVALID),
+    .BID(BID[1:0]),
+    .BRESP(BRESP),
+
     .ACLKENCHK(),
     .ARREADYCHK(),
     .AWREADYCHK(),
@@ -148,39 +197,40 @@ OLYMPUS_MCU u_cortexm85(
     // AXI outputs
     .AWAKEUP(),
     .AWAKEUPCHK(),
-    .ARVALID(),
-    .ARID(),
-    .ARADDR(),
-    .ARBURST(),
-    .ARLEN(),
-    .ARSIZE(),
-    .ARLOCK(),
-    .ARCACHE(),
-    .ARPROT(),
-    .ARMASTER(),
-    .ARINNER(),
-    .ARDOMAIN(),
-    .RREADY(),
-    .AWVALID(),
-    .AWID(),
-    .AWADDR(),
-    .AWBURST(),
-    .AWLEN(),
-    .AWSIZE(),
-    .AWLOCK(),
-    .AWCACHE(),
-    .AWPROT(),
-    .AWMASTER(),
-    .AWINNER(),
-    .AWDOMAIN(),
-    .AWSPARSE(),
-    .WVALID(),
-    .WID(),
-    .WSTRB(),
-    .WDATA(),
-    .WPOISON(),
-    .WLAST(),
-    .BREADY(),
+    .ARVALID(ARVALID),
+    .ARID(ARID),
+    .ARADDR(ARADDR),
+    .ARBURST(ARBURST),
+    .ARLEN(ARLEN),
+    .ARSIZE(ARSIZE),
+    .ARLOCK(ARLOCK),
+    .ARCACHE(ARCACHE),
+    .ARPROT(ARPROT),
+    .ARMASTER(ARMASTER),
+    .ARINNER(ARINNER),
+    .ARDOMAIN(ARDOMAIN),
+    .RREADY(RREADY),
+    .AWVALID(AWVALID),
+    .AWID(AWID[1:0]),
+    .AWADDR(AWADDR),
+    .AWBURST(AWBURST),
+    .AWLEN(AWLEN),
+    .AWSIZE(AWSIZE),
+    .AWLOCK(AWLOCK),
+    .AWCACHE(AWCACHE),
+    .AWPROT(AWPROT),
+    .AWMASTER(AWMASTER),
+    .AWINNER(AWINNER),
+    .AWDOMAIN(AWDOMAIN),
+    .AWSPARSE(AWSPARSE),
+    .WVALID(WVALID),
+    .WID(WID[1:0]),
+    .WSTRB(WSTRB),
+    .WDATA(WDATA),
+    .WPOISON(WPOISON),
+    .WLAST(WLAST),
+    .BREADY(BREADY),
+
     .ARVALIDCHK(),
     .ARADDRCHK(),
     .ARIDCHK(),
@@ -207,34 +257,48 @@ OLYMPUS_MCU u_cortexm85(
     .BREADYCHK(),
 
     // Static values
-    .COREECOREVNUM(),
-    .DBGECOREVNUM(),
-    .REVIDRNUM(),
+    .COREECOREVNUM(8'h00),
+    .DBGECOREVNUM(28'd0),
+    .REVIDRNUM(4'd0),
 
     // Config and status inputs?
-    .CFGFPU(),
-    .CFGMVE(),
-    .CFGNOCDECP(),
-    .CFGPACBTI(),
-    .CPSPRESENT(),
-    .CPNSPRESENT(),
-    .LOCKSVTAIRCR(),
-    .LOCKNSVTOR(),
-    .INITSVTOR(),
-    .INITNSVTOR(),
-    .NIDEN(),
-    .DBGEN(),
-    .SPNIDEN(),
-    .SPIDEN(),
-    .DAPEN(),
-    .CPUWAIT(),
-    .EDBGRQ(),
-    .DBGRESTART(),
-    .SLEEPHOLDREQn(),
-    .RXEV(),
-    .WICCONTROL(),
-    .CPREADY(),
-    .CPERROR(),
+    .CFGITCMSZ(4'b0111),
+    .CFGDTCMSZ(4'b0111),
+    .CFGPAHBSZ(3'b001), // 64MB
+    .CFGMEMALIAS(5'b00000),
+    .CFGFPU(1'b1),
+    .CFGMVE(2'b10),
+    .CFGBIGEND(BE),
+    .MPUNSDISABLE(1'b1),
+    .MPUSDISABLE(1'b1),
+    .SAUDISABLE(1'b1),
+    .CFGSSTCALIB(26'h2000000),
+    .CFGNSSTCALIB(26'h2000000),
+    .CFGPACBTI(1'b0),
+
+    .CFGNOCDECP(1'b0),
+
+
+    .CPSPRESENT(8'd0),
+    .CPNSPRESENT(8'd0),
+    .LOCKSVTAIRCR(1'b0),
+    .LOCKNSVTOR(1'b0),
+    .INITSVTOR(24'hC08000), // Vector table offset
+    .INITNSVTOR(24'hC08000), // Vector table offset
+    .NIDEN(1'b1),
+    .DBGEN(1'b1),
+    .SPNIDEN(1'b1),
+    .SPIDEN(1'b1),
+    .DAPEN(1'b0),
+    .CPUWAIT(CPUWAIT),
+    .EDBGRQ(1'b0),
+    .DBGRESTART(1'b0),
+    .SLEEPHOLDREQn(1'b1),
+    .RXEV(1'b0),
+    .WICCONTROL(4'b1111),
+
+    .CPREADY(1'b1),
+    .CPERROR(1'b1),
     .CPRDATA(),
     // Config and status outputs
     .EWAKEUP(),
@@ -267,11 +331,11 @@ OLYMPUS_MCU u_cortexm85(
     .EVENTBUS(),
 
     // Power control
-    .COREPSTATE(),
-    .COREPREQ(),
-    .CLKINQREQn(),
-    .INITL1RSTDIS(),
-    .DFTRSTDISABLE(),
+    .COREPSTATE(5'b11000),
+    .COREPREQ(1'b1),
+    .CLKINQREQn(1'b1),
+    .INITL1RSTDIS(1'b0),
+    .DFTRSTDISABLE(1'b0),
     
     .COREPACTIVE(),
     .COREPDENY(),
@@ -312,10 +376,10 @@ OLYMPUS_MCU u_cortexm85(
     .CLKQDENY(),
     .CLKQACTIVE(),
 
-    .DFTRAMHOLD(),
+    .DFTRAMHOLD(1'b0),
 
-    .PWRDBGQREQn(),
-    .DBGCLKQREQn(),
+    .PWRDBGQREQn(1'b1),
+    .DBGCLKQREQn(1'b1),
 
     .PWRDBGQACTIVE(),
     .PWRDBGQACCEPTn(),
@@ -327,15 +391,15 @@ OLYMPUS_MCU u_cortexm85(
 
     .DSYNC(),
 
-    .TSVALUEB(),
+    .TSVALUEB(TSVALUEB),
 
-    .EWICCLKQREQn(),
+    .EWICCLKQREQn(1'b1),
 
     .EWICCLKQACTIVE(),
     .EWICCLKQACCEPTn(),
     .EWICCLKQDENY(),
 
-    .LOCKDCAIC(),
+    .LOCKDCAIC(1'b0),
 
     .PREADY(),
     .PRDATA(),
@@ -385,84 +449,79 @@ OLYMPUS_MCU u_cortexm85(
 
     .TSCLKCHANGE(),
 
-    .NMI(),
-    .IRQ(),
+    // Interrupts
+    .NMI(1'b0),
+    .IRQ(IRQ),
 
     .IWICSENSE(),
     .IWAKEUP(),
 
-    .CFGBIGEND(),
-    .HREADYP(),
-    .HRDATAP(),
-    .HRESPP(),
-    .HEXOKAYP(),
+    .HREADYP(HREADYP),
+    .HRDATAP(HRDATAP),
+    .HRESPP(HRESPP),
+    .HEXOKAYP(1'b1),
     .HREADYCHKP(),
     .HRDATACHKP(),
     .HRESPCHKP(),
 
     .PWRDBGWAKEQACTIVE(),
     .PWRCOREWAKEPACTIVE(),
-    .HTRANSP(),
-    .HADDRP(),
-    .HMASTERP(),
-    .HWRITEP(),
-    .HPROTP(),
-    .HNONSECP(),
-    .HBURSTP(),
-    .HSIZEP(),
-    .HEXCLP(),
-    .HWDATAP(),
+    .HTRANSP(HTRANSP),
+    .HADDRP(HADDRP),
+    .HMASTERP(HMASTERP),
+    .HWRITEP(HWRITEP),
+    .HPROTP(HPROTP),
+    .HNONSECP(HNONSECP),
+    .HBURSTP(HBURSTP),
+    .HSIZEP(HSIZEP),
+    .HEXCLP(HEXCLP),
+    .HWDATAP(HWDATAP),
     .HTRANSCHKP(),
     .HADDRCHKP(),
     .HWDATACHKP(),
     .HCTRLCHK1P(),
     .HCTRLCHK2P(),
     .HPROTCHKP(),
-    .DBE(),
-    .DMEV0(),
-    .DMEV1(),
-    .DMEV2(),
-    .DMEL0(),
-    .DMEL1(),
-    .DMEI0(),
-    .DMEI1(),
-    .DFE(),
+    .DBE(DBE),
+    .DMEV0(DMEV0),
+    .DMEV1(DMEV1),
+    .DMEV2(DMEV2),
+    .DMEL0(DMEL0),
+    .DMEL1(DMEL1),
+    .DMEI0(DMEI0),
+    .DMEI1(DMEI1),
+    .DFE(DFE),
 
-    .IDAUNSA(),
-    .IDAUNSCA(),
-    .IDAUIDA(),
-    .IDAUIDVA(),
-    .IDAUNCHKA(),
-    .IDAUNSB(),
-    .IDAUNSCB(),
-    .IDAUIDB(),
-    .IDAUIDVB(),
-    .IDAUNCHKB(),
-    .IDAUNSC(),
-    .IDAUNSCC(),
-    .IDAUIDC(),
-    .IDAUIDVC(),
-    .IDAUNCHKC(),
-    .IDAUNSD(),
-    .IDAUNSCD(),
-    .IDAUIDD(),
-    .IDAUIDVD(),
-    .IDAUNCHKD(),
-    .IDAUNSE(),
-    .IDAUNSCE(),
-    .IDAUIDE(),
-    .IDAUIDVE(),
-    .IDAUNCHKE(),
-    .MPUNSDISABLE(),
-    .LOCKNSMPU(),
-    .MPUSDISABLE(),
-    .LOCKSMPU(),
-    .SAUDISABLE(),
-    .LOCKSAU(),
-    .LOCKITGU(),
-    .LOCKDTGU(),
-    .CFGITCMSZ(),
-    .CFGDTCMSZ(),
+    .IDAUNSA(1'b0),
+    .IDAUNSCA(1'b1),
+    .IDAUIDA(8'h00),
+    .IDAUIDVA(1'b1),
+    .IDAUNCHKA(1'b1),
+    .IDAUNSB(1'b0),
+    .IDAUNSCB(1'b1),
+    .IDAUIDB(8'h00),
+    .IDAUIDVB(1'b1),
+    .IDAUNCHKB(1'b1),
+    .IDAUNSC(1'b0),
+    .IDAUNSCC(1'b1),
+    .IDAUIDC(8'h00),
+    .IDAUIDVC(1'b1),
+    .IDAUNCHKC(1'b1),
+    .IDAUNSD(1'b0),
+    .IDAUNSCD(1'b1),
+    .IDAUIDD(8'h00),
+    .IDAUIDVD(1'b1),
+    .IDAUNCHKD(1'b1),
+    .IDAUNSE(1'b0),
+    .IDAUNSCE(1'b1),
+    .IDAUIDE(8'h00),
+    .IDAUIDVE(1'b1),
+    .IDAUNCHKE(1'b1),
+    .LOCKNSMPU(1'b0),
+    .LOCKSMPU(1'b0),
+    .LOCKSAU(1'b0),
+    .LOCKITGU(1'b0),
+    .LOCKDTGU(1'b0),
 
     .IDAUVALIDA(),
     .IDAUADDRA(),
@@ -475,54 +534,50 @@ OLYMPUS_MCU u_cortexm85(
     .IDAUVALIDE(),
     .IDAUADDRE(),
 
-    .CFGNSSTCALIB(),
-    .CFGSSTCALIB(),
-    .NSSTCLKEN(),
-    .SSTCLKEN(),
+    .NSSTCLKEN(CLKEN),
+    .SSTCLKEN(CLKEN),
 
     .CURRPRI(),
     .SYSRESETREQ(),
 
-    .PMCTEN(),
-    .PMCTC(),
+    .PMCTEN(1'b0),
+    .PMCTC(1'b0),
 
     .PMCTE(),
     .PMCTF(),
 
-    .LOCKTCM(),
-    .LOCKPAHB(),
-    .CFGPAHBSZ(),
-    .CFGMEMALIAS(),
-    .INITECCEN(),
-    .INITTCMEN(),
-    .INITPAHBEN(),
+    .LOCKTCM(1'b0),
+    .LOCKPAHB(1'b0),
+    .INITECCEN(1'b0),
+    .INITTCMEN(2'b11),
+    .INITPAHBEN(1'b1),
 
-    .ITCMWAIT(),
-    .ITCMERR(),
-    .ITCMRDATA(),
-    .D0TCMWAIT(),
-    .D0TCMERR(),
-    .D0TCMRDATA(),
-    .D1TCMWAIT(),
-    .D1TCMERR(),
-    .D1TCMRDATA(),
-    .D2TCMWAIT(),
-    .D2TCMERR(),
-    .D2TCMRDATA(),
-    .D3TCMWAIT(),
-    .D3TCMERR(),
-    .D3TCMRDATA(),
-    .HREADYS(),
-    .HSELS(),
-    .HTRANSS(),
-    .HWRITES(),
-    .HWSTRBS(),
-    .HADDRS(),
-    .HSIZES(),
-    .HBURSTS(),
-    .HPROTS(),
-    .HNONSECS(),
-    .HWDATAS(),
+    .ITCMWAIT(1'b0),
+    .ITCMERR(1'b0),
+    .ITCMRDATA(ITCMRDATA),
+    .D0TCMWAIT(1'b0),
+    .D0TCMERR(1'b0),
+    .D0TCMRDATA(D0TCMRDATA),
+    .D1TCMWAIT(1'b0),
+    .D1TCMERR(1'b0),
+    .D1TCMRDATA(D1TCMRDATA),
+    .D2TCMWAIT(1'b0),
+    .D2TCMERR(1'b0),
+    .D2TCMRDATA(D2TCMRDATA),
+    .D3TCMWAIT(1'b0),
+    .D3TCMERR(1'b0),
+    .D3TCMRDATA(D3TCMRDATA),
+    .HREADYS(HREADYS),
+    .HSELS(HSELS),
+    .HTRANSS(HTRANSS),
+    .HWRITES(HWRITES),
+    .HWSTRBS(8'hFF),
+    .HADDRS(HADDRS),
+    .HSIZES(HSIZES),
+    .HBURSTS(HBURSTS),
+    .HPROTS(HPROTS),
+    .HNONSECS(1'b0),
+    .HWDATAS(HWDATAS),
     .HREADYCHKS(),
     .HTRANSCHKS(),
     .HADDRCHKS(),
@@ -532,51 +587,52 @@ OLYMPUS_MCU u_cortexm85(
     .HCTRLCHK1S(),
     .HSELCHKS(),
 
-    .ITCMCS(),
-    .ITCMADDR(),
-    .ITCMWR(),
-    .ITCMBYTEWR(),
-    .ITCMPRIV(),
-    .ITCMMASTER(),
-    .ITCMWDATA(),
-    .D0TCMCS(),
-    .D0TCMADDR(),
-    .D0TCMWR(),
-    .D0TCMBYTEWR(),
-    .D0TCMPRIV(),
-    .D0TCMMASTER(),
-    .D0TCMWDATA(),
-    .D1TCMCS(),
-    .D1TCMADDR(),
-    .D1TCMWR(),
-    .D1TCMBYTEWR(),
-    .D1TCMPRIV(),
-    .D1TCMMASTER(),
-    .D1TCMWDATA(),
-    .D2TCMCS(),
-    .D2TCMADDR(),
-    .D2TCMWR(),
-    .D2TCMBYTEWR(),
-    .D2TCMPRIV(),
-    .D2TCMMASTER(),
-    .D2TCMWDATA(),
-    .D3TCMCS(),
-    .D3TCMADDR(),
-    .D3TCMWR(),
-    .D3TCMBYTEWR(),
-    .D3TCMPRIV(),
-    .D3TCMMASTER(),
-    .D3TCMWDATA(),
-    .HREADYOUTS(),
-    .HRESPS(),
-    .HRDATAS(),
-    .SAHBWABORT(),
-    .SAHBWABORTCHK(),
+    .ITCMCS(ITCMCS),
+    .ITCMADDR(ITCMADDR),
+    .ITCMWR(ITCMWR),
+    .ITCMBYTEWR(ITCMBYTEWR),
+    .ITCMPRIV(ITCMPRIV),
+    .ITCMMASTER(ITCMMASTER),
+    .ITCMWDATA(ITCMWDATA),
+
+    .D0TCMCS(D0TCMCS),
+    .D0TCMADDR(D0TCMADDR),
+    .D0TCMWR(D0TCMWR),
+    .D0TCMBYTEWR(D0TCMBYTEWR),
+    .D0TCMPRIV(D0TCMPRIV),
+    .D0TCMMASTER(D0TCMMASTER),
+    .D0TCMWDATA(D0TCMWDATA),
+    .D1TCMCS(D1TCMCS),
+    .D1TCMADDR(D1TCMADDR),
+    .D1TCMWR(D1TCMWR),
+    .D1TCMBYTEWR(D1TCMBYTEWR),
+    .D1TCMPRIV(D1TCMPRIV),
+    .D1TCMMASTER(D1TCMMASTER),
+    .D1TCMWDATA(D1TCMWDATA),
+    .D2TCMCS(D2TCMCS),
+    .D2TCMADDR(D2TCMADDR),
+    .D2TCMWR(D2TCMWR),
+    .D2TCMBYTEWR(D2TCMBYTEWR),
+    .D2TCMPRIV(D2TCMPRIV),
+    .D2TCMMASTER(D2TCMMASTER),
+    .D2TCMWDATA(D2TCMWDATA),
+    .D3TCMCS(D3TCMCS),
+    .D3TCMADDR(D3TCMADDR),
+    .D3TCMWR(D3TCMWR),
+    .D3TCMBYTEWR(D3TCMBYTEWR),
+    .D3TCMPRIV(D3TCMPRIV),
+    .D3TCMMASTER(D3TCMMASTER),
+    .D3TCMWDATA(D3TCMWDATA),
+    .HREADYOUTS(HREADYOUTS),
+    .HRESPS(HRESPS),
+    .HRDATAS(HRDATAS),
+    .SAHBWABORT(SAHBWABORT),
+    .SAHBWABORTCHK(SAHBWABORTCHK),
     .HREADYOUTCHKS(),
     .HRDATACHKS(),
     .HRESPCHKS(),
 
-    .MAXPORTSIZE(),
+    .MAXPORTSIZE(4'b1011),
 
     .TRACECLK(),
     .TRACEDATA(),
@@ -597,14 +653,14 @@ OLYMPUS_MCU u_cortexm85(
     .ETB_MEM_D(),
     .ETB_MEM_Q(),
     .TRACECLKINQACTIVE(),
-    .TRACECLKINQREQn(),
+    .TRACECLKINQREQn(1'b1),
     .TRACECLKINQACCEPTn(),
     .TRACECLKINQDENY(),
 
-    .MBISTREQ(),
+    .MBISTREQ(1'b0),
 
-    .DCLSCORECTL(),
-    .DCLSIWICCTL(),
+    .DCLSCORECTL(12'b010101010101),
+    .DCLSIWICCTL(6'b010101),
     .DCLSCORECOMPRES(),
     .DCLSIWICCOMPRES(),
 
@@ -647,6 +703,61 @@ OLYMPUS_MCU u_cortexm85(
     .nPWRUPDEBUG_TRICKLE()  // Power control for Debug primary current in-rush limited supply
 `endif
 `endif // ARM_PG_ON
+);
+
+// Timestamp generation
+always @(posedge FCLK or negedge nPORESET) begin
+    if(~nPORESET) begin
+        TSVALUEB <= 64'h0;
+    end else begin
+        TSVALUEB <= TSVALUEB + 64'h1;
+    end
+end
+
+
+dtcm u_dtcm (
+    .CLK(FCLK),
+    .D0TCMCS(D0TCMCS),
+    .D0TCMADDR(D0TCMADDR),
+    .D0TCMWR(D0TCMWR),
+    .D0TCMBYTEWR(D0TCMBYTEWR),
+    .D0TCMWDATA(D0TCMWDATA),
+    .D0TCMRDATA(D0TCMRDATA),
+
+    .D1TCMCS(D1TCMCS),
+    .D1TCMADDR(D1TCMADDR),
+    .D1TCMWR(D1TCMWR),
+    .D1TCMBYTEWR(D1TCMBYTEWR),
+    .D1TCMWDATA(D1TCMWDATA),
+    .D1TCMRDATA(D1TCMRDATA)
+);
+
+dtcm u_dtcm2 (
+    .CLK(FCLK),
+    .D0TCMCS(D2TCMCS),
+    .D0TCMADDR(D2TCMADDR),
+    .D0TCMWR(D2TCMWR),
+    .D0TCMBYTEWR(D2TCMBYTEWR),
+    .D0TCMWDATA(D2TCMWDATA),
+    .D0TCMRDATA(D2TCMRDATA),
+
+    .D1TCMCS(D3TCMCS),
+    .D1TCMADDR(D3TCMADDR),
+    .D1TCMWR(D3TCMWR),
+    .D1TCMBYTEWR(D3TCMBYTEWR),
+    .D1TCMWDATA(D3TCMWDATA),
+    .D1TCMRDATA(D3TCMRDATA)
+);
+
+
+itcm u_itcm (
+    .CLK(FCLK),
+    .ITCMCS(ITCMCS),
+    .ITCMADDR(ITCMADDR),
+    .ITCMWR(ITCMWR),
+    .ITCMBYTEWR(ITCMBYTEWR),
+    .ITCMWDATA(ITCMWDATA),
+    .ITCMRDATA(ITCMRDATA)
 );
 
 

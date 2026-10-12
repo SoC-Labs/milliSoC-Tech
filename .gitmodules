@@ -7,3 +7,6 @@
 [submodule "logical/sldma350_tech"]
 	path = logical/sldma350_tech
 	url = https://github.com/SoC-Labs/SLDMA-350-Tech.git
+[submodule "logical/hostio4"]
+	path = logical/hostio4
+	url = https://git.soton.ac.uk/soclabs/hostio4.git

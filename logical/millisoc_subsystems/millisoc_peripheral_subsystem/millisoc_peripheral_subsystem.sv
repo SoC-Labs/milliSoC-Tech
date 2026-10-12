@@ -60,7 +60,9 @@ module millisoc_peripheral_subsystem #(
     output wire [3:0]   iodata4_t,
     output wire         ioreq1_o,
     output wire         ioreq2_o,
-    input  wire         ioack_i,
+    output wire         ioreq_e,
+    output wire         ioreq_t,
+    input  wire         ioack_a,
 
     // GPIO P0
     input  wire [15:0]  p0_in,
@@ -877,7 +879,9 @@ millisoc_peripheral_debug #(
     .iodata4_t(iodata4_t),
     .ioreq1_o(ioreq1_o),
     .ioreq2_o(ioreq2_o),
-    .ioack_i(ioack_i),
+    .ioreq_e(ioreq_e),
+    .ioreq_t(ioreq_t),
+    .ioack_a(ioack_a),
 
     .usrt0_txint(usrt0_txint),
     .usrt0_rxint(usrt0_rxint),

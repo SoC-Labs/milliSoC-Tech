@@ -39,7 +39,9 @@ module millisoc_peripheral_debug #(
     output wire [3:0]               iodata4_t,
     output wire                     ioreq1_o,
     output wire                     ioreq2_o,
-    input  wire                     ioack_i,
+    output wire                     ioreq_e,
+    output wire                     ioreq_t,
+    input  wire                     ioack_a,
 
     output wire                     usrt0_txint,
     output wire                     usrt0_rxint,
@@ -193,7 +195,7 @@ socdebug_usrt_control u_usrt1_control (
 
 
 
-extio8x4_axis_initiator u_extio8x4_axis_initiator(
+hostio4_controller u_hostio4_axis_initiator(
   .clk             ( HCLK          ),
   .resetn          ( HRESETn       ),
   .testmode        ( 1'b0      ),
@@ -220,8 +222,9 @@ extio8x4_axis_initiator u_extio8x4_axis_initiator(
   .iodata4_t       ( iodata4_t       ),
   .ioreq1_o        ( ioreq1_o        ),
   .ioreq2_o        ( ioreq2_o        ),
-  .ioack_a         ( ioack_i         )
-
+  .ioreq_e         ( ioreq_e         ),
+  .ioreq_t         ( ioreq_t         ),
+  .ioack_a         ( ioack_a         )
 );
 
 

@@ -14,6 +14,7 @@
 //-----------------------------------------------------------------------------
 // Modules instantiated:
 //  millisoc_cpu_ss                 (u_millisoc_cpu_ss)
+//  millisoc_sys_ctrl               (u_millisoc_sys_ctrl)
 //  ada_top_sldma350                (u_dma350)
 //  millisoc_peripheral_subsystem   (u_millisoc_peripheral_subsystem)
 //  top_ahb_qspi                    (u_ahb_qspi)
@@ -47,7 +48,9 @@ module millisoc_system(
     output wire [3:0]       iodata4_t,
     output wire             ioreq1_o,
     output wire             ioreq2_o,
-    input  wire             ioack_i,
+    output wire             ioreq_e,
+    output wire             ioreq_t,
+    input  wire             ioack_a,
 
     // DAP-LITE external signals
     input  wire             nTRST,
@@ -88,7 +91,7 @@ apb4_if DMA_CFG_APB();
 wire    PCLKEN_DMA;
 
 // - AXI from DMA to System Bus
-axi4_if #(.DATA_W(64), .ID_W(), .ADDR_W(32)) DMA_AXI();
+axi4_if #(.DATA_W(64), .ID_W(2), .ADDR_W(32)) DMA_AXI();
 wire [3:0]  DMA_awqos;
 wire [3:0]  DMA_arqos;
 
@@ -107,7 +110,7 @@ ahb_if #(.DATA_W(32), .ADDR_W(32)) PERIPH_AHB();
 assign PERIPH_AHB.HSEL=1'b1;
 assign PERIPH_AHB.HREADY=1'b1;
 // - AHB to CPU
-ahb_if #(.DATA_W(32), .ADDR_W(32)) CPU_S_AHB();
+ahb_if #(.DATA_W(64), .ADDR_W(32)) CPU_S_AHB();
 
 // - AXI from CPU to NIC400
 wire         CPU_ACLKEN;
@@ -124,7 +127,6 @@ wire        nSYSRESET;
 wire        SYSRESETREQ;
 wire        nDBGETMRESET;
 wire        CPUWAIT;
-wire        SWCLKTCK;
 wire        TRACECLKIN;
 wire        TRESETn;
 wire        ARESETn;
@@ -135,13 +137,13 @@ wire [239:0]    CPU_IRQs;
 wire [3:0]      SYS_DMA_DONE_IRQ;
 wire            SYS_DMA_COMB_IRQ;
 wire            IRQ_QSPI_FINISHED;
-wire [65:0]     PERI_IRQS;
+wire [71:0]     PERI_IRQS;
 
 assign CPU_IRQs[3:0]=   SYS_DMA_DONE_IRQ[3:0];
 assign CPU_IRQs[4]=     SYS_DMA_COMB_IRQ;
 assign CPU_IRQs[5]=     IRQ_QSPI_FINISHED;
-assign CPU_IRQs[71:6]=  PERI_IRQS;
-assign CPU_IRQs[239:72]=168'd0;
+assign CPU_IRQs[77:6]=  PERI_IRQS;
+assign CPU_IRQs[239:78]=161'd0;
 
 // Tie offs (may be used later)
 assign PCLKEN_DMA = 1'b1;
@@ -287,7 +289,7 @@ ada_top_sldma350 u_dma350 (
     .penable(DMA_CFG_APB.penable),
     .pprot(DMA_CFG_APB.pprot),
     .pwrite(DMA_CFG_APB.pwrite),
-    .paddr(DMA_CFG_APB.paddr),
+    .paddr(DMA_CFG_APB.paddr[12:0]),
     .pwdata(DMA_CFG_APB.pwdata),
     .pstrb(DMA_CFG_APB.pstrb),
     .pready(DMA_CFG_APB.pready),
@@ -423,7 +425,9 @@ millisoc_peripheral_subsystem u_millisoc_peripheral_subsystem (
     .iodata4_t(iodata4_t),
     .ioreq1_o(ioreq1_o),
     .ioreq2_o(ioreq2_o),
-    .ioack_i(ioack_i),
+    .ioreq_e(ioreq_e),
+    .ioreq_t(ioreq_t),
+    .ioack_a(ioack_a),
 
     .p0_in(P0_IN),
     .p0_out(P0_OUT),

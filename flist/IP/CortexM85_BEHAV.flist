@@ -23,26 +23,40 @@
 
 // ============= Include file search path =============
 
-// +incdir+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/testbench/execution_tb/verilog
-// -y      $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/testbench/execution_tb/verilog
+// +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/testbench/execution_tb/verilog
+// -y      $(CORTEX_M85_LOGICAL_DIR)/logical/testbench/execution_tb/verilog
 
-// +incdir+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/testbench/execution_tb/verilog/example_sys
-// -y      $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/testbench/execution_tb/verilog/example_sys
+// +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/testbench/execution_tb/verilog/example_sys
+// -y      $(CORTEX_M85_LOGICAL_DIR)/logical/testbench/execution_tb/verilog/example_sys
 
-+incdir+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/testbench/execution_tb/verilog/models
--y      $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/testbench/execution_tb/verilog/models
++incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/testbench/execution_tb/verilog/models
+-y      $(CORTEX_M85_LOGICAL_DIR)/logical/testbench/execution_tb/verilog/models
 
-+incdir+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/models/cells/generic
--y      $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/models/cells/generic
++incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic
+-y      $(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic
 
 // OLYMPUS_CONFIG.v
-+incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus/verilog
++incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus/verilog
 
 // MCU layer
-+incdir+/home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_aab/verilog
--y      /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/olympus/logical/olympus_aab/verilog
++incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_aab/verilog
+-y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_aab/verilog
 
 
++libext+.v+.sv+.vlib
+
+$(CORTEX_M85_LOGICAL_DIR)/logical/shared/verilog/olympus_instrid_pkg.sv
+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_core/verilog/olympus_core_instrid.sv
+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_epu/verilog/olympus_epu_instrid.sv
+
+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus/verilog/olympus_tarmac.sv
+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus/verilog/olympus_tarmac_inst.sv
+
++incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/shared/verilog
+-y $(CORTEX_M85_LOGICAL_DIR)/logical/shared/verilog
+
++incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/testbench/shared/tarmac/verilog
+-y      $(CORTEX_M85_LOGICAL_DIR)/logical/testbench/shared/tarmac/verilog
 
 
 
