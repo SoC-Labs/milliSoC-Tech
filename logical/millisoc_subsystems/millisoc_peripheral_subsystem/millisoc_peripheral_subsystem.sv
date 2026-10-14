@@ -38,9 +38,6 @@ module millisoc_peripheral_subsystem #(
     input  wire         HRESETn,
     input  wire         RT_CLK, // 32kHz real time clock
 
-
-    // ADP AHB bus interface
-    ahb_if.master          ADP_AHB,
     // Peripheral AHB bus interface
     ahb_if.subordinate     PERIPH_AHB,
 
@@ -52,17 +49,6 @@ module millisoc_peripheral_subsystem #(
     input  wire         UARTRXD1,
     output wire         UARTTXD1,
     output wire         UARTTXEN1,
-
-    // EXTIO Interface
-    input  wire [3:0]   iodata4_i,
-    output wire [3:0]   iodata4_o,
-    output wire [3:0]   iodata4_e,
-    output wire [3:0]   iodata4_t,
-    output wire         ioreq1_o,
-    output wire         ioreq2_o,
-    output wire         ioreq_e,
-    output wire         ioreq_t,
-    input  wire         ioack_a,
 
     // GPIO P0
     input  wire [15:0]  p0_in,
@@ -102,27 +88,15 @@ wire [2:0]  PPROT;
 wire        APBACTIVE;
 
 // AHB internal wires 
+ahb_if #(.DATA_W(32), .ADDR_W(32)) GPIO0_AHB();
+ahb_if #(.DATA_W(32), .ADDR_W(32)) GPIO1_AHB();
+ahb_if #(.DATA_W(32), .ADDR_W(32)) APBSYS_AHB();
+
+
 wire        defslv_hsel;   // AHB default slave signals
 wire        defslv_hreadyout;
 wire [31:0] defslv_hrdata;
 wire        defslv_hresp;
-
-wire        apbsys_hsel;  // APB subsystem AHB interface signals
-wire        apbsys_hreadyout;
-wire [31:0] apbsys_hrdata;
-wire        apbsys_hresp;
-
-wire        gpio0_hsel;   // AHB GPIO bus interface signals
-wire        gpio0_hreadyout;
-wire [31:0] gpio0_hrdata;
-wire        gpio0_hresp;
-
-wire        gpio1_hsel;   // AHB GPIO bus interface signals
-wire        gpio1_hreadyout;
-wire [31:0] gpio1_hrdata;
-wire        gpio1_hresp;
-
-
 
 // Internal APB signals for Timer0
 wire        PSEL_TIMER0;
@@ -260,98 +234,83 @@ assign PERI_IRQS[63] = spi_tx_int;
 assign PERI_IRQS[64] = spi_rx_overr_int;
 assign PERI_IRQS[65] = spi_tx_to_int;
 
-millisoc_peripheral_addr_decode #(
-    .BASEADDR_APBSS(32'h4000_0000),
-    .BASEADDR_GPIO0(32'h4001_0000),
-    .BASEADDR_GPIO1(32'h4002_0000)
-) u_peripheral_addr_decode (
-    .hsel(PERIPH_AHB.HSEL),
-    .haddr(PERIPH_AHB.HADDR),
-    .apbsys_hsel(apbsys_hsel),
-    .gpio0_hsel(gpio0_hsel),
-    .gpio1_hsel(gpio1_hsel),
-    .defslv_hsel(defslv_hsel)
+
+cmsdk_ahb_busmatrix_periph_lite u_periph_ahb_bus (
+    .HCLK       (HCLK),
+    .HRESETn    (HRESETn),
+    .REMAP      (4'h0), // No remap
+
+    .HADDRs0    (PERIPH_AHB.HADDR),
+    .HTRANSs0   (PERIPH_AHB.HTRANS),
+    .HWRITEs0   (PERIPH_AHB.HWRITE),
+    .HSIZEs0    (PERIPH_AHB.HSIZE),
+    .HBURSTs0   (PERIPH_AHB.HBURST),
+    .HPROTs0    (PERIPH_AHB.HPROT),
+    .HWDATAs0   (PERIPH_AHB.HWDATA),
+    .HMASTLOCKs0(1'b0),
+    .HRDATAs0   (PERIPH_AHB.HRDATA),
+    .HREADYs0   (PERIPH_AHB.HREADYOUT),
+    .HRESPs0    (PERIPH_AHB.HRESP),
+
+
+    .HSELm0     (APBSYS_AHB.HSEL),
+    .HADDRm0    (APBSYS_AHB.HADDR),
+    .HTRANSm0   (APBSYS_AHB.HTRANS),
+    .HWRITEm0   (APBSYS_AHB.HWRITE),
+    .HSIZEm0    (APBSYS_AHB.HSIZE),
+    .HBURSTm0   (APBSYS_AHB.HBURST),
+    .HPROTm0    (APBSYS_AHB.HPROT),
+    .HWDATAm0   (APBSYS_AHB.HWDATA),
+    .HMASTLOCKm0(),
+    .HREADYMUXm0(APBSYS_AHB.HREADY),
+    .HRDATAm0   (APBSYS_AHB.HRDATA),
+    .HREADYOUTm0(APBSYS_AHB.HREADYOUT),
+    .HRESPm0    (APBSYS_AHB.HRESP),
+
+    .HSELm1     (GPIO0_AHB.HSEL),
+    .HADDRm1    (GPIO0_AHB.HADDR),
+    .HTRANSm1   (GPIO0_AHB.HTRANS),
+    .HWRITEm1   (GPIO0_AHB.HWRITE),
+    .HSIZEm1    (GPIO0_AHB.HSIZE),
+    .HBURSTm1   (GPIO0_AHB.HBURST),
+    .HPROTm1    (GPIO0_AHB.HPROT),
+    .HWDATAm1   (GPIO0_AHB.HWDATA),
+    .HMASTLOCKm1(),
+    .HREADYMUXm1(GPIO0_AHB.HREADY),
+    .HRDATAm1   (GPIO0_AHB.HRDATA),
+    .HREADYOUTm1(GPIO0_AHB.HREADYOUT),
+    .HRESPm1    (GPIO0_AHB.HRESP),
+
+    .HSELm2     (GPIO1_AHB.HSEL),
+    .HADDRm2    (GPIO1_AHB.HADDR),
+    .HTRANSm2   (GPIO1_AHB.HTRANS),
+    .HWRITEm2   (GPIO1_AHB.HWRITE),
+    .HSIZEm2    (GPIO1_AHB.HSIZE),
+    .HBURSTm2   (GPIO1_AHB.HBURST),
+    .HPROTm2    (GPIO1_AHB.HPROT),
+    .HWDATAm2   (GPIO1_AHB.HWDATA),
+    .HMASTLOCKm2(),
+    .HREADYMUXm2(GPIO1_AHB.HREADY),
+    .HRDATAm2   (GPIO1_AHB.HRDATA),
+    .HREADYOUTm2(GPIO1_AHB.HREADYOUT),
+    .HRESPm2    (GPIO1_AHB.HRESP),
+
+    .SCANENABLE (1'b0),
+    .SCANINHCLK (1'b0)
 );
 
-cmsdk_ahb_slave_mux #(
-    .PORT0_ENABLE  (1), // APB subsystem bridge
-    .PORT1_ENABLE  (1), // GPIO Port 0
-    .PORT2_ENABLE  (1), // GPIO Port 1
-    .PORT3_ENABLE  (0), // SYS control
-    .PORT4_ENABLE  (0), // Default
-    .PORT5_ENABLE  (0), // 
-    .PORT6_ENABLE  (0), // 
-    .PORT7_ENABLE  (0),
-    .PORT8_ENABLE  (0),
-    .PORT9_ENABLE  (0),
-    .DW            (32)  
-) u_ahb_slave_mux_sys_bus (
-    .HCLK         (HCLK),
-    .HRESETn      (HRESETn),
-    .HREADY       (PERIPH_AHB.HREADY),
 
-    .HSEL0        (apbsys_hsel),     // Input Port 0
-    .HREADYOUT0   (apbsys_hreadyout),
-    .HRESP0       (apbsys_hresp),
-    .HRDATA0      (apbsys_hrdata),
-
-    .HSEL1        (gpio0_hsel),      // Input Port 1
-    .HREADYOUT1   (gpio0_hreadyout),
-    .HRESP1       (gpio0_hresp),
-    .HRDATA1      (gpio0_hrdata),
-
-    .HSEL2        (gpio1_hsel),      // Input Port 2
-    .HREADYOUT2   (gpio1_hreadyout),
-    .HRESP2       (gpio1_hresp),
-    .HRDATA2      (gpio1_hrdata),
-
-    .HSEL3        (1'b0),    // Input Port 3
-    .HREADYOUT3   (defslv_hreadyout),
-    .HRESP3       (defslv_hresp),
-    .HRDATA3      (defslv_hrdata),
-
-    .HSEL4        (defslv_hsel),     // Input Port 4
-    .HREADYOUT4   (defslv_hreadyout),
-    .HRESP4       (defslv_hresp),
-    .HRDATA4      (defslv_hrdata),
-
-    .HSEL5        (1'b0),     // Input Port 5
-    .HREADYOUT5   (defslv_hreadyout),
-    .HRESP5       (defslv_hresp),
-    .HRDATA5      (defslv_hrdata),
-    .HSEL6        (1'b0),     // Input Port 6
-    .HREADYOUT6   (defslv_hreadyout),
-    .HRESP6       (defslv_hresp),
-    .HRDATA6      (defslv_hrdata),
-    .HSEL7        (1'b0),     // Input Port 7
-    .HREADYOUT7   (defslv_hreadyout),
-    .HRESP7       (defslv_hresp),
-    .HRDATA7      (defslv_hrdata),
-    .HSEL8        (1'b0),     // Input Port 8
-    .HREADYOUT8   (defslv_hreadyout),
-    .HRESP8       (defslv_hresp),
-    .HRDATA8      (defslv_hrdata),
-    .HSEL9        (1'b0),     // Input Port 9
-    .HREADYOUT9   (defslv_hreadyout),
-    .HRESP9       (defslv_hresp),
-    .HRDATA9      (defslv_hrdata),
-
-    .HREADYOUT    (PERIPH_AHB.HREADYOUT),   // Outputs
-    .HRESP        (PERIPH_AHB.HRESP),
-    .HRDATA       (PERIPH_AHB.HRDATA)
-);
-
-// Default slave
-cmsdk_ahb_default_slave u_ahb_default_slave_1 (
-.HCLK         (HCLK),
-.HRESETn      (HRESETn),
-.HSEL         (defslv_hsel),
-.HTRANS       (PERIPH_AHB.HTRANS),
-.HREADY       (PERIPH_AHB.HREADY),
-.HREADYOUT    (defslv_hreadyout),
-.HRESP        (defslv_hresp)
-);
-assign   defslv_hrdata = 32'hDEADBEEF; // Default slave do not have read data
+// // Default slave
+// cmsdk_ahb_default_slave u_ahb_default_slave_1 (
+// .HCLK         (HCLK),
+// .HRESETn      (HRESETn),
+// .HSEL         (defslv_hsel),
+// .HTRANS       (PERIPH_AHB.HTRANS),
+// .HREADY       (PERIPH_AHB.HREADY),
+// .HREADYOUT    (defslv_hreadyout),
+// .HRESP        (defslv_hresp)
+// );
+// assign   defslv_hrdata = 32'hDEADBEEF; // Default slave do not have read data
 
 
 
@@ -363,16 +322,16 @@ cmsdk_ahb_gpio #(
     .HCLK(HCLK),        
     .HRESETn(HRESETn),     
     .FCLK(HCLK),        
-    .HSEL(gpio0_hsel),        
-    .HREADY(PERIPH_AHB.HREADY),
-    .HTRANS(PERIPH_AHB.HTRANS),
-    .HSIZE(PERIPH_AHB.HSIZE),
-    .HWRITE(PERIPH_AHB.HWRITE),
-    .HADDR(PERIPH_AHB.HADDR[11:0]),
-    .HWDATA(PERIPH_AHB.HWDATA),
-    .HREADYOUT(gpio0_hreadyout),
-    .HRESP(gpio0_hresp),
-    .HRDATA(gpio0_hrdata),
+    .HSEL(GPIO0_AHB.HSEL),        
+    .HREADY(GPIO0_AHB.HREADY),
+    .HTRANS(GPIO0_AHB.HTRANS),
+    .HSIZE(GPIO0_AHB.HSIZE),
+    .HWRITE(GPIO0_AHB.HWRITE),
+    .HADDR(GPIO0_AHB.HADDR[11:0]),
+    .HWDATA(GPIO0_AHB.HWDATA),
+    .HREADYOUT(GPIO0_AHB.HREADYOUT),
+    .HRESP(GPIO0_AHB.HRESP),
+    .HRDATA(GPIO0_AHB.HRDATA),
 
     .ECOREVNUM(4'h0),   
 
@@ -393,16 +352,16 @@ cmsdk_ahb_gpio #(
     .HCLK(HCLK),        
     .HRESETn(HRESETn),     
     .FCLK(HCLK),        
-    .HSEL(gpio1_hsel),        
-    .HREADY(PERIPH_AHB.HREADY),      
-    .HTRANS(PERIPH_AHB.HTRANS),      
-    .HSIZE(PERIPH_AHB.HSIZE),       
-    .HWRITE(PERIPH_AHB.HWRITE),      
-    .HADDR(PERIPH_AHB.HADDR[11:0]),       
-    .HWDATA(PERIPH_AHB.HWDATA),     
-    .HREADYOUT(gpio1_hreadyout),       
-    .HRESP(gpio1_hresp),       
-    .HRDATA(gpio1_hrdata),   
+    .HSEL(GPIO1_AHB.HSEL),        
+    .HREADY(GPIO1_AHB.HREADY),
+    .HTRANS(GPIO1_AHB.HTRANS),
+    .HSIZE(GPIO1_AHB.HSIZE),
+    .HWRITE(GPIO1_AHB.HWRITE),
+    .HADDR(GPIO1_AHB.HADDR[11:0]),
+    .HWDATA(GPIO1_AHB.HWDATA),
+    .HREADYOUT(GPIO1_AHB.HREADYOUT),
+    .HRESP(GPIO1_AHB.HRESP),
+    .HRDATA(GPIO1_AHB.HRDATA),
 
     .ECOREVNUM(4'h0),   
 
@@ -420,12 +379,12 @@ cmsdk_ahb_gpio #(
 
   wire   [31:0]    hwdata_le; // Little endian write data
   wire   [31:0]    hrdata_le; // Little endian read data
-  wire             reg_be_swap_ctrl_en = PERIPH_AHB.HSEL & PERIPH_AHB.HTRANS[1] & PERIPH_AHB.HREADY & bigendian;
+  wire             reg_be_swap_ctrl_en = APBSYS_AHB.HSEL & APBSYS_AHB.HTRANS[1] & APBSYS_AHB.HREADY & bigendian;
   reg     [1:0]    reg_be_swap_ctrl; // registered byte swap control
   wire    [1:0]    nxt_be_swap_ctrl; // next state of byte swap control
 
-  assign nxt_be_swap_ctrl[1] = bigendian & (PERIPH_AHB.HSIZE[1:0]==2'b10); // Swap upper and lower half word
-  assign nxt_be_swap_ctrl[0] = bigendian & (PERIPH_AHB.HSIZE[1:0]!=2'b00); // Swap byte within hafword
+  assign nxt_be_swap_ctrl[1] = bigendian & (APBSYS_AHB.HSIZE[1:0]==2'b10); // Swap upper and lower half word
+  assign nxt_be_swap_ctrl[0] = bigendian & (APBSYS_AHB.HSIZE[1:0]!=2'b00); // Swap byte within hafword
 
   // Register byte swap control for data phase
   always @(posedge HCLK or negedge HRESETn)
@@ -438,8 +397,8 @@ cmsdk_ahb_gpio #(
 
   // swap byte within half word
   wire  [31:0] hwdata_mux_1 = (reg_be_swap_ctrl[0] & bigendian) ?
-     {PERIPH_AHB.HWDATA[23:16],PERIPH_AHB.HWDATA[31:24],PERIPH_AHB.HWDATA[7:0],PERIPH_AHB.HWDATA[15:8]}:
-     {PERIPH_AHB.HWDATA[31:24],PERIPH_AHB.HWDATA[23:16],PERIPH_AHB.HWDATA[15:8],PERIPH_AHB.HWDATA[7:0]};
+     {APBSYS_AHB.HWDATA[23:16],APBSYS_AHB.HWDATA[31:24],APBSYS_AHB.HWDATA[7:0],APBSYS_AHB.HWDATA[15:8]}:
+     {APBSYS_AHB.HWDATA[31:24],APBSYS_AHB.HWDATA[23:16],APBSYS_AHB.HWDATA[15:8],APBSYS_AHB.HWDATA[7:0]};
   // swap lower and upper half word
   assign       hwdata_le    = (reg_be_swap_ctrl[1] & bigendian) ?
      {hwdata_mux_1[15: 0],hwdata_mux_1[31:16]}:
@@ -449,7 +408,7 @@ cmsdk_ahb_gpio #(
      {hrdata_le[23:16],hrdata_le[31:24],hrdata_le[ 7:0],hrdata_le[15:8]}:
      {hrdata_le[31:24],hrdata_le[23:16],hrdata_le[15:8],hrdata_le[7:0]};
   // swap lower and upper half word
-  assign       apbsys_hrdata       = (reg_be_swap_ctrl[1] & bigendian) ?
+  assign       APBSYS_AHB.HRDATA       = (reg_be_swap_ctrl[1] & bigendian) ?
      {hrdata_mux_1[15: 0],hrdata_mux_1[31:16]}:
      {hrdata_mux_1[31:16],hrdata_mux_1[15:0]};
 
@@ -462,18 +421,18 @@ cmsdk_ahb_to_apb #(
     // AHB side
     .HCLK     (HCLK),
     .HRESETn  (HRESETn),
-    .HSEL     (apbsys_hsel),
-    .HADDR    (PERIPH_AHB.HADDR[15:0]),
-    .HTRANS   (PERIPH_AHB.HTRANS),
-    .HSIZE    (PERIPH_AHB.HSIZE),
-    .HPROT    (PERIPH_AHB.HPROT),
-    .HWRITE   (PERIPH_AHB.HWRITE),
-    .HREADY   (PERIPH_AHB.HREADY),
+    .HSEL     (APBSYS_AHB.HSEL),
+    .HADDR    (APBSYS_AHB.HADDR[15:0]),
+    .HTRANS   (APBSYS_AHB.HTRANS),
+    .HSIZE    (APBSYS_AHB.HSIZE),
+    .HPROT    (APBSYS_AHB.HPROT),
+    .HWRITE   (APBSYS_AHB.HWRITE),
+    .HREADY   (APBSYS_AHB.HREADY),
     .HWDATA   (hwdata_le),
 
-    .HREADYOUT(apbsys_hreadyout), // AHB Outputs
+    .HREADYOUT(APBSYS_AHB.HREADYOUT), // AHB Outputs
     .HRDATA   (hrdata_le),
-    .HRESP    (apbsys_hresp),
+    .HRESP    (APBSYS_AHB.HRESP),
 
     .PADDR    (PADDR[15:0]),
     .PSEL     (PSEL),
@@ -497,8 +456,8 @@ cmsdk_apb_slave_mux #(
     .PORT0_ENABLE(1),
     .PORT1_ENABLE(1),
     .PORT2_ENABLE(1),
-    .PORT3_ENABLE(1),
-    .PORT4_ENABLE(1),
+    .PORT3_ENABLE(0),   // Was USRT, now unused
+    .PORT4_ENABLE(0),   // Was USRT, now unused
     .PORT5_ENABLE(1),
     .PORT6_ENABLE(1),
     .PORT7_ENABLE(1),
@@ -838,61 +797,5 @@ Ssp u_apb_spi(
 assign PREADY_SPI  = 1'b1;
 assign PSLVERR_SPI = 1'b0;
 
-
-millisoc_peripheral_debug #(
-    .FT1248_WIDTH(1)
-) u_millisoc_peripheral_debug(
-    .HCLK(HCLK),
-    .HRESETn(HRESETn),
-    .HADDR_ADP(ADP_AHB.HADDR),
-    .HTRANS_ADP(ADP_AHB.HTRANS),
-    .HWRITE_ADP(ADP_AHB.HWRITE),
-    .HSIZE_ADP(ADP_AHB.HSIZE),
-    .HBURST_ADP(ADP_AHB.HBURST),
-    .HPROT_ADP(ADP_AHB.HPROT),
-    .HWDATA_ADP(ADP_AHB.HWDATA),
-    .HRDATA_ADP(ADP_AHB.HRDATA),
-    .HREADY_ADP(ADP_AHB.HREADY),
-    .HRESP_ADP(ADP_AHB.HRESP),
-
-    .PCLK(PCLK),
-    .PRESETn(PRESETn),
-
-    .USRT0_PSEL(PSEL_USRT0),
-    .USRT0_PRDATA(PRDATA_USRT0),
-    .USRT0_PREADY(PREADY_USRT0),
-    .USRT0_PSLVERR(PSLVERR_USRT0),
-
-    .USRT1_PSEL(PSEL_USRT1),
-    .USRT1_PRDATA(PRDATA_USRT1),
-    .USRT1_PREADY(PREADY_USRT1),
-    .USRT1_PSLVERR(PSLVERR_USRT1),
-
-    .USRT_PADDRm(PADDR[11:0]),
-    .USRT_PENABLE(PENABLE),
-    .USRT_PWRITE(PWRITE),
-    .USRT_PWDATA(PWDATA),
-
-    .iodata4_i(iodata4_i),
-    .iodata4_o(iodata4_o),
-    .iodata4_e(iodata4_e),
-    .iodata4_t(iodata4_t),
-    .ioreq1_o(ioreq1_o),
-    .ioreq2_o(ioreq2_o),
-    .ioreq_e(ioreq_e),
-    .ioreq_t(ioreq_t),
-    .ioack_a(ioack_a),
-
-    .usrt0_txint(usrt0_txint),
-    .usrt0_rxint(usrt0_rxint),
-    .usrt0_txovrint(usrt0_txovrint),
-    .usrt0_rxovrint(usrt0_rxovrint),
-    .usrt0_combined_int(usrt0_combined_int),
-    .usrt1_txint(usrt1_txint),
-    .usrt1_rxint(usrt1_rxint),
-    .usrt1_txovrint(usrt1_txovrint),
-    .usrt1_rxovrint(usrt1_rxovrint),
-    .usrt1_combined_int(usrt1_combined_int)
-);
 
 endmodule

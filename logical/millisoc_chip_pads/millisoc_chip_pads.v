@@ -7,10 +7,10 @@ module millisoc_chip_pads(
     output wire         QSPI_nCS,
     inout  wire [3:0]   QSPI_IO,
 
-    inout  wire [3:0]   EXTIO_IO,
-    output wire         EXTIO_IOREQ1,
-    output wire         EXTIO_IOREQ2,
-    input  wire         EXTIO_IOACK
+    output wire         UARTTXD0,
+    input  wire         UARTRXD0,
+    output wire         UARTTXD1,
+    input  wire         UARTRXD1
 );
 
 // QSPI internal Signals
@@ -26,14 +26,6 @@ wire             uarttxen0;
 wire             uartrxd1;
 wire             uarttxd1;
 wire             uarttxen1;
-// EXTIO internal Signals
-wire [3:0]       iodata4_i;
-wire [3:0]       iodata4_o;
-wire [3:0]       iodata4_e;
-wire [3:0]       iodata4_t;
-wire             ioreq1_o;
-wire             ioreq2_o;
-wire             ioack_i;
 // DAP-LITE internal signals
 wire             ntrst;
 wire             swclktck;
@@ -72,15 +64,6 @@ millisoc_system u_millisoc_system(
     .UARTRXD1(uartrxd1),
     .UARTTXD1(uarttxd1),
     .UARTTXEN1(uarttxen1),
-    .iodata4_i(iodata4_i),
-    .iodata4_o(iodata4_o),
-    .iodata4_e(iodata4_e),
-    .iodata4_t(iodata4_t),
-    .ioreq1_o(ioreq1_o),
-    .ioreq2_o(ioreq2_o),
-    .ioreq_e(ioreq_e),
-    .ioreq_t(ioreq_t),
-    .ioack_a(ioack_a),
     .nTRST(ntrst),
     .SWCLKTCK(swclktck),
     .SWDITMS(swditms),
@@ -117,14 +100,6 @@ millisoc_chip_phy u_millisoc_chip_phy(
     .uarttxd1(uarttxd1),
     .uarttxen1(uarttxen1),
 
-    .iodata4_i(iodata4_i),
-    .iodata4_o(iodata4_o),
-    .iodata4_e(iodata4_e),
-    .iodata4_t(iodata4_t),
-    .ioreq1_o(ioreq1_o),
-    .ioreq2_o(ioreq2_o),
-    .ioack_i(ioack_a),
-
     .ntrst(ntrst),
     .swclktck(swclktck),
     .swditms(swditms),
@@ -152,10 +127,10 @@ millisoc_chip_phy u_millisoc_chip_phy(
     .qspi_ncs_pad(QSPI_nCS),
     .qspi_io_pad(QSPI_IO),
 
-    .iodata4_pad(EXTIO_IO),
-    .ioreq1_pad(EXTIO_IOREQ1),
-    .ioreq2_pad(EXTIO_IOREQ2),
-    .ioack_pad(EXTIO_IOACK)
+    .uart_txd0_pad(UARTTXD0),
+    .uart_rxd0_pad(UARTRXD0),
+    .uart_txd1_pad(UARTTXD1),
+    .uart_rxd1_pad(UARTRXD1)
 );
 
 endmodule

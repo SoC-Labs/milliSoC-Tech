@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<cfgfile xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+   <!-- - - - - *** DO NOT MODIFY ABOVE THIS LINE *** - - - - - - - - - - - -->
+
+   <!-- Global definitions -->
+   <architecture_version>ahb2</architecture_version><arbitration_scheme>round</arbitration_scheme><routing_data_width>32</routing_data_width><routing_address_width>32</routing_address_width><timescales>yes</timescales><user_signal_width>0</user_signal_width><bus_matrix_name>cmsdk_ahb_busmatrix_periph</bus_matrix_name><input_stage_name>cmsdk_ahb_bm_input_stage_periph</input_stage_name><matrix_decode_name>cmsdk_ahb_bm_decode_periph</matrix_decode_name><output_arbiter_name>cmsdk_ahb_bm_output_arb_periph</output_arbiter_name><output_stage_name>cmsdk_ahb_bm_output_stage_periph</output_stage_name>
+
+   <!-- Master interface definitions -->
+   <master_interface name="m0"/><master_interface name="m1"/><master_interface name="m2"/>
+
+   <!-- Slave interface definitions -->
+   <slave_interface name="s0"><sparse_connect interface="m0"/><sparse_connect interface="m1"/><sparse_connect interface="m2"/><address_region interface="m0" remapping="none" mem_lo="40000000" mem_hi="4000FFFF"/><address_region interface="m1" remapping="none" mem_lo="40010000" mem_hi="4001FFFF"/><address_region interface="m2" remapping="none" mem_lo="40020000" mem_hi="4002FFFF"/></slave_interface>
+
+   <!-- - - - - *** DO NOT MODIFY BELOW THIS LINE *** - - - - - - - - - - - -->
+</cfgfile>

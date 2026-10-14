@@ -1,12 +1,6 @@
 [submodule "logical/ahb_qspi"]
 	path = logical/ahb_qspi
 	url = https://github.com/SoC-Labs/AHB-QSPI.git
-[submodule "logical/socdebug_tech"]
-	path = logical/socdebug_tech
-	url = https://github.com/SoC-Labs/SoCDebug-Tech.git
 [submodule "logical/sldma350_tech"]
 	path = logical/sldma350_tech
 	url = https://github.com/SoC-Labs/SLDMA-350-Tech.git
-[submodule "logical/hostio4"]
-	path = logical/hostio4
-	url = https://git.soton.ac.uk/soclabs/hostio4.git

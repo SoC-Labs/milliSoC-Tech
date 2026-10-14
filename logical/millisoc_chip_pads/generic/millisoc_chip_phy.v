@@ -16,15 +16,6 @@ module millisoc_chip_phy(
     input  wire             uarttxen1,
 
 
-    // EXTIO Signals
-    output wire [3:0]       iodata4_i,
-    input  wire [3:0]       iodata4_o,
-    input  wire [3:0]       iodata4_e,
-    input  wire [3:0]       iodata4_t,
-    input  wire             ioreq1_o,
-    input  wire             ioreq2_o,
-    output wire             ioack_i,
-
     // DAP-LITE signals
     output wire             ntrst,
     output wire             swclktck,
@@ -55,13 +46,11 @@ module millisoc_chip_phy(
     output wire           qspi_ncs_pad,
     inout  wire [3:0]     qspi_io_pad,
 
-    // EXTIO to pads
-    inout  wire [3:0]     iodata4_pad,
-    output wire           ioreq1_pad,
-    output wire           ioreq2_pad,
-    input  wire           ioack_pad
-
-
+    // UART
+    output wire           uart_txd0_pad,
+    input  wire           uart_rxd0_pad,
+    output wire           uart_txd1_pad,
+    input  wire           uart_rxd1_pad
 );
 
 assign  qspi_sclk_pad = qspi_sclk;
@@ -74,16 +63,11 @@ generate
     end
 endgenerate
 
-assign ioreq1_pad = ioreq1_o;
-assign ioreq2_pad = ioreq2_o;
-assign ioack_i   = ioack_pad;
-genvar j;
-generate
-    for (j=0; j<4; j=j+1) begin : g_extio_loop
-        assign iodata4_pad[j] = iodata4_e[j] ? iodata4_o[j] : 1'bz;
-        assign iodata4_i[j]   = iodata4_pad[j];
-    end
-endgenerate
 
+assign uart_txd0_pad = uarttxen0 ? uarttxd0 : 1'bz;
+assign uartrxd0     = uart_rxd0_pad;
+
+assign uart_txd1_pad = uarttxen1 ? uarttxd1 : 1'bz;
+assign uartrxd1     = uart_rxd1_pad;
 
 endmodule

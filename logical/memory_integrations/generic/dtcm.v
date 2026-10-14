@@ -3,14 +3,14 @@ module dtcm (
     input  wire         CLK,
 
     input  wire         D0TCMCS,    // D0 TCM Chip Select
-    input  wire [23:3]  D0TCMADDR,  // D0 TCM Address
+    input  wire [22:3]  D0TCMADDR,  // D0 TCM Address
     input  wire         D0TCMWR,    // D0 TCM Write Enable
     input  wire [ 3:0]  D0TCMBYTEWR,// D0 TCM Byte Write Enable
     input  wire [31:0]  D0TCMWDATA, // D0 TCM Write Data
     output wire [31:0]  D0TCMRDATA, // D0 TCM Read Data
 
     input  wire         D1TCMCS,    // D1 TCM Chip Select
-    input  wire [23:3]  D1TCMADDR,  // D1 TCM Address
+    input  wire [22:3]  D1TCMADDR,  // D1 TCM Address
     input  wire         D1TCMWR,    // D1 TCM Write Enable
     input  wire [ 3:0]  D1TCMBYTEWR,// D1 TCM Byte Write Enable
     input  wire [31:0]  D1TCMWDATA, // D1 TCM Write Data
@@ -18,7 +18,7 @@ module dtcm (
 );
 
 bit_ram #(
-    .ADDR_BITS(21),
+    .ADDR_BITS(20),
     .DATA_BITS(8),
     .RESET(0),
     .RESET_HIGH(0)
@@ -31,7 +31,7 @@ bit_ram #(
     .we_i({8{D0TCMWR&D0TCMBYTEWR[0]}})
 );
 bit_ram #(
-    .ADDR_BITS(21),
+    .ADDR_BITS(20),
     .DATA_BITS(8),
     .RESET(0),
     .RESET_HIGH(0)
@@ -44,7 +44,7 @@ bit_ram #(
     .we_i({8{D0TCMWR&D0TCMBYTEWR[1]}})
 );
 bit_ram #(
-    .ADDR_BITS(21),
+    .ADDR_BITS(20),
     .DATA_BITS(8),
     .RESET(0),
     .RESET_HIGH(0)
@@ -57,7 +57,7 @@ bit_ram #(
     .we_i({8{D0TCMWR&D0TCMBYTEWR[2]}})
 );
 bit_ram #(
-    .ADDR_BITS(21),
+    .ADDR_BITS(20),
     .DATA_BITS(8),
     .RESET(0),
     .RESET_HIGH(0)
@@ -70,7 +70,7 @@ bit_ram #(
     .we_i({8{D0TCMWR&D0TCMBYTEWR[3]}})
 );
 bit_ram #(
-    .ADDR_BITS(21),
+    .ADDR_BITS(20),
     .DATA_BITS(8),
     .RESET(0),
     .RESET_HIGH(0)
@@ -83,7 +83,7 @@ bit_ram #(
     .we_i({8{D1TCMWR&D1TCMBYTEWR[0]}})
 );
 bit_ram #(
-    .ADDR_BITS(21),
+    .ADDR_BITS(20),
     .DATA_BITS(8),
     .RESET(0),
     .RESET_HIGH(0)
@@ -96,7 +96,7 @@ bit_ram #(
     .we_i({8{D1TCMWR&D1TCMBYTEWR[1]}})
 );
 bit_ram #(
-    .ADDR_BITS(21),
+    .ADDR_BITS(20),
     .DATA_BITS(8),
     .RESET(0),
     .RESET_HIGH(0)
@@ -109,7 +109,7 @@ bit_ram #(
     .we_i({8{D1TCMWR&D1TCMBYTEWR[2]}})
 );
 bit_ram #(
-    .ADDR_BITS(21),
+    .ADDR_BITS(20),
     .DATA_BITS(8),
     .RESET(0),
     .RESET_HIGH(0)

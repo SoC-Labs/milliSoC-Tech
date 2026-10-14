@@ -15,7 +15,7 @@
       <WUSERWidth>0</WUSERWidth>
       <BUSERWidth>0</BUSERWidth>
       <RUSERWidth>0</RUSERWidth>
-      <GlobalIDWidth>5</GlobalIDWidth>
+      <GlobalIDWidth>6</GlobalIDWidth>
       <HierarchicalClockGating>false</HierarchicalClockGating>
       <ClockControllerImplementation>asynchronous</ClockControllerImplementation>
       <RSBCentralRing>false</RSBCentralRing>
@@ -24,6 +24,8 @@
       <Taxonomy>master_slave</Taxonomy>
       <QoSEnabled>false</QoSEnabled>
       <QVNEnabled>false</QVNEnabled>
+      <DPEEnabled>false</DPEEnabled>
+      <SystemDataWidth>64</SystemDataWidth>
     </Parameters>
     <Domains>
       <VoltageDomains>
@@ -62,10 +64,12 @@
     </Groups>
     <Interfaces>
       <SlaveInterface>
-        <Name>CM7</Name>
+        <Name>CPU_Mx</Name>
         <AXI4SlaveProtocol>
           <AddressWidth>32</AddressWidth>
           <DataWidth>64</DataWidth>
+          <RUSEREnabled>false</RUSEREnabled>
+          <WUSEREnabled>false</WUSEREnabled>
           <VIDWidth>3</VIDWidth>
           <MultiRegion>false</MultiRegion>
           <TrustZoneSlave>non_secure</TrustZoneSlave>
@@ -167,23 +171,24 @@
         <ClockRef>clk0</ClockRef>
       </MasterInterface>
       <SlaveInterface>
-        <Name>ADP</Name>
-        <AHBLiteInitiatorSlaveProtocol>
+        <Name>DEBUG</Name>
+        <AXI4SlaveProtocol>
           <AddressWidth>32</AddressWidth>
-          <DataWidth>32</DataWidth>
+          <DataWidth>64</DataWidth>
           <RUSEREnabled>false</RUSEREnabled>
           <WUSEREnabled>false</WUSEREnabled>
-          <LockSupport>false</LockSupport>
-          <TrustZoneSlaveAHB>non_secure</TrustZoneSlaveAHB>
-          <ReadAcceptanceAHB>1</ReadAcceptanceAHB>
+          <VIDWidth>0</VIDWidth>
+          <MultiRegion>false</MultiRegion>
+          <TrustZoneSlave>non_secure</TrustZoneSlave>
+          <ReadAcceptance>4</ReadAcceptance>
           <WriteAcceptance>4</WriteAcceptance>
-          <QoSTypeAHB>fixed</QoSTypeAHB>
+          <QoSTypeAXI>fixed</QoSTypeAXI>
           <QoSValue>0</QoSValue>
           <TransactionRateRegulation>false</TransactionRateRegulation>
           <OutstandingTransactionRegulation>false</OutstandingTransactionRegulation>
           <LatencyPeriodRegulation>false</LatencyPeriodRegulation>
-          <EnableEarlyWriteResponse>true</EnableEarlyWriteResponse>
-        </AHBLiteInitiatorSlaveProtocol>
+          <VNExternal>false</VNExternal>
+        </AXI4SlaveProtocol>
         <GeographicDomainRef>gd0</GeographicDomainRef>
         <ClockRef>clk0</ClockRef>
         <MultiPorted>false</MultiPorted>
@@ -194,7 +199,7 @@
         <Name>CPU_S</Name>
         <AHBLiteTargetMasterProtocol>
           <AddressWidth>32</AddressWidth>
-          <DataWidth>32</DataWidth>
+          <DataWidth>64</DataWidth>
           <RUSEREnabled>false</RUSEREnabled>
           <WUSEREnabled>false</WUSEREnabled>
           <ReadIssuing>1</ReadIssuing>
@@ -207,12 +212,40 @@
         <GeographicDomainRef>gd0</GeographicDomainRef>
         <ClockRef>clk0</ClockRef>
       </MasterInterface>
+      <SlaveInterface>
+        <Name>CPU_Rx</Name>
+        <AXI4SlaveProtocol>
+          <AddressWidth>32</AddressWidth>
+          <DataWidth>64</DataWidth>
+          <RUSEREnabled>false</RUSEREnabled>
+          <WUSEREnabled>false</WUSEREnabled>
+          <VIDWidth>0</VIDWidth>
+          <MultiRegion>false</MultiRegion>
+          <TrustZoneSlave>non_secure</TrustZoneSlave>
+          <ReadAcceptance>4</ReadAcceptance>
+          <WriteAcceptance>4</WriteAcceptance>
+          <QoSTypeAXI>fixed</QoSTypeAXI>
+          <QoSValue>0</QoSValue>
+          <TransactionRateRegulation>false</TransactionRateRegulation>
+          <OutstandingTransactionRegulation>false</OutstandingTransactionRegulation>
+          <LatencyPeriodRegulation>false</LatencyPeriodRegulation>
+          <VNExternal>false</VNExternal>
+        </AXI4SlaveProtocol>
+        <GeographicDomainRef>gd0</GeographicDomainRef>
+        <ClockRef>clk0</ClockRef>
+        <MultiPorted>false</MultiPorted>
+        <CyclicDependencyAvoidanceScheme>single_slave</CyclicDependencyAvoidanceScheme>
+        <LowLatency>false</LowLatency>
+      </SlaveInterface>
     </Interfaces>
     <MemoryMaps>
       <MemoryMap>
         <Name>main_map</Name>
         <MemoryMapSource>
-          <InterfaceRef>CM7</InterfaceRef>
+          <InterfaceRef>CPU_Mx</InterfaceRef>
+        </MemoryMapSource>
+        <MemoryMapSource>
+          <InterfaceRef>CPU_Rx</InterfaceRef>
         </MemoryMapSource>
         <MappedBlock>
           <InterfaceRef>QSPI</InterfaceRef>
@@ -266,7 +299,7 @@
       <MemoryMap>
         <Name>adp_map</Name>
         <MemoryMapSource>
-          <InterfaceRef>ADP</InterfaceRef>
+          <InterfaceRef>DEBUG</InterfaceRef>
         </MemoryMapSource>
         <MappedBlock>
           <InterfaceRef>QSPI</InterfaceRef>
@@ -303,7 +336,7 @@
     <Paths>
       <Path>
         <Source>
-          <InterfaceRef>CM7</InterfaceRef>
+          <InterfaceRef>CPU_Mx</InterfaceRef>
         </Source>
         <Targets>
           <Target>
@@ -338,7 +371,7 @@
       </Path>
       <Path>
         <Source>
-          <InterfaceRef>ADP</InterfaceRef>
+          <InterfaceRef>DEBUG</InterfaceRef>
         </Source>
         <Targets>
           <Target>
@@ -355,6 +388,25 @@
           </Target>
           <Target>
             <InterfaceRef>CPU_S</InterfaceRef>
+          </Target>
+        </Targets>
+      </Path>
+      <Path>
+        <Source>
+          <InterfaceRef>CPU_Rx</InterfaceRef>
+        </Source>
+        <Targets>
+          <Target>
+            <InterfaceRef>QSPI</InterfaceRef>
+          </Target>
+          <Target>
+            <InterfaceRef>DMA_CFG</InterfaceRef>
+          </Target>
+          <Target>
+            <InterfaceRef>QSPI_CFG</InterfaceRef>
+          </Target>
+          <Target>
+            <InterfaceRef>ROM</InterfaceRef>
           </Target>
         </Targets>
       </Path>
@@ -379,7 +431,7 @@
         &lt;hcg_en&gt;false&lt;/hcg_en&gt;
         &lt;license_status&gt;unlicensed_nic&lt;/license_status&gt;
         &lt;periph_id3 def=&quot;true&quot;&gt;0&lt;/periph_id3&gt;
-        &lt;pl_id_width&gt;5&lt;/pl_id_width&gt;
+        &lt;pl_id_width&gt;6&lt;/pl_id_width&gt;
         &lt;qos_status&gt;false&lt;/qos_status&gt;
         &lt;rsb_arch_central_ring&gt;false&lt;/rsb_arch_central_ring&gt;
         &lt;ruser_width&gt;0&lt;/ruser_width&gt;
@@ -448,7 +500,7 @@
         &lt;master_if_data_width&gt;64&lt;/master_if_data_width&gt;
         &lt;multi_ported&gt;false&lt;/multi_ported&gt;
         &lt;multi_region&gt;false&lt;/multi_region&gt;
-        &lt;name&gt;CM7&lt;/name&gt;
+        &lt;name&gt;CPU_Mx&lt;/name&gt;
         &lt;protocol&gt;axi4&lt;/protocol&gt;
         &lt;qos_config&gt;
             &lt;hard&gt;disable&lt;/hard&gt;
@@ -564,8 +616,8 @@
         &lt;vn_external_bridge&gt;none&lt;/vn_external_bridge&gt;
         &lt;x&gt;0&lt;/x&gt;
         &lt;y&gt;20&lt;/y&gt;
-        &lt;master_if_port_name&gt;CM7_m&lt;/master_if_port_name&gt;
-        &lt;slave_if_port_name&gt;CM7_s&lt;/slave_if_port_name&gt;
+        &lt;master_if_port_name&gt;CPU_Mx_m&lt;/master_if_port_name&gt;
+        &lt;slave_if_port_name&gt;CPU_Mx_s&lt;/slave_if_port_name&gt;
     &lt;/asib&gt;
     &lt;asib&gt;
         &lt;address_ranges&gt;
@@ -785,17 +837,15 @@
         &lt;/address_ranges&gt;
         &lt;apb_config&gt;false&lt;/apb_config&gt;
         &lt;apb_slave_no def=&quot;true&quot;&gt;2&lt;/apb_slave_no&gt;
-        &lt;broken_bursts&gt;false&lt;/broken_bursts&gt;
         &lt;cds&gt;singleslave&lt;/cds&gt;
         &lt;clock_boundary&gt;none&lt;/clock_boundary&gt;
         &lt;clock_domain_name_master_if&gt;clk0&lt;/clock_domain_name_master_if&gt;
         &lt;clock_domain_name_slave_if&gt;clk0&lt;/clock_domain_name_slave_if&gt;
-        &lt;ewr_incr_promotion&gt;true&lt;/ewr_incr_promotion&gt;
         &lt;master_if_data_width&gt;64&lt;/master_if_data_width&gt;
         &lt;multi_ported&gt;false&lt;/multi_ported&gt;
         &lt;multi_region&gt;false&lt;/multi_region&gt;
-        &lt;name&gt;ADP&lt;/name&gt;
-        &lt;protocol&gt;ahb_mm&lt;/protocol&gt;
+        &lt;name&gt;DEBUG&lt;/name&gt;
+        &lt;protocol&gt;axi4&lt;/protocol&gt;
         &lt;qos_config&gt;
             &lt;hard&gt;disable&lt;/hard&gt;
             &lt;lqv&gt;disable&lt;/lqv&gt;
@@ -808,8 +858,55 @@
         &lt;reg&gt;
             &lt;impl&gt;present&lt;/impl&gt;
             &lt;location&gt;slave_port&lt;/location&gt;
+            &lt;name&gt;aw&lt;/name&gt;
+            &lt;type&gt;rev&lt;/type&gt;
+        &lt;/reg&gt;
+        &lt;reg&gt;
+            &lt;impl&gt;present&lt;/impl&gt;
+            &lt;location&gt;slave_port&lt;/location&gt;
             &lt;name&gt;w&lt;/name&gt;
             &lt;type&gt;rev&lt;/type&gt;
+        &lt;/reg&gt;
+        &lt;reg&gt;
+            &lt;impl&gt;present&lt;/impl&gt;
+            &lt;location&gt;slave_port&lt;/location&gt;
+            &lt;name&gt;ar&lt;/name&gt;
+            &lt;type&gt;rev&lt;/type&gt;
+        &lt;/reg&gt;
+        &lt;reg&gt;
+            &lt;depth def=&quot;true&quot;&gt;2&lt;/depth&gt;
+            &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+            &lt;location&gt;boundary&lt;/location&gt;
+            &lt;name&gt;aw&lt;/name&gt;
+            &lt;type&gt;fifo&lt;/type&gt;
+        &lt;/reg&gt;
+        &lt;reg&gt;
+            &lt;depth def=&quot;true&quot;&gt;2&lt;/depth&gt;
+            &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+            &lt;location&gt;boundary&lt;/location&gt;
+            &lt;name&gt;ar&lt;/name&gt;
+            &lt;type&gt;fifo&lt;/type&gt;
+        &lt;/reg&gt;
+        &lt;reg&gt;
+            &lt;depth def=&quot;true&quot;&gt;2&lt;/depth&gt;
+            &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+            &lt;location&gt;boundary&lt;/location&gt;
+            &lt;name&gt;r&lt;/name&gt;
+            &lt;type&gt;fifo&lt;/type&gt;
+        &lt;/reg&gt;
+        &lt;reg&gt;
+            &lt;depth def=&quot;true&quot;&gt;2&lt;/depth&gt;
+            &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+            &lt;location&gt;boundary&lt;/location&gt;
+            &lt;name&gt;w&lt;/name&gt;
+            &lt;type&gt;fifo&lt;/type&gt;
+        &lt;/reg&gt;
+        &lt;reg&gt;
+            &lt;depth def=&quot;true&quot;&gt;2&lt;/depth&gt;
+            &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+            &lt;location&gt;boundary&lt;/location&gt;
+            &lt;name&gt;b&lt;/name&gt;
+            &lt;type&gt;fifo&lt;/type&gt;
         &lt;/reg&gt;
         &lt;reg&gt;
             &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
@@ -844,27 +941,129 @@
         &lt;reg&gt;
             &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
             &lt;location&gt;slave_port&lt;/location&gt;
-            &lt;name&gt;a&lt;/name&gt;
+            &lt;name&gt;r&lt;/name&gt;
             &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
         &lt;/reg&gt;
         &lt;reg&gt;
             &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
             &lt;location&gt;slave_port&lt;/location&gt;
-            &lt;name&gt;d&lt;/name&gt;
+            &lt;name&gt;b&lt;/name&gt;
             &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+        &lt;/reg&gt;
+        &lt;slave_if_addr_width&gt;32&lt;/slave_if_addr_width&gt;
+        &lt;slave_if_data_width&gt;64&lt;/slave_if_data_width&gt;
+        &lt;token_prerequest def=&quot;true&quot;&gt;false&lt;/token_prerequest&gt;
+        &lt;token_prerequest_bridge def=&quot;true&quot;&gt;false&lt;/token_prerequest_bridge&gt;
+        &lt;trustzone&gt;nsec&lt;/trustzone&gt;
+        &lt;vid_width&gt;0&lt;/vid_width&gt;
+        &lt;vn_external&gt;none&lt;/vn_external&gt;
+        &lt;vn_external_bridge&gt;none&lt;/vn_external_bridge&gt;
+        &lt;x&gt;0&lt;/x&gt;
+        &lt;y&gt;60&lt;/y&gt;
+        &lt;master_if_port_name&gt;DEBUG_m&lt;/master_if_port_name&gt;
+        &lt;slave_if_port_name&gt;DEBUG_s&lt;/slave_if_port_name&gt;
+    &lt;/asib&gt;
+    &lt;asib&gt;
+        &lt;address_ranges&gt;
+            &lt;name&gt;main_map&lt;/name&gt;
+            &lt;range&gt;
+                &lt;addr_max&gt;0x603FFFFF&lt;/addr_max&gt;
+                &lt;addr_min&gt;0x60000000&lt;/addr_min&gt;
+                &lt;remap&gt;
+                    &lt;bit&gt;default&lt;/bit&gt;
+                    &lt;present&gt;true&lt;/present&gt;
+                    &lt;region&gt;0&lt;/region&gt;
+                    &lt;target&gt;QSPI&lt;/target&gt;
+                &lt;/remap&gt;
+            &lt;/range&gt;
+            &lt;range&gt;
+                &lt;addr_max&gt;0x44001FFF&lt;/addr_max&gt;
+                &lt;addr_min&gt;0x44000000&lt;/addr_min&gt;
+                &lt;remap&gt;
+                    &lt;bit&gt;default&lt;/bit&gt;
+                    &lt;present&gt;true&lt;/present&gt;
+                    &lt;region&gt;0&lt;/region&gt;
+                    &lt;target&gt;DMA_CFG&lt;/target&gt;
+                &lt;/remap&gt;
+            &lt;/range&gt;
+            &lt;range&gt;
+                &lt;addr_max&gt;0x4401FFFF&lt;/addr_max&gt;
+                &lt;addr_min&gt;0x44010000&lt;/addr_min&gt;
+                &lt;remap&gt;
+                    &lt;bit&gt;default&lt;/bit&gt;
+                    &lt;present&gt;true&lt;/present&gt;
+                    &lt;region&gt;0&lt;/region&gt;
+                    &lt;target&gt;QSPI_CFG&lt;/target&gt;
+                &lt;/remap&gt;
+            &lt;/range&gt;
+            &lt;range&gt;
+                &lt;addr_max&gt;0x6040FFFF&lt;/addr_max&gt;
+                &lt;addr_min&gt;0x60400000&lt;/addr_min&gt;
+                &lt;remap&gt;
+                    &lt;bit&gt;default&lt;/bit&gt;
+                    &lt;present&gt;true&lt;/present&gt;
+                    &lt;region&gt;0&lt;/region&gt;
+                    &lt;target&gt;ROM&lt;/target&gt;
+                &lt;/remap&gt;
+            &lt;/range&gt;
+        &lt;/address_ranges&gt;
+        &lt;apb_config&gt;false&lt;/apb_config&gt;
+        &lt;apb_slave_no def=&quot;true&quot;&gt;2&lt;/apb_slave_no&gt;
+        &lt;cds&gt;singleslave&lt;/cds&gt;
+        &lt;clock_boundary&gt;none&lt;/clock_boundary&gt;
+        &lt;clock_domain_name_master_if&gt;clk0&lt;/clock_domain_name_master_if&gt;
+        &lt;clock_domain_name_slave_if&gt;clk0&lt;/clock_domain_name_slave_if&gt;
+        &lt;master_if_data_width&gt;64&lt;/master_if_data_width&gt;
+        &lt;multi_ported&gt;false&lt;/multi_ported&gt;
+        &lt;multi_region&gt;false&lt;/multi_region&gt;
+        &lt;name&gt;CPU_Rx&lt;/name&gt;
+        &lt;protocol&gt;axi4&lt;/protocol&gt;
+        &lt;qos_config&gt;
+            &lt;hard&gt;disable&lt;/hard&gt;
+            &lt;lqv&gt;disable&lt;/lqv&gt;
+            &lt;pot&gt;disable&lt;/pot&gt;
+        &lt;/qos_config&gt;
+        &lt;qv&gt;
+            &lt;type&gt;fixed&lt;/type&gt;
+            &lt;value&gt;0&lt;/value&gt;
+        &lt;/qv&gt;
+        &lt;reg&gt;
+            &lt;impl&gt;present&lt;/impl&gt;
+            &lt;location&gt;slave_port&lt;/location&gt;
+            &lt;name&gt;aw&lt;/name&gt;
+            &lt;type&gt;rev&lt;/type&gt;
+        &lt;/reg&gt;
+        &lt;reg&gt;
+            &lt;impl&gt;present&lt;/impl&gt;
+            &lt;location&gt;slave_port&lt;/location&gt;
+            &lt;name&gt;w&lt;/name&gt;
+            &lt;type&gt;rev&lt;/type&gt;
+        &lt;/reg&gt;
+        &lt;reg&gt;
+            &lt;impl&gt;present&lt;/impl&gt;
+            &lt;location&gt;slave_port&lt;/location&gt;
+            &lt;name&gt;ar&lt;/name&gt;
+            &lt;type&gt;rev&lt;/type&gt;
         &lt;/reg&gt;
         &lt;reg&gt;
             &lt;depth def=&quot;true&quot;&gt;2&lt;/depth&gt;
             &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
             &lt;location&gt;boundary&lt;/location&gt;
-            &lt;name&gt;a&lt;/name&gt;
+            &lt;name&gt;aw&lt;/name&gt;
             &lt;type&gt;fifo&lt;/type&gt;
         &lt;/reg&gt;
         &lt;reg&gt;
             &lt;depth def=&quot;true&quot;&gt;2&lt;/depth&gt;
             &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
             &lt;location&gt;boundary&lt;/location&gt;
-            &lt;name&gt;d&lt;/name&gt;
+            &lt;name&gt;ar&lt;/name&gt;
+            &lt;type&gt;fifo&lt;/type&gt;
+        &lt;/reg&gt;
+        &lt;reg&gt;
+            &lt;depth def=&quot;true&quot;&gt;2&lt;/depth&gt;
+            &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+            &lt;location&gt;boundary&lt;/location&gt;
+            &lt;name&gt;r&lt;/name&gt;
             &lt;type&gt;fifo&lt;/type&gt;
         &lt;/reg&gt;
         &lt;reg&gt;
@@ -874,8 +1073,57 @@
             &lt;name&gt;w&lt;/name&gt;
             &lt;type&gt;fifo&lt;/type&gt;
         &lt;/reg&gt;
+        &lt;reg&gt;
+            &lt;depth def=&quot;true&quot;&gt;2&lt;/depth&gt;
+            &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+            &lt;location&gt;boundary&lt;/location&gt;
+            &lt;name&gt;b&lt;/name&gt;
+            &lt;type&gt;fifo&lt;/type&gt;
+        &lt;/reg&gt;
+        &lt;reg&gt;
+            &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+            &lt;location&gt;master_port&lt;/location&gt;
+            &lt;name&gt;aw&lt;/name&gt;
+            &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+        &lt;/reg&gt;
+        &lt;reg&gt;
+            &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+            &lt;location&gt;master_port&lt;/location&gt;
+            &lt;name&gt;ar&lt;/name&gt;
+            &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+        &lt;/reg&gt;
+        &lt;reg&gt;
+            &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+            &lt;location&gt;master_port&lt;/location&gt;
+            &lt;name&gt;r&lt;/name&gt;
+            &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+        &lt;/reg&gt;
+        &lt;reg&gt;
+            &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+            &lt;location&gt;master_port&lt;/location&gt;
+            &lt;name&gt;w&lt;/name&gt;
+            &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+        &lt;/reg&gt;
+        &lt;reg&gt;
+            &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+            &lt;location&gt;master_port&lt;/location&gt;
+            &lt;name&gt;b&lt;/name&gt;
+            &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+        &lt;/reg&gt;
+        &lt;reg&gt;
+            &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+            &lt;location&gt;slave_port&lt;/location&gt;
+            &lt;name&gt;r&lt;/name&gt;
+            &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+        &lt;/reg&gt;
+        &lt;reg&gt;
+            &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+            &lt;location&gt;slave_port&lt;/location&gt;
+            &lt;name&gt;b&lt;/name&gt;
+            &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+        &lt;/reg&gt;
         &lt;slave_if_addr_width&gt;32&lt;/slave_if_addr_width&gt;
-        &lt;slave_if_data_width&gt;32&lt;/slave_if_data_width&gt;
+        &lt;slave_if_data_width&gt;64&lt;/slave_if_data_width&gt;
         &lt;token_prerequest def=&quot;true&quot;&gt;false&lt;/token_prerequest&gt;
         &lt;token_prerequest_bridge def=&quot;true&quot;&gt;false&lt;/token_prerequest_bridge&gt;
         &lt;trustzone&gt;nsec&lt;/trustzone&gt;
@@ -883,9 +1131,9 @@
         &lt;vn_external&gt;none&lt;/vn_external&gt;
         &lt;vn_external_bridge&gt;none&lt;/vn_external_bridge&gt;
         &lt;x&gt;0&lt;/x&gt;
-        &lt;y&gt;60&lt;/y&gt;
-        &lt;master_if_port_name&gt;ADP_m&lt;/master_if_port_name&gt;
-        &lt;slave_if_port_name&gt;ADP_s&lt;/slave_if_port_name&gt;
+        &lt;y&gt;80&lt;/y&gt;
+        &lt;master_if_port_name&gt;CPU_Rx_m&lt;/master_if_port_name&gt;
+        &lt;slave_if_port_name&gt;CPU_Rx_s&lt;/slave_if_port_name&gt;
     &lt;/asib&gt;
     &lt;amib&gt;
         &lt;apb_config&gt;false&lt;/apb_config&gt;
@@ -1086,23 +1334,23 @@
         &lt;compress_id def=&quot;true&quot;&gt;false&lt;/compress_id&gt;
         &lt;dest_type&gt;peripheral&lt;/dest_type&gt;
         &lt;master_if_addr_width&gt;32&lt;/master_if_addr_width&gt;
-        &lt;master_if_data_width&gt;32&lt;/master_if_data_width&gt;
+        &lt;master_if_data_width&gt;64&lt;/master_if_data_width&gt;
         &lt;multi_ported&gt;false&lt;/multi_ported&gt;
         &lt;multi_region&gt;false&lt;/multi_region&gt;
         &lt;name&gt;CPU_S&lt;/name&gt;
         &lt;protocol&gt;ahb_ms&lt;/protocol&gt;
         &lt;qv_out&gt;false&lt;/qv_out&gt;
         &lt;reg&gt;
-            &lt;impl&gt;present&lt;/impl&gt;
+            &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
             &lt;location&gt;slave_port&lt;/location&gt;
             &lt;name&gt;aw&lt;/name&gt;
-            &lt;type&gt;rev&lt;/type&gt;
+            &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
         &lt;/reg&gt;
         &lt;reg&gt;
-            &lt;impl&gt;present&lt;/impl&gt;
+            &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
             &lt;location&gt;slave_port&lt;/location&gt;
             &lt;name&gt;ar&lt;/name&gt;
-            &lt;type&gt;rev&lt;/type&gt;
+            &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
         &lt;/reg&gt;
         &lt;reg&gt;
             &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
@@ -1334,38 +1582,15 @@
             &lt;x&gt;0&lt;/x&gt;
             &lt;y&gt;103&lt;/y&gt;
         &lt;/slave_if&gt;
+        &lt;slave_if&gt;
+            &lt;name&gt;axi_s_3&lt;/name&gt;
+            &lt;x&gt;0&lt;/x&gt;
+            &lt;y&gt;123&lt;/y&gt;
+        &lt;/slave_if&gt;
         &lt;sparse&gt;
             &lt;cds&gt;singleslave&lt;/cds&gt;
             &lt;sas def=&quot;true&quot;&gt;false&lt;/sas&gt;
             &lt;slave_if_port&gt;axi_s_0&lt;/slave_if_port&gt;
-            &lt;master_if_port&gt;
-                &lt;name&gt;axi_m_0&lt;/name&gt;
-                &lt;reg&gt;
-                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
-                    &lt;name&gt;aw&lt;/name&gt;
-                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
-                &lt;/reg&gt;
-                &lt;reg&gt;
-                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
-                    &lt;name&gt;ar&lt;/name&gt;
-                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
-                &lt;/reg&gt;
-                &lt;reg&gt;
-                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
-                    &lt;name&gt;r&lt;/name&gt;
-                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
-                &lt;/reg&gt;
-                &lt;reg&gt;
-                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
-                    &lt;name&gt;w&lt;/name&gt;
-                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
-                &lt;/reg&gt;
-                &lt;reg&gt;
-                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
-                    &lt;name&gt;b&lt;/name&gt;
-                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
-                &lt;/reg&gt;
-            &lt;/master_if_port&gt;
             &lt;master_if_port&gt;
                 &lt;name&gt;axi_m_1&lt;/name&gt;
                 &lt;reg&gt;
@@ -1483,6 +1708,34 @@
             &lt;cds&gt;singleslave&lt;/cds&gt;
             &lt;sas def=&quot;true&quot;&gt;false&lt;/sas&gt;
             &lt;slave_if_port&gt;axi_s_1&lt;/slave_if_port&gt;
+            &lt;master_if_port&gt;
+                &lt;name&gt;axi_m_0&lt;/name&gt;
+                &lt;reg&gt;
+                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+                    &lt;name&gt;aw&lt;/name&gt;
+                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+                &lt;/reg&gt;
+                &lt;reg&gt;
+                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+                    &lt;name&gt;ar&lt;/name&gt;
+                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+                &lt;/reg&gt;
+                &lt;reg&gt;
+                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+                    &lt;name&gt;r&lt;/name&gt;
+                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+                &lt;/reg&gt;
+                &lt;reg&gt;
+                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+                    &lt;name&gt;w&lt;/name&gt;
+                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+                &lt;/reg&gt;
+                &lt;reg&gt;
+                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+                    &lt;name&gt;b&lt;/name&gt;
+                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+                &lt;/reg&gt;
+            &lt;/master_if_port&gt;
             &lt;master_if_port&gt;
                 &lt;name&gt;axi_m_1&lt;/name&gt;
                 &lt;reg&gt;
@@ -1713,12 +1966,129 @@
                 &lt;/reg&gt;
             &lt;/master_if_port&gt;
         &lt;/sparse&gt;
+        &lt;sparse&gt;
+            &lt;cds&gt;singleslave&lt;/cds&gt;
+            &lt;sas def=&quot;true&quot;&gt;false&lt;/sas&gt;
+            &lt;slave_if_port&gt;axi_s_3&lt;/slave_if_port&gt;
+            &lt;master_if_port&gt;
+                &lt;name&gt;axi_m_1&lt;/name&gt;
+                &lt;reg&gt;
+                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+                    &lt;name&gt;aw&lt;/name&gt;
+                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+                &lt;/reg&gt;
+                &lt;reg&gt;
+                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+                    &lt;name&gt;ar&lt;/name&gt;
+                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+                &lt;/reg&gt;
+                &lt;reg&gt;
+                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+                    &lt;name&gt;r&lt;/name&gt;
+                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+                &lt;/reg&gt;
+                &lt;reg&gt;
+                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+                    &lt;name&gt;w&lt;/name&gt;
+                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+                &lt;/reg&gt;
+                &lt;reg&gt;
+                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+                    &lt;name&gt;b&lt;/name&gt;
+                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+                &lt;/reg&gt;
+            &lt;/master_if_port&gt;
+            &lt;master_if_port&gt;
+                &lt;name&gt;axi_m_2&lt;/name&gt;
+                &lt;reg&gt;
+                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+                    &lt;name&gt;aw&lt;/name&gt;
+                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+                &lt;/reg&gt;
+                &lt;reg&gt;
+                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+                    &lt;name&gt;ar&lt;/name&gt;
+                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+                &lt;/reg&gt;
+                &lt;reg&gt;
+                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+                    &lt;name&gt;r&lt;/name&gt;
+                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+                &lt;/reg&gt;
+                &lt;reg&gt;
+                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+                    &lt;name&gt;w&lt;/name&gt;
+                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+                &lt;/reg&gt;
+                &lt;reg&gt;
+                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+                    &lt;name&gt;b&lt;/name&gt;
+                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+                &lt;/reg&gt;
+            &lt;/master_if_port&gt;
+            &lt;master_if_port&gt;
+                &lt;name&gt;axi_m_3&lt;/name&gt;
+                &lt;reg&gt;
+                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+                    &lt;name&gt;aw&lt;/name&gt;
+                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+                &lt;/reg&gt;
+                &lt;reg&gt;
+                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+                    &lt;name&gt;ar&lt;/name&gt;
+                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+                &lt;/reg&gt;
+                &lt;reg&gt;
+                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+                    &lt;name&gt;r&lt;/name&gt;
+                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+                &lt;/reg&gt;
+                &lt;reg&gt;
+                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+                    &lt;name&gt;w&lt;/name&gt;
+                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+                &lt;/reg&gt;
+                &lt;reg&gt;
+                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+                    &lt;name&gt;b&lt;/name&gt;
+                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+                &lt;/reg&gt;
+            &lt;/master_if_port&gt;
+            &lt;master_if_port&gt;
+                &lt;name&gt;axi_m_4&lt;/name&gt;
+                &lt;reg&gt;
+                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+                    &lt;name&gt;aw&lt;/name&gt;
+                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+                &lt;/reg&gt;
+                &lt;reg&gt;
+                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+                    &lt;name&gt;ar&lt;/name&gt;
+                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+                &lt;/reg&gt;
+                &lt;reg&gt;
+                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+                    &lt;name&gt;r&lt;/name&gt;
+                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+                &lt;/reg&gt;
+                &lt;reg&gt;
+                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+                    &lt;name&gt;w&lt;/name&gt;
+                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+                &lt;/reg&gt;
+                &lt;reg&gt;
+                    &lt;impl def=&quot;true&quot;&gt;absent&lt;/impl&gt;
+                    &lt;name&gt;b&lt;/name&gt;
+                    &lt;type def=&quot;true&quot;&gt;full&lt;/type&gt;
+                &lt;/reg&gt;
+            &lt;/master_if_port&gt;
+        &lt;/sparse&gt;
         &lt;type&gt;busmatrix&lt;/type&gt;
         &lt;width&gt;0&lt;/width&gt;
         &lt;x&gt;500&lt;/x&gt;
         &lt;y&gt;45&lt;/y&gt;
         &lt;master_if_port_name&gt;axi_m_0,axi_m_1,axi_m_2,axi_m_3,axi_m_4&lt;/master_if_port_name&gt;
-        &lt;slave_if_port_name&gt;axi_s_0,axi_s_1,axi_s_2&lt;/slave_if_port_name&gt;
+        &lt;slave_if_port_name&gt;axi_s_0,axi_s_1,axi_s_2,axi_s_3&lt;/slave_if_port_name&gt;
     &lt;/inter&gt;
     &lt;inter&gt;
         &lt;name&gt;ds_1&lt;/name&gt;
@@ -1737,8 +2107,8 @@
         &lt;aruser&gt;false&lt;/aruser&gt;
         &lt;awuser&gt;false&lt;/awuser&gt;
         &lt;buser&gt;false&lt;/buser&gt;
-        &lt;dest&gt;CM7&lt;/dest&gt;
-        &lt;dest_port&gt;CM7_s&lt;/dest_port&gt;
+        &lt;dest&gt;CPU_Mx&lt;/dest&gt;
+        &lt;dest_port&gt;CPU_Mx_s&lt;/dest_port&gt;
         &lt;lock&gt;false&lt;/lock&gt;
         &lt;out_reads&gt;7&lt;/out_reads&gt;
         &lt;out_trans&gt;39&lt;/out_trans&gt;
@@ -1746,7 +2116,7 @@
         &lt;protocol&gt;axi4&lt;/protocol&gt;
         &lt;ruser&gt;false&lt;/ruser&gt;
         &lt;src&gt;external&lt;/src&gt;
-        &lt;src_port&gt;CM7&lt;/src_port&gt;
+        &lt;src_port&gt;CPU_Mx&lt;/src_port&gt;
         &lt;wuser&gt;false&lt;/wuser&gt;
     &lt;/connect&gt;
     &lt;connect&gt;
@@ -1769,16 +2139,32 @@
         &lt;aruser&gt;false&lt;/aruser&gt;
         &lt;awuser&gt;false&lt;/awuser&gt;
         &lt;buser&gt;false&lt;/buser&gt;
-        &lt;dest&gt;ADP&lt;/dest&gt;
-        &lt;dest_port&gt;ADP_s&lt;/dest_port&gt;
+        &lt;dest&gt;DEBUG&lt;/dest&gt;
+        &lt;dest_port&gt;DEBUG_s&lt;/dest_port&gt;
         &lt;lock&gt;false&lt;/lock&gt;
-        &lt;out_reads&gt;1&lt;/out_reads&gt;
-        &lt;out_trans&gt;5&lt;/out_trans&gt;
+        &lt;out_reads&gt;4&lt;/out_reads&gt;
+        &lt;out_trans&gt;8&lt;/out_trans&gt;
         &lt;out_writes&gt;4&lt;/out_writes&gt;
-        &lt;protocol&gt;ahb_mm&lt;/protocol&gt;
+        &lt;protocol&gt;axi4&lt;/protocol&gt;
         &lt;ruser&gt;false&lt;/ruser&gt;
         &lt;src&gt;external&lt;/src&gt;
-        &lt;src_port&gt;ADP&lt;/src_port&gt;
+        &lt;src_port&gt;DEBUG&lt;/src_port&gt;
+        &lt;wuser&gt;false&lt;/wuser&gt;
+    &lt;/connect&gt;
+    &lt;connect&gt;
+        &lt;aruser&gt;false&lt;/aruser&gt;
+        &lt;awuser&gt;false&lt;/awuser&gt;
+        &lt;buser&gt;false&lt;/buser&gt;
+        &lt;dest&gt;CPU_Rx&lt;/dest&gt;
+        &lt;dest_port&gt;CPU_Rx_s&lt;/dest_port&gt;
+        &lt;lock&gt;false&lt;/lock&gt;
+        &lt;out_reads&gt;4&lt;/out_reads&gt;
+        &lt;out_trans&gt;8&lt;/out_trans&gt;
+        &lt;out_writes&gt;4&lt;/out_writes&gt;
+        &lt;protocol&gt;axi4&lt;/protocol&gt;
+        &lt;ruser&gt;false&lt;/ruser&gt;
+        &lt;src&gt;external&lt;/src&gt;
+        &lt;src_port&gt;CPU_Rx&lt;/src_port&gt;
         &lt;wuser&gt;false&lt;/wuser&gt;
     &lt;/connect&gt;
     &lt;connect&gt;
@@ -1863,14 +2249,25 @@
     &lt;/connect&gt;
     &lt;connect&gt;
         &lt;dest&gt;bm0&lt;/dest&gt;
-        &lt;dest_port&gt;axi_s_1&lt;/dest_port&gt;
+        &lt;dest_port&gt;axi_s_0&lt;/dest_port&gt;
         &lt;lock&gt;false&lt;/lock&gt;
         &lt;out_reads def=&quot;true&quot;&gt;7&lt;/out_reads&gt;
         &lt;out_trans&gt;39&lt;/out_trans&gt;
         &lt;out_writes def=&quot;true&quot;&gt;32&lt;/out_writes&gt;
         &lt;protocol&gt;axi4&lt;/protocol&gt;
-        &lt;src&gt;CM7&lt;/src&gt;
-        &lt;src_port&gt;CM7_m&lt;/src_port&gt;
+        &lt;src&gt;CPU_Mx&lt;/src&gt;
+        &lt;src_port&gt;CPU_Mx_m&lt;/src_port&gt;
+    &lt;/connect&gt;
+    &lt;connect&gt;
+        &lt;dest&gt;bm0&lt;/dest&gt;
+        &lt;dest_port&gt;axi_s_1&lt;/dest_port&gt;
+        &lt;lock&gt;false&lt;/lock&gt;
+        &lt;out_reads&gt;4&lt;/out_reads&gt;
+        &lt;out_trans&gt;8&lt;/out_trans&gt;
+        &lt;out_writes&gt;4&lt;/out_writes&gt;
+        &lt;protocol&gt;axi4&lt;/protocol&gt;
+        &lt;src&gt;DEBUG&lt;/src&gt;
+        &lt;src_port&gt;DEBUG_m&lt;/src_port&gt;
     &lt;/connect&gt;
     &lt;connect&gt;
         &lt;dest&gt;bm0&lt;/dest&gt;
@@ -1882,6 +2279,17 @@
         &lt;protocol&gt;axi4&lt;/protocol&gt;
         &lt;src&gt;DMA&lt;/src&gt;
         &lt;src_port&gt;DMA_m&lt;/src_port&gt;
+    &lt;/connect&gt;
+    &lt;connect&gt;
+        &lt;dest&gt;bm0&lt;/dest&gt;
+        &lt;dest_port&gt;axi_s_3&lt;/dest_port&gt;
+        &lt;lock&gt;false&lt;/lock&gt;
+        &lt;out_reads&gt;4&lt;/out_reads&gt;
+        &lt;out_trans&gt;8&lt;/out_trans&gt;
+        &lt;out_writes&gt;4&lt;/out_writes&gt;
+        &lt;protocol&gt;axi4&lt;/protocol&gt;
+        &lt;src&gt;CPU_Rx&lt;/src&gt;
+        &lt;src_port&gt;CPU_Rx_m&lt;/src_port&gt;
     &lt;/connect&gt;
     &lt;connect&gt;
         &lt;dest&gt;CPU_S&lt;/dest&gt;
@@ -1928,17 +2336,6 @@
         &lt;src_port&gt;axi_m_3&lt;/src_port&gt;
     &lt;/connect&gt;
     &lt;connect&gt;
-        &lt;dest&gt;bm0&lt;/dest&gt;
-        &lt;dest_port&gt;axi_s_0&lt;/dest_port&gt;
-        &lt;lock&gt;false&lt;/lock&gt;
-        &lt;out_reads def=&quot;true&quot;&gt;1&lt;/out_reads&gt;
-        &lt;out_trans&gt;3&lt;/out_trans&gt;
-        &lt;out_writes def=&quot;true&quot;&gt;2&lt;/out_writes&gt;
-        &lt;protocol&gt;axi4&lt;/protocol&gt;
-        &lt;src&gt;ADP&lt;/src&gt;
-        &lt;src_port&gt;ADP_m&lt;/src_port&gt;
-    &lt;/connect&gt;
-    &lt;connect&gt;
         &lt;dest&gt;ds_1&lt;/dest&gt;
         &lt;dest_port&gt;axi_s_0&lt;/dest_port&gt;
         &lt;lock&gt;false&lt;/lock&gt;
@@ -1952,35 +2349,47 @@
     &lt;architecture&gt;
         &lt;link&gt;
             &lt;slave_if&gt;
+                &lt;name&gt;CPU_Mx&lt;/name&gt;
+                &lt;master_if&gt;QSPI&lt;/master_if&gt;
+                &lt;master_if&gt;QSPI_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
+                &lt;/master_if&gt;
+                &lt;master_if&gt;ROM&lt;/master_if&gt;
+                &lt;master_if&gt;apb_group0&lt;/master_if&gt;
+                &lt;master_if&gt;DMA_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
+                &lt;/master_if&gt;
+            &lt;/slave_if&gt;
+        &lt;/link&gt;
+        &lt;link&gt;
+            &lt;slave_if&gt;
+                &lt;name&gt;DEBUG&lt;/name&gt;
+                &lt;master_if&gt;QSPI&lt;/master_if&gt;
+                &lt;master_if&gt;QSPI_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
+                &lt;/master_if&gt;
+                &lt;master_if&gt;ROM&lt;/master_if&gt;
+                &lt;master_if&gt;CPU_S&lt;/master_if&gt;
+                &lt;master_if&gt;apb_group0&lt;/master_if&gt;
+                &lt;master_if&gt;DMA_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
+                &lt;/master_if&gt;
+            &lt;/slave_if&gt;
+        &lt;/link&gt;
+        &lt;link&gt;
+            &lt;slave_if&gt;
+                &lt;name&gt;CPU_Rx&lt;/name&gt;
+                &lt;master_if&gt;QSPI&lt;/master_if&gt;
+                &lt;master_if&gt;QSPI_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
+                &lt;/master_if&gt;
+                &lt;master_if&gt;ROM&lt;/master_if&gt;
+                &lt;master_if&gt;apb_group0&lt;/master_if&gt;
+                &lt;master_if&gt;DMA_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
+                &lt;/master_if&gt;
+            &lt;/slave_if&gt;
+        &lt;/link&gt;
+        &lt;link&gt;
+            &lt;slave_if&gt;
                 &lt;name&gt;DMA&lt;/name&gt;
                 &lt;master_if&gt;QSPI&lt;/master_if&gt;
+                &lt;master_if&gt;ROM&lt;/master_if&gt;
                 &lt;master_if&gt;CPU_S&lt;/master_if&gt;
-                &lt;master_if&gt;ROM&lt;/master_if&gt;
-            &lt;/slave_if&gt;
-        &lt;/link&gt;
-        &lt;link&gt;
-            &lt;slave_if&gt;
-                &lt;name&gt;CM7&lt;/name&gt;
-                &lt;master_if&gt;QSPI&lt;/master_if&gt;
-                &lt;master_if&gt;apb_group0&lt;/master_if&gt;
-                &lt;master_if&gt;QSPI_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
-                &lt;/master_if&gt;
-                &lt;master_if&gt;ROM&lt;/master_if&gt;
-                &lt;master_if&gt;DMA_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
-                &lt;/master_if&gt;
-            &lt;/slave_if&gt;
-        &lt;/link&gt;
-        &lt;link&gt;
-            &lt;slave_if&gt;
-                &lt;name&gt;ADP&lt;/name&gt;
-                &lt;master_if&gt;QSPI&lt;/master_if&gt;
-                &lt;master_if&gt;apb_group0&lt;/master_if&gt;
-                &lt;master_if&gt;QSPI_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
-                &lt;/master_if&gt;
-                &lt;master_if&gt;CPU_S&lt;/master_if&gt;
-                &lt;master_if&gt;ROM&lt;/master_if&gt;
-                &lt;master_if&gt;DMA_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
-                &lt;/master_if&gt;
             &lt;/slave_if&gt;
         &lt;/link&gt;
     &lt;/architecture&gt;

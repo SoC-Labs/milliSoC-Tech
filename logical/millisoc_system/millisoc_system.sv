@@ -40,18 +40,6 @@ module millisoc_system(
     output wire             UARTTXD1,
     output wire             UARTTXEN1,
 
-
-    // EXTIO Signals
-    input  wire [3:0]       iodata4_i,
-    output wire [3:0]       iodata4_o,
-    output wire [3:0]       iodata4_e,
-    output wire [3:0]       iodata4_t,
-    output wire             ioreq1_o,
-    output wire             ioreq2_o,
-    output wire             ioreq_e,
-    output wire             ioreq_t,
-    input  wire             ioack_a,
-
     // DAP-LITE external signals
     input  wire             nTRST,
     input  wire             SWCLKTCK,
@@ -104,7 +92,6 @@ apb4_if SYS_CTRL_APB();
 ahb_if #(.DATA_W(64), .ADDR_W(32)) ROM_AHB();
 
 // - AHB to peripheral subsystem
-ahb_if #(.DATA_W(32), .ADDR_W(32)) ADP_AHB();
 ahb_if #(.DATA_W(32), .ADDR_W(32)) PERIPH_AHB();
 
 assign PERIPH_AHB.HSEL=1'b1;
@@ -115,6 +102,8 @@ ahb_if #(.DATA_W(64), .ADDR_W(32)) CPU_S_AHB();
 // - AXI from CPU to NIC400
 wire         CPU_ACLKEN;
 axi4_if #(.DATA_W(64), .ID_W(3), .ADDR_W(32)) CPU_AXI();
+axi4_if #(.DATA_W(64), .ID_W(3), .ADDR_W(32)) CPU_Rx_AXI();
+axi4_if #(.DATA_W(64), .ID_W(3), .ADDR_W(32)) DEBUG_AXI();
 
 // - Resets and clock gates for CPU
 wire        CLKEN;
@@ -409,7 +398,6 @@ millisoc_peripheral_subsystem u_millisoc_peripheral_subsystem (
     .HRESETn(HRESETn),
     .RT_CLK(),
 
-    .ADP_AHB(ADP_AHB),
     .PERIPH_AHB(PERIPH_AHB),
 
     .UARTRXD0(UARTRXD0),
@@ -418,16 +406,6 @@ millisoc_peripheral_subsystem u_millisoc_peripheral_subsystem (
     .UARTRXD1(UARTRXD1),
     .UARTTXD1(UARTTXD1),
     .UARTTXEN1(UARTTXEN1),
-
-    .iodata4_i(iodata4_i),
-    .iodata4_o(iodata4_o),
-    .iodata4_e(iodata4_e),
-    .iodata4_t(iodata4_t),
-    .ioreq1_o(ioreq1_o),
-    .ioreq2_o(ioreq2_o),
-    .ioreq_e(ioreq_e),
-    .ioreq_t(ioreq_t),
-    .ioack_a(ioack_a),
 
     .p0_in(P0_IN),
     .p0_out(P0_OUT),
@@ -564,52 +542,110 @@ nic400_millisoc_main u_nic400_millisoc_main (
     .PSLVERR_QSPI_CFG(QSPI_CFG_APB.pslverr),
     .PREADY_QSPI_CFG(QSPI_CFG_APB.pready),
 
-    .HADDR_ADP(ADP_AHB.HADDR),
-    .HTRANS_ADP(ADP_AHB.HTRANS),
-    .HWRITE_ADP(ADP_AHB.HWRITE),
-    .HSIZE_ADP(ADP_AHB.HSIZE),
-    .HBURST_ADP(ADP_AHB.HBURST),
-    .HPROT_ADP(ADP_AHB.HPROT),
-    .HWDATA_ADP(ADP_AHB.HWDATA),
-    .HRDATA_ADP(ADP_AHB.HRDATA),
-    .HREADY_ADP(ADP_AHB.HREADY),
-    .HRESP_ADP(ADP_AHB.HRESP),
+    .AWID_CPU_Mx(CPU_AXI.AWID),
+    .AWADDR_CPU_Mx(CPU_AXI.AWADDR),
+    .AWLEN_CPU_Mx(CPU_AXI.AWLEN),
+    .AWSIZE_CPU_Mx(CPU_AXI.AWSIZE),
+    .AWBURST_CPU_Mx(CPU_AXI.AWBURST),
+    .AWLOCK_CPU_Mx(CPU_AXI.AWLOCK),
+    .AWCACHE_CPU_Mx(CPU_AXI.AWCACHE),
+    .AWPROT_CPU_Mx(CPU_AXI.AWPROT),
+    .AWVALID_CPU_Mx(CPU_AXI.AWVALID),
+    .AWREADY_CPU_Mx(CPU_AXI.AWREADY),
+    .WDATA_CPU_Mx(CPU_AXI.WDATA),
+    .WSTRB_CPU_Mx(CPU_AXI.WSTRB),
+    .WLAST_CPU_Mx(CPU_AXI.WLAST),
+    .WVALID_CPU_Mx(CPU_AXI.WVALID),
+    .WREADY_CPU_Mx(CPU_AXI.WREADY),
+    .BID_CPU_Mx(CPU_AXI.BID),
+    .BRESP_CPU_Mx(CPU_AXI.BRESP),
+    .BVALID_CPU_Mx(CPU_AXI.BVALID),
+    .BREADY_CPU_Mx(CPU_AXI.BREADY),
+    .ARID_CPU_Mx(CPU_AXI.ARID),
+    .ARADDR_CPU_Mx(CPU_AXI.ARADDR),
+    .ARLEN_CPU_Mx(CPU_AXI.ARLEN),
+    .ARSIZE_CPU_Mx(CPU_AXI.ARSIZE),
+    .ARBURST_CPU_Mx(CPU_AXI.ARBURST),
+    .ARLOCK_CPU_Mx(CPU_AXI.ARLOCK),
+    .ARCACHE_CPU_Mx(CPU_AXI.ARCACHE),
+    .ARPROT_CPU_Mx(CPU_AXI.ARPROT),
+    .ARVALID_CPU_Mx(CPU_AXI.ARVALID),
+    .ARREADY_CPU_Mx(CPU_AXI.ARREADY),
+    .RID_CPU_Mx(CPU_AXI.RID),
+    .RDATA_CPU_Mx(CPU_AXI.RDATA),
+    .RRESP_CPU_Mx(CPU_AXI.RRESP),
+    .RLAST_CPU_Mx(CPU_AXI.RLAST),
+    .RVALID_CPU_Mx(CPU_AXI.RVALID),
+    .RREADY_CPU_Mx(CPU_AXI.RREADY),
 
-    .AWID_CM7(CPU_AXI.AWID),
-    .AWADDR_CM7(CPU_AXI.AWADDR),
-    .AWLEN_CM7(CPU_AXI.AWLEN),
-    .AWSIZE_CM7(CPU_AXI.AWSIZE),
-    .AWBURST_CM7(CPU_AXI.AWBURST),
-    .AWLOCK_CM7(CPU_AXI.AWLOCK),
-    .AWCACHE_CM7(CPU_AXI.AWCACHE),
-    .AWPROT_CM7(CPU_AXI.AWPROT),
-    .AWVALID_CM7(CPU_AXI.AWVALID),
-    .AWREADY_CM7(CPU_AXI.AWREADY),
-    .WDATA_CM7(CPU_AXI.WDATA),
-    .WSTRB_CM7(CPU_AXI.WSTRB),
-    .WLAST_CM7(CPU_AXI.WLAST),
-    .WVALID_CM7(CPU_AXI.WVALID),
-    .WREADY_CM7(CPU_AXI.WREADY),
-    .BID_CM7(CPU_AXI.BID),
-    .BRESP_CM7(CPU_AXI.BRESP),
-    .BVALID_CM7(CPU_AXI.BVALID),
-    .BREADY_CM7(CPU_AXI.BREADY),
-    .ARID_CM7(CPU_AXI.ARID),
-    .ARADDR_CM7(CPU_AXI.ARADDR),
-    .ARLEN_CM7(CPU_AXI.ARLEN),
-    .ARSIZE_CM7(CPU_AXI.ARSIZE),
-    .ARBURST_CM7(CPU_AXI.ARBURST),
-    .ARLOCK_CM7(CPU_AXI.ARLOCK),
-    .ARCACHE_CM7(CPU_AXI.ARCACHE),
-    .ARPROT_CM7(CPU_AXI.ARPROT),
-    .ARVALID_CM7(CPU_AXI.ARVALID),
-    .ARREADY_CM7(CPU_AXI.ARREADY),
-    .RID_CM7(CPU_AXI.RID),
-    .RDATA_CM7(CPU_AXI.RDATA),
-    .RRESP_CM7(CPU_AXI.RRESP),
-    .RLAST_CM7(CPU_AXI.RLAST),
-    .RVALID_CM7(CPU_AXI.RVALID),
-    .RREADY_CM7(CPU_AXI.RREADY),
+    //.AWID_CPU_Rx(CPU_Rx_AXI.AWID),
+    .AWADDR_CPU_Rx(CPU_Rx_AXI.AWADDR),
+    .AWLEN_CPU_Rx(CPU_Rx_AXI.AWLEN),
+    .AWSIZE_CPU_Rx(CPU_Rx_AXI.AWSIZE),
+    .AWBURST_CPU_Rx(CPU_Rx_AXI.AWBURST),
+    .AWLOCK_CPU_Rx(CPU_Rx_AXI.AWLOCK),
+    .AWCACHE_CPU_Rx(CPU_Rx_AXI.AWCACHE),
+    .AWPROT_CPU_Rx(CPU_Rx_AXI.AWPROT),
+    .AWVALID_CPU_Rx(CPU_Rx_AXI.AWVALID),
+    .AWREADY_CPU_Rx(CPU_Rx_AXI.AWREADY),
+    .WDATA_CPU_Rx(CPU_Rx_AXI.WDATA),
+    .WSTRB_CPU_Rx(CPU_Rx_AXI.WSTRB),
+    .WLAST_CPU_Rx(CPU_Rx_AXI.WLAST),
+    .WVALID_CPU_Rx(CPU_Rx_AXI.WVALID),
+    .WREADY_CPU_Rx(CPU_Rx_AXI.WREADY),
+    //.BID_CPU_Rx(CPU_Rx_AXI.BID),
+    .BRESP_CPU_Rx(CPU_Rx_AXI.BRESP),
+    .BVALID_CPU_Rx(CPU_Rx_AXI.BVALID),
+    .BREADY_CPU_Rx(CPU_Rx_AXI.BREADY),
+    //.ARID_CPU_Rx(CPU_Rx_AXI.ARID),
+    .ARADDR_CPU_Rx(CPU_Rx_AXI.ARADDR),
+    .ARLEN_CPU_Rx(CPU_Rx_AXI.ARLEN),
+    .ARSIZE_CPU_Rx(CPU_Rx_AXI.ARSIZE),
+    .ARBURST_CPU_Rx(CPU_Rx_AXI.ARBURST),
+    .ARLOCK_CPU_Rx(CPU_Rx_AXI.ARLOCK),
+    .ARCACHE_CPU_Rx(CPU_Rx_AXI.ARCACHE),
+    .ARPROT_CPU_Rx(CPU_Rx_AXI.ARPROT),
+    .ARVALID_CPU_Rx(CPU_Rx_AXI.ARVALID),
+    .ARREADY_CPU_Rx(CPU_Rx_AXI.ARREADY),
+    //.RID_CPU_Rx(CPU_Rx_AXI.RID),
+    .RDATA_CPU_Rx(CPU_Rx_AXI.RDATA),
+    .RRESP_CPU_Rx(CPU_Rx_AXI.RRESP),
+    .RLAST_CPU_Rx(CPU_Rx_AXI.RLAST),
+    .RVALID_CPU_Rx(CPU_Rx_AXI.RVALID),
+    .RREADY_CPU_Rx(CPU_Rx_AXI.RREADY),
+
+    .AWADDR_DEBUG(DEBUG_AXI.AWADDR),
+    .AWLEN_DEBUG(DEBUG_AXI.AWLEN),
+    .AWSIZE_DEBUG(DEBUG_AXI.AWSIZE),
+    .AWBURST_DEBUG(DEBUG_AXI.AWBURST),
+    .AWLOCK_DEBUG(DEBUG_AXI.AWLOCK),
+    .AWCACHE_DEBUG(DEBUG_AXI.AWCACHE),
+    .AWPROT_DEBUG(DEBUG_AXI.AWPROT),
+    .AWVALID_DEBUG(DEBUG_AXI.AWVALID),
+    .AWREADY_DEBUG(DEBUG_AXI.AWREADY),
+    .WDATA_DEBUG(DEBUG_AXI.WDATA),
+    .WSTRB_DEBUG(DEBUG_AXI.WSTRB),
+    .WLAST_DEBUG(DEBUG_AXI.WLAST),
+    .WVALID_DEBUG(DEBUG_AXI.WVALID),
+    .WREADY_DEBUG(DEBUG_AXI.WREADY),
+    .BRESP_DEBUG(DEBUG_AXI.BRESP),
+    .BVALID_DEBUG(DEBUG_AXI.BVALID),
+    .BREADY_DEBUG(DEBUG_AXI.BREADY),
+    .ARADDR_DEBUG(DEBUG_AXI.ARADDR),
+    .ARLEN_DEBUG(DEBUG_AXI.ARLEN),
+    .ARSIZE_DEBUG(DEBUG_AXI.ARSIZE),
+    .ARBURST_DEBUG(DEBUG_AXI.ARBURST),
+    .ARLOCK_DEBUG(DEBUG_AXI.ARLOCK),
+    .ARCACHE_DEBUG(DEBUG_AXI.ARCACHE),
+    .ARPROT_DEBUG(DEBUG_AXI.ARPROT),
+    .ARVALID_DEBUG(DEBUG_AXI.ARVALID),
+    .ARREADY_DEBUG(DEBUG_AXI.ARREADY),
+    .RDATA_DEBUG(DEBUG_AXI.RDATA),
+    .RRESP_DEBUG(DEBUG_AXI.RRESP),
+    .RLAST_DEBUG(DEBUG_AXI.RLAST),
+    .RVALID_DEBUG(DEBUG_AXI.RVALID),
+    .RREADY_DEBUG(DEBUG_AXI.RREADY),
+
 
     .AWID_DMA(DMA_AXI.AWID),
     .AWADDR_DMA(DMA_AXI.AWADDR),
@@ -653,5 +689,18 @@ nic400_millisoc_main u_nic400_millisoc_main (
     .clk0clken(1'b1),
     .clk0resetn(nPORESET)
 );
+
+// Temporary tie off's for DEBUG AXI and CPU_Rx AXI
+assign CPU_Rx_AXI.AWVALID = 1'b0;
+assign CPU_Rx_AXI.WREADY = 1'b0;
+assign CPU_Rx_AXI.BREADY = 1'b0;
+assign CPU_Rx_AXI.ARVALID = 1'b0;
+assign CPU_Rx_AXI.RREADY = 1'b0;
+
+assign DEBUG_AXI.AWVALID = 1'b0;
+assign DEBUG_AXI.WREADY = 1'b0;
+assign DEBUG_AXI.BREADY = 1'b0;
+assign DEBUG_AXI.ARVALID = 1'b0;
+assign DEBUG_AXI.RREADY = 1'b0;
 
 endmodule

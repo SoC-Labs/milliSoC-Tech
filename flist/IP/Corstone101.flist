@@ -37,6 +37,12 @@ $(ARM_IP_LIBRARY_PATH)/latest/Corstone-101/logical/cmsdk_ahb_gpio/verilog/cmsdk_
 $(ARM_IP_LIBRARY_PATH)/latest/Corstone-101/logical/cmsdk_iop_gpio/verilog/cmsdk_iop_gpio.v
 $(ARM_IP_LIBRARY_PATH)/latest/Corstone-101/logical/cmsdk_ahb_gpio/verilog/cmsdk_ahb_gpio.v
 
-$(ARM_IP_LIBRARY_PATH)/latest/Corstone-101/logical/cmsdk_ahb_slave_mux/verilog/cmsdk_ahb_slave_mux.v
-$(ARM_IP_LIBRARY_PATH)/latest/Corstone-101/logical/cmsdk_ahb_default_slave/verilog/cmsdk_ahb_default_slave.v
 
+// Bus
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/cmsdk/logical/cmsdk_ahb_busmatrix_periph/verilog/cmsdk_ahb_bm_decode_periphs0.v
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/cmsdk/logical/cmsdk_ahb_busmatrix_periph/verilog/cmsdk_ahb_bm_input_stage_periph.v
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/cmsdk/logical/cmsdk_ahb_busmatrix_periph/verilog/cmsdk_ahb_bm_output_arb_periph.v
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/cmsdk/logical/cmsdk_ahb_busmatrix_periph/verilog/cmsdk_ahb_bm_output_stage_periph.v
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/cmsdk/logical/cmsdk_ahb_busmatrix_periph/verilog/cmsdk_ahb_busmatrix_periph_default_slave.v
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/cmsdk/logical/cmsdk_ahb_busmatrix_periph/verilog/cmsdk_ahb_busmatrix_periph_lite.v
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/cmsdk/logical/cmsdk_ahb_busmatrix_periph/verilog/cmsdk_ahb_busmatrix_periph.v

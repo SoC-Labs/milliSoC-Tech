@@ -3,7 +3,9 @@ software/build
 .ecmproject
 .project
 
+logical/cmsdk
 logical/nic400_millisoc_main
+logical/soc400
 logical/shared
 
 software/src/*/*.hex
@@ -13,3 +15,5 @@ software/src/*/*.ELF
 software/src/*/*.bin
 
 logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical
+
+socrates/*/*/*.log

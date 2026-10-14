@@ -1,5 +1,0 @@
-
-
-$(SOCLABS_MILLISOC_TECH_DIR)/logical/socdebug_tech/controller/verilog/socdebug_ahb.v
-$(SOCLABS_MILLISOC_TECH_DIR)/logical/socdebug_tech/controller/verilog/socdebug_adp_control.v
-$(SOCLABS_MILLISOC_TECH_DIR)/logical/socdebug_tech/controller/verilog/socdebug_usrt_control.v
