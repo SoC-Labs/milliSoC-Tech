@@ -277,8 +277,8 @@ OLYMPUS #(
     .CPNSPRESENT(8'd0),
     .LOCKSVTAIRCR(1'b0),
     .LOCKNSVTOR(1'b0),
-    .INITSVTOR(24'hC08000), // Vector table offset
-    .INITNSVTOR(24'hC08000), // Vector table offset
+    .INITSVTOR(24'h000000), // Vector table offset
+    .INITNSVTOR(24'h000000), // Vector table offset
     .NIDEN(1'b1),
     .DBGEN(1'b1),
     .SPNIDEN(1'b1),

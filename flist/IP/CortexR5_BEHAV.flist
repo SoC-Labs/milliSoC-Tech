@@ -1,0 +1,11 @@
+-y $(CORTEX_R5_LOGICAL_DIR)/logical/models/cells/generic
+-y $(CORTEX_R5_LOGICAL_DIR)/logical/models/modules
+-y $(CORTEX_R5_LOGICAL_DIR)/logical/models/rams/generic_all
+-y $(CORTEX_R5_LOGICAL_DIR)/logical/cortexr5_intkit/verilog/ApbChecker
+
+-y $(CORTEX_R5_LOGICAL_DIR)/logical/heron_loggers/verilog
+
++incdir+$(CORTEX_R5_LOGICAL_DIR)/logical/heron_loggers/verilog
++incdir+$(CORTEX_R5_LOGICAL_DIR)/logical/heron_loggers/verilog/dt2_disass
+
+$(CORTEX_R5_LOGICAL_DIR)/logical/cortexr5_integration/verilog/cortexr5_tcm.v

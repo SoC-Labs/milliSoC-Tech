@@ -15,6 +15,13 @@ module millisoc_chip_phy(
     input  wire             uarttxd1,
     input  wire             uarttxen1,
 
+    output wire             uartrxd0_RT,
+    input  wire             uarttxd0_RT,
+    input  wire             uarttxen0_RT,
+    output wire             uartrxd1_RT,
+    input  wire             uarttxd1_RT,
+    input  wire             uarttxen1_RT,
+
 
     // DAP-LITE signals
     output wire             ntrst,
@@ -50,7 +57,13 @@ module millisoc_chip_phy(
     output wire           uart_txd0_pad,
     input  wire           uart_rxd0_pad,
     output wire           uart_txd1_pad,
-    input  wire           uart_rxd1_pad
+    input  wire           uart_rxd1_pad,
+
+    output wire           uart_txd0_pad_RT,
+    input  wire           uart_rxd0_pad_RT,
+    output wire           uart_txd1_pad_RT,
+    input  wire           uart_rxd1_pad_RT
+
 );
 
 assign  qspi_sclk_pad = qspi_sclk;
@@ -69,5 +82,11 @@ assign uartrxd0     = uart_rxd0_pad;
 
 assign uart_txd1_pad = uarttxen1 ? uarttxd1 : 1'bz;
 assign uartrxd1     = uart_rxd1_pad;
+
+assign uart_txd0_pad_RT = uarttxen0_RT ? uarttxd0_RT : 1'bz;
+assign uartrxd0_RT     = uart_rxd0_pad_RT;
+
+assign uart_txd1_pad_RT = uarttxen1_RT ? uarttxd1_RT : 1'bz;
+assign uartrxd1_RT     = uart_rxd1_pad_RT;
 
 endmodule

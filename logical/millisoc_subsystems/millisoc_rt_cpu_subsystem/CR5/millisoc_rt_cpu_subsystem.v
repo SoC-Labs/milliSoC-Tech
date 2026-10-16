@@ -1,5 +1,7 @@
 
-module millisoc_rt_cpu_subsystem(
+module millisoc_rt_cpu_subsystem #(
+    parameter BE=0,
+    parameter GIC_ID_BITS=6) (
     //Clocks and Resets
     input  wire         CLKIN,
     input  wire         nSYSPORESET,
@@ -180,35 +182,6 @@ module millisoc_rt_cpu_subsystem(
     input  wire         nETMWFIREADY0,
     input  wire [1:0]   ETMEXTOUT0,
 
-    // Control
-    input  wire         CFGEE,
-    input  wire         CFGIE,
-    input  wire         TEINIT,
-    input  wire         PARITYLEVEL,
-    input  wire [3:0]   GROUPID,
-
-    //
-
-    input  wire         VINITHI0,
-    input  wire         INITRAMA0,
-    input  wire         INITRAMB0,
-    input  wire         LOCZRAMA0,
-    input  wire         CFGNMFI0,
-    input  wire [3:0]   CFGATCMSZ0,
-    input  wire [3:0]   CFGBTCMSZ0,
-    input  wire [2:0]   PARECCENRAM0,
-    input  wire [2:0]   ERRENRAM0,
-    input  wire [1:0]   RMWENRAM0,
-    input  wire         ENTCM1IF0,
-    input  wire         SLBTCMSB0,
-    input  wire         INITPPX0,
-    input  wire         INITPPH0,
-    input  wire [31:12] PPHBASE0,
-    input  wire [4:0]   PPHSIZE0,
-    input  wire [31:12] PPXBASE0,
-    input  wire [4:0]   PPXSIZE0,
-    input  wire [31:12] PPVBASE0,
-    input  wire [4:0]   PPVSIZE0,
 
     // Floating-point
     output wire         FPIXC0,
@@ -230,15 +203,8 @@ module millisoc_rt_cpu_subsystem(
     input  wire         IRQADDRVSYNCEN,
 
 
-    input  wire         nFIQ0,
-    input  wire         nIRQ0,
-    input  wire         IRQADDRV0,
-    input  wire [31:2]  IRQADDR0,
-    output wire         IRQACK0,
     output wire         nPMUIRQ0,
-
-
-
+    input  wire [239:0] IRQS,
     //
 
     input  wire         nRESET0,
@@ -312,6 +278,50 @@ module millisoc_rt_cpu_subsystem(
     output wire         PPXCORR0,
 
 
+    // GIC AXI
+    // AXI read address channel
+    input  wire    [GIC_ID_BITS-1:0]  GIC_ARID,
+    input  wire                [14:0] GIC_ARADDR,
+    input  wire                 [7:0] GIC_ARLEN,
+    input  wire                 [2:0] GIC_ARSIZE,
+    input  wire                 [1:0] GIC_ARBURST,
+    input  wire                 [2:0] GIC_ARPROT,
+    input  wire                 [2:0] GIC_ARUSER,
+    input  wire                       GIC_ARVALID,
+    output wire                       GIC_ARREADY,
+
+    // AXI read data channel
+    output wire    [GIC_ID_BITS-1:0]  GIC_RID,
+    output wire                [31:0] GIC_RDATA,
+    output wire                       GIC_RLAST,
+    output wire                 [1:0] GIC_RRESP,
+    output wire                       GIC_RVALID,
+    input  wire                       GIC_RREADY,
+
+    // AXI write address channel
+    input  wire    [GIC_ID_BITS-1:0]  GIC_AWID,
+    input  wire                [14:0] GIC_AWADDR,
+    input  wire                 [7:0] GIC_AWLEN,
+    input  wire                 [2:0] GIC_AWSIZE,
+    input  wire                 [1:0] GIC_AWBURST,
+    input  wire                 [2:0] GIC_AWPROT,
+    input  wire                 [2:0] GIC_AWUSER,
+    input  wire                       GIC_AWVALID,
+    output wire                       GIC_AWREADY,
+
+    // AXI write data channel
+    input  wire                [31:0] GIC_WDATA,
+    input  wire                 [3:0] GIC_WSTRB,
+    input  wire                       GIC_WVALID,
+    output wire                       GIC_WREADY,
+
+    // AXI write response channel
+    output wire    [GIC_ID_BITS-1:0]  GIC_BID,
+    output wire                 [1:0] GIC_BRESP,
+    output wire                       GIC_BVALID,
+    input  wire                       GIC_BREADY,
+
+
     // Split/Lock
     input  wire         CLKIN1,
     input  wire         SLSPLIT,
@@ -375,6 +385,9 @@ wire         B1TCSEQ0;
 wire [63:0]  B1TCDATAOUT0;
 wire [13:0]  B1TCPARITYOUT0;
 wire [2:0]   B1TCACCTYPE0;
+
+wire         nFIQ0;
+wire         nIRQ0;
 
 CORTEXR5 u_cortexr5(
     //Clocks and Resets
@@ -627,33 +640,33 @@ CORTEXR5 u_cortexr5(
 
 
     // Control
-    .CFGEE(CFGEE),
-    .CFGIE(CFGIE),
-    .TEINIT(TEINIT),
-    .PARITYLEVEL(PARITYLEVEL),
-    .GROUPID(GROUPID),
+    .CFGEE(BE),
+    .CFGIE(BE),
+    .TEINIT(1'b0),
+    .PARITYLEVEL(1'b0),
+    .GROUPID(4'h0),
 
 
-    .VINITHI0(VINITHI0),
-    .INITRAMA0(INITRAMA0),
-    .INITRAMB0(INITRAMB0),
-    .LOCZRAMA0(LOCZRAMA0),
-    .CFGNMFI0(CFGNMFI0),
-    .CFGATCMSZ0(CFGATCMSZ0),
-    .CFGBTCMSZ0(CFGBTCMSZ0),
-    .PARECCENRAM0(PARECCENRAM0),
-    .ERRENRAM0(ERRENRAM0),
-    .RMWENRAM0(RMWENRAM0),
-    .ENTCM1IF0(ENTCM1IF0),
-    .SLBTCMSB0(SLBTCMSB0),
-    .INITPPX0(INITPPX0),
-    .INITPPH0(INITPPH0),
-    .PPHBASE0(PPHBASE0),
-    .PPHSIZE0(PPHSIZE0),
-    .PPXBASE0(PPXBASE0),
-    .PPXSIZE0(PPXSIZE0),
-    .PPVBASE0(PPVBASE0),
-    .PPVSIZE0(PPVSIZE0),
+    .VINITHI0(1'b1),    // Boot from ROM 0xFFFF0000
+    .INITRAMA0(1'b1),
+    .INITRAMB0(1'b1),
+    .LOCZRAMA0(1'b1),
+    .CFGNMFI0(1'b0),
+    .CFGATCMSZ0(4'b0101), // 16KB
+    .CFGBTCMSZ0(4'b0101), // 16kb
+    .PARECCENRAM0(3'b000), // No ECC
+    .ERRENRAM0(3'b000), // No enable check on TCM
+    .RMWENRAM0(2'b11), // Enable RMW
+    .ENTCM1IF0(1'b1), // enable B1TCM
+    .SLBTCMSB0(1'b1), // MSB to select B1TCM
+    .INITPPX0(1'b1),
+    .INITPPH0(1'b0),
+    .PPHBASE0(20'h44000),
+    .PPHSIZE0(5'b00101), // 16KB
+    .PPXBASE0(20'h40000),
+    .PPXSIZE0(5'b01000), // 128 KB
+    .PPVBASE0(20'h40000),
+    .PPVSIZE0(5'b00101),
 
     // Floating-point
     .FPIXC0(FPIXC0),
@@ -677,12 +690,10 @@ CORTEXR5 u_cortexr5(
 
     .nFIQ0(nFIQ0),
     .nIRQ0(nIRQ0),
-    .IRQADDRV0(IRQADDRV0),
-    .IRQADDR0(IRQADDR0),
-    .IRQACK0(IRQACK0),
+    .IRQADDRV0(1'b0),
+    .IRQADDR0({30{1'b0}}),
+    .IRQACK0(),
     .nPMUIRQ0(nPMUIRQ0),
-
-
 
     //
 
@@ -791,6 +802,136 @@ CORTEXR5 u_cortexr5(
     `endif // ARM_CORTEXR5_PWR_CTL
 
 
+);
+
+
+cortexr5_tcm
+#(.A_WIDTH                     (20),
+    .ECC                         (1'b0)
+    )
+u_tcm_ram_a
+    ( // Outputs
+    .stall                       (ATCWAIT0),
+    .retry                       (ATCRETRY0),
+    .error                       (ATCERROR0),
+    .lateerror                   (ATCLATEERROR0),
+    .data_in                     (ATCDATAIN0),
+    .parity_in                   (ATCPARITYIN0),
+    // Inputs
+    .clk                         (CLKIN),
+    .rstn                        (nSYSPORESET),
+    .addr                        (ATCADDR0),
+    .cs                          ({ATCEN10,ATCEN00}),
+    .we                          (ATCWE0),
+    .strb                        (ATCBYTEWR0),
+    .data_out                    (ATCDATAOUT0),
+    .parity_out                  (ATCPARITYOUT0));
+
+cortexr5_tcm
+    #(.A_WIDTH                     (20),
+    .ECC                         (1'b0)
+    )
+u_tcm_ram_b0
+    (// Outputs
+    .stall                       (B0TCWAIT0),
+    .retry                       (B0TCRETRY0),
+    .error                       (B0TCERROR0),
+    .lateerror                   (B0TCLATEERROR0),
+    .data_in                     (B0TCDATAIN0),
+    .parity_in                   (B0TCPARITYIN0),
+    // Inputs
+    .clk                         (CLKIN),
+    .rstn                        (nSYSPORESET),
+    .addr                        (B0TCADDR0),
+    .cs                          ({B0TCEN10,B0TCEN00}),
+    .we                          (B0TCWE0),
+    .strb                        (B0TCBYTEWR0),
+    .data_out                    (B0TCDATAOUT0),
+    .parity_out                  (B0TCPARITYOUT0));
+
+cortexr5_tcm
+    #(.A_WIDTH                     (20),
+    .ECC                         (1'b0)
+    )
+u_tcm_ram_b1
+    (// Outputs
+    .stall                       (B1TCWAIT0),
+    .retry                       (B1TCRETRY0),
+    .error                       (B1TCERROR0),
+    .lateerror                   (B1TCLATEERROR0),
+    .data_in                     (B1TCDATAIN0),
+    .parity_in                   (B1TCPARITYIN0),
+    // Inputs
+    .clk                         (CLKIN),
+    .rstn                        (nSYSPORESET),
+    .addr                        (B1TCADDR0),
+    .cs                          ({B1TCEN10, B1TCEN00}),
+    .we                          (B1TCWE0),
+    .strb                        (B1TCBYTEWR0),
+    .data_out                    (B1TCDATAOUT0),
+    .parity_out                  (B1TCPARITYOUT0));
+
+
+GIC400 #(
+    .NUM_CPUS(1),
+    .NUM_SPIS(240),
+    .NUM_WID_BITS(GIC_ID_BITS),
+    .NUM_RID_BITS(GIC_ID_BITS)
+     ) u_gic400 (
+    .CLK(CLKIN),
+    .nRESET(nRESET0),
+    .DFTRSTDISABLE(1'b0),
+    .DFTSE(1'b0),
+    .CFGSDISABLE(1'b0),
+
+    .ARID(GIC_ARID),
+    .ARADDR(GIC_ARADDR),
+    .ARLEN(GIC_ARLEN),
+    .ARSIZE(GIC_ARSIZE),
+    .ARBURST(GIC_ARBURST),
+    .ARPROT(GIC_ARPROT),
+    .ARUSER(GIC_ARUSER),
+    .ARVALID(GIC_ARVALID),
+    .ARREADY(GIC_ARREADY),
+    .RID(GIC_RID),
+    .RDATA(GIC_RDATA),
+    .RLAST(GIC_RLAST),
+    .RRESP(GIC_RRESP),
+    .RVALID(GIC_RVALID),
+    .RREADY(GIC_RREADY),
+    .AWID(GIC_AWID),
+    .AWADDR(GIC_AWADDR),
+    .AWLEN(GIC_AWLEN),
+    .AWSIZE(GIC_AWSIZE),
+    .AWBURST(GIC_AWBURST),
+    .AWPROT(GIC_AWPROT),
+    .AWUSER(GIC_AWUSER),
+    .AWVALID(GIC_AWVALID),
+    .AWREADY(GIC_AWREADY),
+    .WDATA(GIC_WDATA),
+    .WSTRB(GIC_WSTRB),
+    .WVALID(GIC_WVALID),
+    .WREADY(GIC_WREADY),
+    .BID(GIC_BID),
+    .BRESP(GIC_BRESP),
+    .BVALID(GIC_BVALID),
+    .BREADY(GIC_BREADY),
+
+    .IRQS(IRQS),
+
+    .nLEGACYFIQ(1'b1),
+    .nLEGACYIRQ(1'b1),
+    .nCNTPSIRQ(1'b1),
+    .nCNTPNSIRQ(1'b1),
+    .nCNTVIRQ(1'b1),
+    .nCNTHPIRQ(1'b1),
+
+    .nIRQCPU(nIRQ0),
+    .nFIQCPU(nFIQ0),
+    .nVIRQCPU(),
+    .nVFIQCPU(),
+    .nIRQOUT(),
+    .nFIQOUT()
 );
 
 endmodule

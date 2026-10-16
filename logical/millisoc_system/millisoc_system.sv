@@ -40,6 +40,13 @@ module millisoc_system(
     output wire             UARTTXD1,
     output wire             UARTTXEN1,
 
+    input  wire             UARTRXD0_RT,
+    output wire             UARTTXD0_RT,
+    output wire             UARTTXEN0_RT,
+    input  wire             UARTRXD1_RT,
+    output wire             UARTTXD1_RT,
+    output wire             UARTTXEN1_RT,
+
     // DAP-LITE external signals
     input  wire             nTRST,
     input  wire             SWCLKTCK,
@@ -102,8 +109,12 @@ ahb_if #(.DATA_W(64), .ADDR_W(32)) CPU_S_AHB();
 // - AXI from CPU to NIC400
 wire         CPU_ACLKEN;
 axi4_if #(.DATA_W(64), .ID_W(3), .ADDR_W(32)) CPU_AXI();
-axi4_if #(.DATA_W(64), .ID_W(3), .ADDR_W(32)) CPU_Rx_AXI();
+axi3_if #(.DATA_W(64), .ID_W(4), .ADDR_W(32)) CPU_Rx_AXI();
 axi4_if #(.DATA_W(64), .ID_W(3), .ADDR_W(32)) DEBUG_AXI();
+
+axi3_if #(.DATA_W(64), .ID_W(8), .ADDR_W(32)) CPU_Rx_S_AXI();
+axi3_if #(.DATA_W(32), .ID_W(4), .ADDR_W(32)) Rx_PERI_AXI();
+axi4_if #(.DATA_W(32), .ID_W(4), .ADDR_W(32)) CPU_Rx_GIC_AXI();
 
 // - Resets and clock gates for CPU
 wire        CLKEN;
@@ -122,17 +133,17 @@ wire        ARESETn;
 wire        WDOGRESREQ;
 
 // Interrupts
-wire [239:0]    CPU_IRQs;
+wire [239:0]    Rx_CPU_IRQs;
 wire [3:0]      SYS_DMA_DONE_IRQ;
 wire            SYS_DMA_COMB_IRQ;
 wire            IRQ_QSPI_FINISHED;
-wire [71:0]     PERI_IRQS;
+wire [71:0]     Rx_PERI_IRQS;
 
-assign CPU_IRQs[3:0]=   SYS_DMA_DONE_IRQ[3:0];
-assign CPU_IRQs[4]=     SYS_DMA_COMB_IRQ;
-assign CPU_IRQs[5]=     IRQ_QSPI_FINISHED;
-assign CPU_IRQs[77:6]=  PERI_IRQS;
-assign CPU_IRQs[239:78]=161'd0;
+assign Rx_CPU_IRQs[3:0]=   SYS_DMA_DONE_IRQ[3:0];
+assign Rx_CPU_IRQs[4]=     SYS_DMA_COMB_IRQ;
+assign Rx_CPU_IRQs[5]=     IRQ_QSPI_FINISHED;
+assign Rx_CPU_IRQs[77:6]=  Rx_PERI_IRQS;
+assign Rx_CPU_IRQs[239:78]=161'd0;
 
 // Tie offs (may be used later)
 assign PCLKEN_DMA = 1'b1;
@@ -142,7 +153,6 @@ assign HCLKEN = 1'b1;
 assign ETMCLKEN = 1'b1;
 assign nDBGETMRESET = nPORESET;
 assign TRESETn = nPORESET;
-assign CPUWAIT = 1'b0;
 assign CPU_ACLKEN  = 1'b1;
 assign HCLK = FCLK;
 assign PCLK = FCLK;
@@ -251,7 +261,327 @@ millisoc_sys_ctrl u_millisoc_sys_ctrl(
     .sys_ctrl_apb(SYS_CTRL_APB),
     .sysresetreq(SYSRESETREQ),
     .watchdogreq(WDOGRESREQ),
-    .nsysreset(nSYSRESET)
+    .nsysreset(nSYSRESET),
+    .cpu_mx_wait(CPUWAIT)
+);
+
+millisoc_rt_cpu_subsystem #(
+    .BE(0),
+    .GIC_ID_BITS(4)
+    ) u_millisoc_rt_cpu_ss (
+    .CLKIN(FCLK),
+    .ACPRESETn(nSYSRESET),
+    .nRESET0(nSYSRESET),
+    .nSYSPORESET(nPORESET),
+    .nCPUHALT0(1'b1),
+    .DBGNOCLKSTOP(1'b0),
+
+    .ACLKENM0(1'b1),
+    .AWIDM0(CPU_Rx_AXI.AWID),
+    .AWADDRM0(CPU_Rx_AXI.AWADDR),
+    .AWLENM0(CPU_Rx_AXI.AWLEN),
+    .AWSIZEM0(CPU_Rx_AXI.AWSIZE),
+    .AWBURSTM0(CPU_Rx_AXI.AWBURST),
+    .AWLOCKM0(CPU_Rx_AXI.AWLOCK),
+    .AWCACHEM0(CPU_Rx_AXI.AWCACHE),
+    .AWPROTM0(CPU_Rx_AXI.AWPROT),
+    .AWINNERM0(),
+    .AWSHAREM0(),
+    .AWVALIDM0(CPU_Rx_AXI.AWVALID),
+    .AWREADYM0(CPU_Rx_AXI.AWREADY),
+    .WIDM0(CPU_Rx_AXI.WID),
+    .WDATAM0(CPU_Rx_AXI.WDATA),
+    .WSTRBM0(CPU_Rx_AXI.WSTRB),
+    .WLASTM0(CPU_Rx_AXI.WLAST),
+    .WVALIDM0(CPU_Rx_AXI.WVALID),
+    .WREADYM0(CPU_Rx_AXI.WREADY),
+    .BIDM0(CPU_Rx_AXI.BID),
+    .BRESPM0(CPU_Rx_AXI.BRESP),
+    .BVALIDM0(CPU_Rx_AXI.BVALID),
+    .BREADYM0(CPU_Rx_AXI.BREADY),
+    .ARIDM0(CPU_Rx_AXI.ARID),
+    .ARADDRM0(CPU_Rx_AXI.ARADDR),
+    .ARLENM0(CPU_Rx_AXI.ARLEN),
+    .ARSIZEM0(CPU_Rx_AXI.ARSIZE),
+    .ARBURSTM0(CPU_Rx_AXI.ARBURST),
+    .ARLOCKM0(CPU_Rx_AXI.ARLOCK),
+    .ARCACHEM0(CPU_Rx_AXI.ARCACHE),
+    .ARPROTM0(CPU_Rx_AXI.ARPROT),
+    .ARINNERM0(),
+    .ARSHAREM0(),
+    .ARVALIDM0(CPU_Rx_AXI.ARVALID),
+    .ARREADYM0(CPU_Rx_AXI.ARREADY),
+    .RIDM0(CPU_Rx_AXI.RID),
+    .RDATAM0(CPU_Rx_AXI.RDATA),
+    .RRESPM0(CPU_Rx_AXI.RRESP),
+    .RLASTM0(CPU_Rx_AXI.RLAST),
+    .RVALIDM0(CPU_Rx_AXI.RVALID),
+    .RREADYM0(CPU_Rx_AXI.RREADY),
+
+    .AWUSERPTYM0(),
+    .AWVPTYM0(),
+    .AWRPTYM0(1'b0),
+    .WVPTYM0(),
+    .WRPTYM0(1'b0),
+    .BVPTYM0(1'b0),
+    .BRPTYM0(),
+    .ARUSERPTYM0(),
+    .ARVPTYM0(),
+    .ARRPTYM0(1'b0),
+    .RVPTYM0(1'b0),
+    .RRPTYM0(),
+    .AWADDRPTYM0(),
+    .AWCTLPTYM0(),
+    .WCTLPTYM0(),
+    .WERRCODEM0(),
+    .BCTLPTYM0(2'b0),
+    .ARADDRPTYM0(),
+    .ARCTLPTYM0(),
+    .RCTLPTYM0(2'b0),
+    .RERRCODEM0(8'b0),
+    .AXIMFATAL0(),
+    .AXIMCORR0(),
+    .MERRADDR0(),
+
+    // AXI Subordinate
+    .ACLKENS0(1'b0),
+    .AWIDS0(CPU_Rx_S_AXI.AWID),
+    .AWADDRS0(CPU_Rx_S_AXI.AWADDR),
+    .AWLENS0(CPU_Rx_S_AXI.AWLEN),
+    .AWSIZES0(CPU_Rx_S_AXI.AWSIZE),
+    .AWBURSTS0(CPU_Rx_S_AXI.AWBURST),
+    .AWLOCKS0(CPU_Rx_S_AXI.AWLOCK),
+    .AWCACHES0(CPU_Rx_S_AXI.AWCACHE),
+    .AWPROTS0(CPU_Rx_S_AXI.AWPROT),
+    .AWCSELS0(4'hF),
+    .AWUSERPTYS0(1'b0),
+    .AWVALIDS0(CPU_Rx_S_AXI.AWVALID),
+    .AWVPTYS0(1'b0),
+    .AWREADYS0(CPU_Rx_S_AXI.AWREADY),
+    .AWRPTYS0(),
+    .WIDS0(CPU_Rx_S_AXI.WID),
+    .WDATAS0(CPU_Rx_S_AXI.WDATA),
+    .WSTRBS0(CPU_Rx_S_AXI.WSTRB),
+    .WLASTS0(CPU_Rx_S_AXI.WLAST),
+    .WVALIDS0(CPU_Rx_S_AXI.WVALID),
+    .WVPTYS0(1'b0),
+    .WREADYS0(CPU_Rx_S_AXI.WREADY),
+    .WRPTYS0(),
+    .BIDS0(CPU_Rx_S_AXI.BID),
+    .BRESPS0(CPU_Rx_S_AXI.BRESP),
+    .BVALIDS0(CPU_Rx_S_AXI.BVALID),
+    .BVPTYS0(),
+    .BREADYS0(CPU_Rx_S_AXI.BREADY),
+    .BRPTYS0(1'b0),
+    .ARIDS0(CPU_Rx_S_AXI.ARID),
+    .ARADDRS0(CPU_Rx_S_AXI.ARADDR),
+    .ARLENS0(CPU_Rx_S_AXI.ARLEN),
+    .ARSIZES0(CPU_Rx_S_AXI.ARSIZE),
+    .ARBURSTS0(CPU_Rx_S_AXI.ARBURST),
+    .ARLOCKS0(CPU_Rx_S_AXI.ARLOCK),
+    .ARCACHES0(CPU_Rx_S_AXI.ARCACHE),
+    .ARPROTS0(CPU_Rx_S_AXI.ARPROT),
+    .ARCSELS0(4'hf),
+    .ARUSERPTYS0(1'b0),
+    .ARVALIDS0(CPU_Rx_S_AXI.ARVALID),
+    .ARVPTYS0(1'b0),
+    .ARREADYS0(CPU_Rx_S_AXI.ARREADY),
+    .ARRPTYS0(),
+    .RIDS0(CPU_Rx_S_AXI.RID),
+    .RDATAS0(CPU_Rx_S_AXI.RDATA),
+    .RRESPS0(CPU_Rx_S_AXI.RRESP),
+    .RLASTS0(CPU_Rx_S_AXI.RLAST),
+    .RVALIDS0(CPU_Rx_S_AXI.RVALID),
+    .RVPTYS0(),
+    .RREADYS0(CPU_Rx_S_AXI.RREADY),
+    .RRPTYS0(1'b0),
+    .AWADDRPTYS0(4'b0),
+    .AWCTLPTYS0(4'b0),
+    .WCTLPTYS0(3'b0),
+    .WERRCODES0(8'b0),
+    .BCTLPTYS0(),
+    .ARADDRPTYS0(4'b0),
+    .ARCTLPTYS0(4'b0),
+    .RCTLPTYS0(),
+    .RERRCODES0(),
+    .AXISFATAL0(),
+    .AXISCORR0(),
+    .SERRADDR0(),
+    .SERRCSEL0(),
+
+    // Debug
+    .PCLKENDBG(1'b0),
+    .DBGROMADDR(20'b0),
+    .DBGROMADDRV(1'b0),
+    .DBGNOPWRDWN(),
+
+    .DBGEN0(1'b0),
+    .NIDEN0(1'b0),
+    .EDBGRQ0(1'b0),
+    .DBGTRIGGER0(),
+    .DBGACK0(),
+    .COMMRX0(),
+    .COMMTX0(),
+    .PSELDBG0(1'b0),
+    .PADDRDBG0(10'b0),
+    .PADDRDBG310(1'b0),
+    .PRDATADBG0(),
+    .PWDATADBG0(32'b0),
+    .PENABLEDBG0(1'b0),
+    .PREADYDBG0(),
+    .PSLVERRDBG0(),
+    .PWRITEDBG0(1'b0),
+    .DBGSELFADDR0(20'b0),
+    .DBGSELFADDRV0(1'b0),
+    .DBGRESTART0(1'b0),
+    .DBGRESTARTED0(),
+    .DBGRSTREQ0(),
+
+    // ETM
+    .ETMICTL0(),
+    .ETMIA0(),
+    .ETMDCTL0(),
+    .ETMDA0(),
+    .ETMDD0(),
+    .ETMCID0(),
+    .ETMWFIPENDING0(),
+    .EVNTBUS0(),
+    .ETMPWRUP0(1'b0),
+    .nETMWFIREADY0(1'b0),
+    .ETMEXTOUT0(2'b0),
+
+    // FPU
+    .FPIXC0(),
+    .FPOFC0(),
+    .FPUFC0(),
+    .FPIOC0(),
+    .FPDZC0(),
+    .FPIDC0(),
+
+    // Redundant-logic
+    .DCCMINP(8'd0),
+    .DCCMOUT(),
+    .DCCMINP2(8'd0),
+    .DCCMOUT2(),
+
+    // Interrupts
+    .INTSYNCEN(1'b1),
+    .IRQADDRVSYNCEN(1'b1),
+    .nPMUIRQ0(),
+    .IRQS(Rx_CPU_IRQs),
+
+    .DBGRESET0n(nSYSRESET),
+    .PRESETDBG0n(nSYSRESET),
+    .nCLKSTOPPED0(),
+    .nWFEPIPESTOPPED0(),
+    .nWFIPIPESTOPPED0(),
+    .EVENTI0(1'b0),
+    .EVENTO0(),
+
+    // AXI-peripheral
+    .ACLKENP0(1'b1),
+    .AWIDP0(Rx_PERI_AXI.AWID),
+    .AWADDRP0(Rx_PERI_AXI.AWADDR),
+    .AWLENP0(Rx_PERI_AXI.AWLEN),
+    .AWSIZEP0(Rx_PERI_AXI.AWSIZE),
+    .AWBURSTP0(Rx_PERI_AXI.AWBURST),
+    .AWLOCKP0(Rx_PERI_AXI.AWLOCK),
+    .AWCACHEP0(Rx_PERI_AXI.AWCACHE),
+    .AWPROTP0(Rx_PERI_AXI.AWPROT),
+    .AWVALIDP0(Rx_PERI_AXI.AWVALID),
+    .AWVPTYP0(),
+    .AWREADYP0(Rx_PERI_AXI.AWREADY),
+    .AWRPTYP0(1'b0),
+    .AWADDRPTYP0(),
+    .AWCTLPTYP0(),
+    .WIDP0(Rx_PERI_AXI.WID),
+    .WDATAP0(Rx_PERI_AXI.WDATA),
+    .WERRCODEP0(),
+    .WSTRBP0(Rx_PERI_AXI.WSTRB),
+    .WLASTP0(Rx_PERI_AXI.WLAST),
+    .WVALIDP0(Rx_PERI_AXI.WVALID),
+    .WVPTYP0(),
+    .WREADYP0(Rx_PERI_AXI.WREADY),
+    .WRPTYP0(1'b0),
+    .WCTLPTYP0(),
+    .BIDP0(Rx_PERI_AXI.BID),
+    .BRESPP0(Rx_PERI_AXI.BRESP),
+    .BVALIDP0(Rx_PERI_AXI.BVALID),
+    .BVPTYP0(1'b0),
+    .BREADYP0(Rx_PERI_AXI.BREADY),
+    .BRPTYP0(),
+    .BCTLPTYP0(2'b0),
+    .ARIDP0(Rx_PERI_AXI.ARID),
+    .ARADDRP0(Rx_PERI_AXI.ARADDR),
+    .ARLENP0(Rx_PERI_AXI.ARLEN),
+    .ARSIZEP0(Rx_PERI_AXI.ARSIZE),
+    .ARBURSTP0(Rx_PERI_AXI.ARBURST),
+    .ARLOCKP0(Rx_PERI_AXI.ARLOCK),
+    .ARCACHEP0(Rx_PERI_AXI.ARCACHE),
+    .ARPROTP0(Rx_PERI_AXI.ARPROT),
+    .ARVALIDP0(Rx_PERI_AXI.ARVALID),
+    .ARVPTYP0(),
+    .ARREADYP0(Rx_PERI_AXI.ARREADY),
+    .ARRPTYP0(1'b0),
+    .ARADDRPTYP0(),
+    .ARCTLPTYP0(),
+    .RIDP0(Rx_PERI_AXI.RID),
+    .RDATAP0(Rx_PERI_AXI.RDATA),
+    .RERRCODEP0(7'b0),
+    .RRESPP0(Rx_PERI_AXI.RRESP),
+    .RLASTP0(Rx_PERI_AXI.RLAST),
+    .RVALIDP0(Rx_PERI_AXI.RVALID),
+    .RVPTYP0(1'b0),
+    .RREADYP0(Rx_PERI_AXI.RREADY),
+    .RRPTYP0(),
+    .RCTLPTYP0(2'b0),
+    .PPXFATAL0(),
+    .PPXCORR0(),
+
+    // GIC AXI interface
+    .GIC_ARID(CPU_Rx_GIC_AXI.ARID),
+    .GIC_ARADDR(CPU_Rx_GIC_AXI.ARADDR),
+    .GIC_ARLEN(CPU_Rx_GIC_AXI.ARLEN),
+    .GIC_ARSIZE(CPU_Rx_GIC_AXI.ARSIZE),
+    .GIC_ARBURST(CPU_Rx_GIC_AXI.ARBURST),
+    .GIC_ARPROT(CPU_Rx_GIC_AXI.ARPROT),
+    .GIC_ARUSER(3'h0),
+    .GIC_ARVALID(CPU_Rx_GIC_AXI.ARVALID),
+    .GIC_ARREADY(CPU_Rx_GIC_AXI.ARREADY),
+    .GIC_RID(CPU_Rx_GIC_AXI.RID),
+    .GIC_RDATA(CPU_Rx_GIC_AXI.RDATA),
+    .GIC_RLAST(CPU_Rx_GIC_AXI.RLAST),
+    .GIC_RRESP(CPU_Rx_GIC_AXI.RRESP),
+    .GIC_RVALID(CPU_Rx_GIC_AXI.RVALID),
+    .GIC_RREADY(CPU_Rx_GIC_AXI.RREADY),
+    .GIC_AWID(CPU_Rx_GIC_AXI.AWID),
+    .GIC_AWADDR(CPU_Rx_GIC_AXI.AWADDR),
+    .GIC_AWLEN(CPU_Rx_GIC_AXI.AWLEN),
+    .GIC_AWSIZE(CPU_Rx_GIC_AXI.AWSIZE),
+    .GIC_AWBURST(CPU_Rx_GIC_AXI.AWBURST),
+    .GIC_AWPROT(CPU_Rx_GIC_AXI.AWPROT),
+    .GIC_AWUSER(3'h0),
+    .GIC_AWVALID(CPU_Rx_GIC_AXI.AWVALID),
+    .GIC_AWREADY(CPU_Rx_GIC_AXI.AWREADY),
+    .GIC_WDATA(CPU_Rx_GIC_AXI.WDATA),
+    .GIC_WSTRB(CPU_Rx_GIC_AXI.WSTRB),
+    .GIC_WVALID(CPU_Rx_GIC_AXI.WVALID),
+    .GIC_WREADY(CPU_Rx_GIC_AXI.WREADY),
+    .GIC_BID(CPU_Rx_GIC_AXI.BID),
+    .GIC_BRESP(CPU_Rx_GIC_AXI.BRESP),
+    .GIC_BVALID(CPU_Rx_GIC_AXI.BVALID),
+    .GIC_BREADY(CPU_Rx_GIC_AXI.BREADY),
+
+    // Split/lock
+    .CLKIN1(1'b0),
+    .SLSPLIT(1'b0),
+    .SLRESETn(1'b0),
+    .SLCLAMP(1'b0),
+    .SLERRACPn(1'b0),
+    .SLERRDBGn(1'b0),
+
+    // Power Modes
+    .RAMCONTROL0(8'd0)
 );
 
 ada_top_sldma350 u_dma350 (
@@ -423,7 +753,35 @@ millisoc_peripheral_subsystem u_millisoc_peripheral_subsystem (
 
     .WDOGRESREQ(WDOGRESREQ),
 
-    .PERI_IRQS(PERI_IRQS)
+    .PERI_IRQS()
+);
+
+millisoc_rt_peripheral_subsystem u_rt_peripheral(
+    .CLK(FCLK),
+    .PORESETn(nPORESET),
+    .SYSRESETn(nSYSRESET),
+    .AXI_PERIPH(Rx_PERI_AXI),
+
+    .UARTRXD0(UARTRXD0_RT),
+    .UARTTXD0(UARTTXD0_RT),
+    .UARTTXEN0(UARTTXEN0_RT),
+    .UARTRXD1(UARTRXD1_RT),
+    .UARTTXD1(UARTTXD1_RT),
+    .UARTTXEN1(UARTTXEN1_RT),
+    .p0_in(),
+    .p0_out(),
+    .p0_en(),
+    .p0_func(),
+    .p1_in(),
+    .p1_out(),
+    .p1_en(),
+    .p1_func(),
+    .SPI_SSn(),
+    .SPI_SCLK(),
+    .SPI_MOSI(),
+    .SPI_MISO(),
+    .WDOGRESREQ(),
+    .PERI_IRQS(Rx_PERI_IRQS)
 );
 
 top_ahb_qspi u_ahb_qspi(
@@ -481,6 +839,43 @@ ROM_wrapper u_ROM_wrapper(
 );
 
 nic400_millisoc_main u_nic400_millisoc_main (
+    .AWID_CPU_Rx_S(CPU_Rx_S_AXI.AWID),
+    .AWADDR_CPU_Rx_S(CPU_Rx_S_AXI.AWADDR),
+    .AWLEN_CPU_Rx_S(CPU_Rx_S_AXI.AWLEN),
+    .AWSIZE_CPU_Rx_S(CPU_Rx_S_AXI.AWSIZE),
+    .AWBURST_CPU_Rx_S(CPU_Rx_S_AXI.AWBURST),
+    .AWLOCK_CPU_Rx_S(CPU_Rx_S_AXI.AWLOCK),
+    .AWCACHE_CPU_Rx_S(CPU_Rx_S_AXI.AWCACHE),
+    .AWPROT_CPU_Rx_S(CPU_Rx_S_AXI.AWPROT),
+    .AWVALID_CPU_Rx_S(CPU_Rx_S_AXI.AWVALID),
+    .AWREADY_CPU_Rx_S(CPU_Rx_S_AXI.AWREADY),
+    .WID_CPU_Rx_S(CPU_Rx_S_AXI.WID),
+    .WDATA_CPU_Rx_S(CPU_Rx_S_AXI.WDATA),
+    .WSTRB_CPU_Rx_S(CPU_Rx_S_AXI.WSTRB),
+    .WLAST_CPU_Rx_S(CPU_Rx_S_AXI.WLAST),
+    .WVALID_CPU_Rx_S(CPU_Rx_S_AXI.WVALID),
+    .WREADY_CPU_Rx_S(CPU_Rx_S_AXI.WREADY),
+    .BID_CPU_Rx_S(CPU_Rx_S_AXI.BID),
+    .BRESP_CPU_Rx_S(CPU_Rx_S_AXI.BRESP),
+    .BVALID_CPU_Rx_S(CPU_Rx_S_AXI.BVALID),
+    .BREADY_CPU_Rx_S(CPU_Rx_S_AXI.BREADY),
+    .ARID_CPU_Rx_S(CPU_Rx_S_AXI.ARID),
+    .ARADDR_CPU_Rx_S(CPU_Rx_S_AXI.ARADDR),
+    .ARLEN_CPU_Rx_S(CPU_Rx_S_AXI.ARLEN),
+    .ARSIZE_CPU_Rx_S(CPU_Rx_S_AXI.ARSIZE),
+    .ARBURST_CPU_Rx_S(CPU_Rx_S_AXI.ARBURST),
+    .ARLOCK_CPU_Rx_S(CPU_Rx_S_AXI.ARLOCK),
+    .ARCACHE_CPU_Rx_S(CPU_Rx_S_AXI.ARCACHE),
+    .ARPROT_CPU_Rx_S(CPU_Rx_S_AXI.ARPROT),
+    .ARVALID_CPU_Rx_S(CPU_Rx_S_AXI.ARVALID),
+    .ARREADY_CPU_Rx_S(CPU_Rx_S_AXI.ARREADY),
+    .RID_CPU_Rx_S(CPU_Rx_S_AXI.RID),
+    .RDATA_CPU_Rx_S(CPU_Rx_S_AXI.RDATA),
+    .RRESP_CPU_Rx_S(CPU_Rx_S_AXI.RRESP),
+    .RLAST_CPU_Rx_S(CPU_Rx_S_AXI.RLAST),
+    .RVALID_CPU_Rx_S(CPU_Rx_S_AXI.RVALID),
+    .RREADY_CPU_Rx_S(CPU_Rx_S_AXI.RREADY),
+
     .HSELx_CPU_S(CPU_S_AHB.HSEL),
     .HADDR_CPU_S(CPU_S_AHB.HADDR),
     .HTRANS_CPU_S(CPU_S_AHB.HTRANS),
@@ -520,6 +915,42 @@ nic400_millisoc_main u_nic400_millisoc_main (
     .HREADY_ROM(ROM_AHB.HREADY),
     .HRESP_ROM(ROM_AHB.HRESP),
 
+    .AWID_RT_GIC(CPU_Rx_GIC_AXI.AWID),
+    .AWADDR_RT_GIC(CPU_Rx_GIC_AXI.AWADDR),
+    .AWLEN_RT_GIC(CPU_Rx_GIC_AXI.AWLEN),
+    .AWSIZE_RT_GIC(CPU_Rx_GIC_AXI.AWSIZE),
+    .AWBURST_RT_GIC(CPU_Rx_GIC_AXI.AWBURST),
+    .AWLOCK_RT_GIC(CPU_Rx_GIC_AXI.AWLOCK),
+    .AWCACHE_RT_GIC(CPU_Rx_GIC_AXI.AWCACHE),
+    .AWPROT_RT_GIC(CPU_Rx_GIC_AXI.AWPROT),
+    .AWVALID_RT_GIC(CPU_Rx_GIC_AXI.AWVALID),
+    .AWREADY_RT_GIC(CPU_Rx_GIC_AXI.AWREADY),
+    .WDATA_RT_GIC(CPU_Rx_GIC_AXI.WDATA),
+    .WSTRB_RT_GIC(CPU_Rx_GIC_AXI.WSTRB),
+    .WLAST_RT_GIC(CPU_Rx_GIC_AXI.WLAST),
+    .WVALID_RT_GIC(CPU_Rx_GIC_AXI.WVALID),
+    .WREADY_RT_GIC(CPU_Rx_GIC_AXI.WREADY),
+    .BID_RT_GIC(CPU_Rx_GIC_AXI.BID),
+    .BRESP_RT_GIC(CPU_Rx_GIC_AXI.BRESP),
+    .BVALID_RT_GIC(CPU_Rx_GIC_AXI.BVALID),
+    .BREADY_RT_GIC(CPU_Rx_GIC_AXI.BREADY),
+    .ARID_RT_GIC(CPU_Rx_GIC_AXI.ARID),
+    .ARADDR_RT_GIC(CPU_Rx_GIC_AXI.ARADDR),
+    .ARLEN_RT_GIC(CPU_Rx_GIC_AXI.ARLEN),
+    .ARSIZE_RT_GIC(CPU_Rx_GIC_AXI.ARSIZE),
+    .ARBURST_RT_GIC(CPU_Rx_GIC_AXI.ARBURST),
+    .ARLOCK_RT_GIC(CPU_Rx_GIC_AXI.ARLOCK),
+    .ARCACHE_RT_GIC(CPU_Rx_GIC_AXI.ARCACHE),
+    .ARPROT_RT_GIC(CPU_Rx_GIC_AXI.ARPROT),
+    .ARVALID_RT_GIC(CPU_Rx_GIC_AXI.ARVALID),
+    .ARREADY_RT_GIC(CPU_Rx_GIC_AXI.ARREADY),
+    .RID_RT_GIC(CPU_Rx_GIC_AXI.RID),
+    .RDATA_RT_GIC(CPU_Rx_GIC_AXI.RDATA),
+    .RRESP_RT_GIC(CPU_Rx_GIC_AXI.RRESP),
+    .RLAST_RT_GIC(CPU_Rx_GIC_AXI.RLAST),
+    .RVALID_RT_GIC(CPU_Rx_GIC_AXI.RVALID),
+    .RREADY_RT_GIC(CPU_Rx_GIC_AXI.RREADY),
+
     .PADDR_DMA_CFG(DMA_CFG_APB.paddr),
     .PWDATA_DMA_CFG(DMA_CFG_APB.pwdata),
     .PWRITE_DMA_CFG(DMA_CFG_APB.pwrite),
@@ -541,6 +972,17 @@ nic400_millisoc_main u_nic400_millisoc_main (
     .PRDATA_QSPI_CFG(QSPI_CFG_APB.prdata),
     .PSLVERR_QSPI_CFG(QSPI_CFG_APB.pslverr),
     .PREADY_QSPI_CFG(QSPI_CFG_APB.pready),
+
+    .PADDR_SYS_CTRL(SYS_CTRL_APB.paddr),
+    .PWDATA_SYS_CTRL(SYS_CTRL_APB.pwdata),
+    .PWRITE_SYS_CTRL(SYS_CTRL_APB.pwrite),
+    .PPROT_SYS_CTRL(SYS_CTRL_APB.pprot),
+    .PSTRB_SYS_CTRL(SYS_CTRL_APB.pstrb),
+    .PENABLE_SYS_CTRL(SYS_CTRL_APB.penable),
+    .PSELx_SYS_CTRL(SYS_CTRL_APB.psel),
+    .PRDATA_SYS_CTRL(SYS_CTRL_APB.prdata),
+    .PSLVERR_SYS_CTRL(SYS_CTRL_APB.pslverr),
+    .PREADY_SYS_CTRL(SYS_CTRL_APB.pready),
 
     .AWID_CPU_Mx(CPU_AXI.AWID),
     .AWADDR_CPU_Mx(CPU_AXI.AWADDR),
@@ -578,7 +1020,7 @@ nic400_millisoc_main u_nic400_millisoc_main (
     .RVALID_CPU_Mx(CPU_AXI.RVALID),
     .RREADY_CPU_Mx(CPU_AXI.RREADY),
 
-    //.AWID_CPU_Rx(CPU_Rx_AXI.AWID),
+    .AWID_CPU_Rx(CPU_Rx_AXI.AWID),
     .AWADDR_CPU_Rx(CPU_Rx_AXI.AWADDR),
     .AWLEN_CPU_Rx(CPU_Rx_AXI.AWLEN),
     .AWSIZE_CPU_Rx(CPU_Rx_AXI.AWSIZE),
@@ -593,11 +1035,11 @@ nic400_millisoc_main u_nic400_millisoc_main (
     .WLAST_CPU_Rx(CPU_Rx_AXI.WLAST),
     .WVALID_CPU_Rx(CPU_Rx_AXI.WVALID),
     .WREADY_CPU_Rx(CPU_Rx_AXI.WREADY),
-    //.BID_CPU_Rx(CPU_Rx_AXI.BID),
+    .BID_CPU_Rx(CPU_Rx_AXI.BID),
     .BRESP_CPU_Rx(CPU_Rx_AXI.BRESP),
     .BVALID_CPU_Rx(CPU_Rx_AXI.BVALID),
     .BREADY_CPU_Rx(CPU_Rx_AXI.BREADY),
-    //.ARID_CPU_Rx(CPU_Rx_AXI.ARID),
+    .ARID_CPU_Rx(CPU_Rx_AXI.ARID),
     .ARADDR_CPU_Rx(CPU_Rx_AXI.ARADDR),
     .ARLEN_CPU_Rx(CPU_Rx_AXI.ARLEN),
     .ARSIZE_CPU_Rx(CPU_Rx_AXI.ARSIZE),
@@ -607,7 +1049,7 @@ nic400_millisoc_main u_nic400_millisoc_main (
     .ARPROT_CPU_Rx(CPU_Rx_AXI.ARPROT),
     .ARVALID_CPU_Rx(CPU_Rx_AXI.ARVALID),
     .ARREADY_CPU_Rx(CPU_Rx_AXI.ARREADY),
-    //.RID_CPU_Rx(CPU_Rx_AXI.RID),
+    .RID_CPU_Rx(CPU_Rx_AXI.RID),
     .RDATA_CPU_Rx(CPU_Rx_AXI.RDATA),
     .RRESP_CPU_Rx(CPU_Rx_AXI.RRESP),
     .RLAST_CPU_Rx(CPU_Rx_AXI.RLAST),
@@ -691,12 +1133,6 @@ nic400_millisoc_main u_nic400_millisoc_main (
 );
 
 // Temporary tie off's for DEBUG AXI and CPU_Rx AXI
-assign CPU_Rx_AXI.AWVALID = 1'b0;
-assign CPU_Rx_AXI.WREADY = 1'b0;
-assign CPU_Rx_AXI.BREADY = 1'b0;
-assign CPU_Rx_AXI.ARVALID = 1'b0;
-assign CPU_Rx_AXI.RREADY = 1'b0;
-
 assign DEBUG_AXI.AWVALID = 1'b0;
 assign DEBUG_AXI.WREADY = 1'b0;
 assign DEBUG_AXI.BREADY = 1'b0;

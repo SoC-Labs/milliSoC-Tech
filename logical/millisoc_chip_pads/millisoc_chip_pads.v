@@ -10,7 +10,13 @@ module millisoc_chip_pads(
     output wire         UARTTXD0,
     input  wire         UARTRXD0,
     output wire         UARTTXD1,
-    input  wire         UARTRXD1
+    input  wire         UARTRXD1,
+
+    output wire         UARTTXD0_RT,
+    input  wire         UARTRXD0_RT,
+    output wire         UARTTXD1_RT,
+    input  wire         UARTRXD1_RT
+
 );
 
 // QSPI internal Signals
@@ -26,6 +32,14 @@ wire             uarttxen0;
 wire             uartrxd1;
 wire             uarttxd1;
 wire             uarttxen1;
+
+wire             uartrxd0_RT;
+wire             uarttxd0_RT;
+wire             uarttxen0_RT;
+wire             uartrxd1_RT;
+wire             uarttxd1_RT;
+wire             uarttxen1_RT;
+
 // DAP-LITE internal signals
 wire             ntrst;
 wire             swclktck;
@@ -64,6 +78,14 @@ millisoc_system u_millisoc_system(
     .UARTRXD1(uartrxd1),
     .UARTTXD1(uarttxd1),
     .UARTTXEN1(uarttxen1),
+
+    .UARTRXD0_RT(uartrxd0_RT),
+    .UARTTXD0_RT(uarttxd0_RT),
+    .UARTTXEN0_RT(uarttxen0_RT),
+    .UARTRXD1_RT(uartrxd1_RT),
+    .UARTTXD1_RT(uarttxd1_RT),
+    .UARTTXEN1_RT(uarttxen1_RT),
+
     .nTRST(ntrst),
     .SWCLKTCK(swclktck),
     .SWDITMS(swditms),
@@ -100,6 +122,13 @@ millisoc_chip_phy u_millisoc_chip_phy(
     .uarttxd1(uarttxd1),
     .uarttxen1(uarttxen1),
 
+    .uartrxd0_RT(uartrxd0_RT),
+    .uarttxd0_RT(uarttxd0_RT),
+    .uarttxen0_RT(uarttxen0_RT),
+    .uartrxd1_RT(uartrxd1_RT),
+    .uarttxd1_RT(uarttxd1_RT),
+    .uarttxen1_RT(uarttxen1_RT),
+
     .ntrst(ntrst),
     .swclktck(swclktck),
     .swditms(swditms),
@@ -130,7 +159,13 @@ millisoc_chip_phy u_millisoc_chip_phy(
     .uart_txd0_pad(UARTTXD0),
     .uart_rxd0_pad(UARTRXD0),
     .uart_txd1_pad(UARTTXD1),
-    .uart_rxd1_pad(UARTRXD1)
+    .uart_rxd1_pad(UARTRXD1),
+
+    .uart_txd0_pad_RT(UARTTXD0_RT),
+    .uart_rxd0_pad_RT(UARTRXD0_RT),
+    .uart_txd1_pad_RT(UARTTXD1_RT),
+    .uart_rxd1_pad_RT(UARTRXD1_RT)
+
 );
 
 endmodule

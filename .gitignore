@@ -5,6 +5,7 @@ software/build
 
 logical/cmsdk
 logical/nic400_millisoc_main
+logical/nic400_Rx_peripheral
 logical/soc400
 logical/shared
 

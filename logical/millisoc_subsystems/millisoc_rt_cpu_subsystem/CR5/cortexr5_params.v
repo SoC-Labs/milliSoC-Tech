@@ -105,7 +105,7 @@
                                   //  0 - excluded
                                   //  1 - included
   // ----------------------------------------------------------------------
-  parameter MICRO_SCU = 0;        // MicroSCU Inclusion
+  parameter MICRO_SCU = 1;        // MicroSCU Inclusion
                                   // Enables ACP functionality
                                   //  0 - excluded
                                   //  1 - included
@@ -139,7 +139,7 @@
   parameter MPU_REGIONS0 = 12;    // Number of MPU Regions on CPU0
                                   // Valid values in {0, 12, 16}
   // ----------------------------------------------------------------------
-  parameter TCM_HI_INIT_ADDR0 = 20'h40000;// Initial address of "other" TCM
+  parameter TCM_HI_INIT_ADDR0 = 20'h20000;// Initial address of "other" TCM
                                           // interface on CPU0 (high bits)
                                           // Must be TCM-size aligned
   // ----------------------------------------------------------------------

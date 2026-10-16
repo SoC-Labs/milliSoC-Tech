@@ -5,6 +5,7 @@ $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_system/millisoc_system.sv
 
 
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_peripheral_subsystem/millisoc_peripheral_subsystem.sv
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_peripheral_subsystem/millisoc_rt_peripheral_subsystem.sv
 
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/interfaces/ahb_if.sv
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/interfaces/axi4_if.sv
@@ -17,9 +18,11 @@ $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_sys_ctrl/milli
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/ROM/generic/ROM_wrapper.v
 
 -f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/NIC400.flist
+-f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/NIC400_Rx.flist
 -f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/PL022.flist
 -f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/PL031.flist
 -f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/Corstone101.flist
+-f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/GIC400.flist
 
 -f $(SOCLABS_SLDMA350_TECH_DIR)/flist/dma350_axi_millisoc.flist
 

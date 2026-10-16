@@ -54,10 +54,3 @@ $(CORTEX_M85_LOGICAL_DIR)/logical/olympus/verilog/olympus_tarmac_inst.sv
 
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/shared/verilog
 -y $(CORTEX_M85_LOGICAL_DIR)/logical/shared/verilog
-
-+incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/testbench/shared/tarmac/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/testbench/shared/tarmac/verilog
-
-
-
-

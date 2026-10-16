@@ -8,7 +8,9 @@ module millisoc_sys_ctrl(
     input  wire         sysresetreq,
     input  wire         watchdogreq,
 
-    output wire         nsysreset
+    output wire         nsysreset,
+
+    output reg          cpu_mx_wait
 );
 
 //Local parameter for IDs,
@@ -38,6 +40,9 @@ assign apb_write_en = sys_ctrl_apb.psel & (~sys_ctrl_apb.penable) & sys_ctrl_apb
 assign sys_ctrl_apb.pready = 1'b1; // Always ready
 assign sys_ctrl_apb.pslverr = 1'b0; // Always OK
 
+assign apb_wr_sel[0] = apb_write_en & (sys_ctrl_apb.paddr[11:2]==10'h0);
+assign apb_wr_sel[1] = apb_write_en & (sys_ctrl_apb.paddr[11:2]==10'h1);
+
 wire [1:0] next_reset_info;
 wire  reg_next_reset_info_en;
 assign next_reset_info[0] = sysresetreq;
@@ -54,11 +59,19 @@ always @(posedge pclk or negedge nporeset) begin
         reset_info <= next_reset_info;
 end
 
+always @(posedge pclk or negedge nporeset) begin
+    if(~nporeset)
+        cpu_mx_wait <= 1'b1;
+    else if (apb_wr_sel[1])
+        cpu_mx_wait <= sys_ctrl_apb.pwdata[0];
+end
+
 always @(apb_read_en or sys_ctrl_apb.paddr or reset_info) begin
     case(apb_read_en)
         1'b1: begin
             case(sys_ctrl_apb.paddr[11:2])
                 10'h000: PRDATA = {30'd0, reset_info};
+                10'h001: PRDATA = {31'd0, cpu_mx_wait};
                 10'h3F4: PRDATA = SYSCTRL_ID0;
                 10'h3F5: PRDATA = SYSCTRL_ID1;
                 10'h3F6: PRDATA = SYSCTRL_ID2;

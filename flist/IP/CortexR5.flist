@@ -1,0 +1,24 @@
+
++incdir+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_rt_cpu_subsystem/CR5
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_rt_cpu_subsystem/CR5/millisoc_rt_cpu_subsystem.v
+
+$(CORTEX_R5_LOGICAL_DIR)/logical/cortexr5/verilog/CORTEXR5.v
+-y $(CORTEX_R5_LOGICAL_DIR)/logical/cortexr5/verilog/
+-y $(CORTEX_R5_LOGICAL_DIR)/logical/heron_axis/verilog/
+-y $(CORTEX_R5_LOGICAL_DIR)/logical/heron_caches_axim/verilog/
+-y $(CORTEX_R5_LOGICAL_DIR)/logical/heron_dpu/verilog/
+-y $(CORTEX_R5_LOGICAL_DIR)/logical/heron_fpu/verilog/
+-y $(CORTEX_R5_LOGICAL_DIR)/logical/heron_lsu/verilog/
+-y $(CORTEX_R5_LOGICAL_DIR)/logical/heron_mpu/verilog/
+-y $(CORTEX_R5_LOGICAL_DIR)/logical/heron_pfu/verilog/
+-y $(CORTEX_R5_LOGICAL_DIR)/logical/heron_scu/verilog/
+
++incdir+$(CORTEX_R5_LOGICAL_DIR)/logical/cortexr5/verilog/
++incdir+$(CORTEX_R5_LOGICAL_DIR)/logical/heron_axis/verilog/
++incdir+$(CORTEX_R5_LOGICAL_DIR)/logical/heron_caches_axim/verilog/
++incdir+$(CORTEX_R5_LOGICAL_DIR)/logical/heron_dpu/verilog/
++incdir+$(CORTEX_R5_LOGICAL_DIR)/logical/heron_fpu/verilog/
++incdir+$(CORTEX_R5_LOGICAL_DIR)/logical/heron_lsu/verilog/
++incdir+$(CORTEX_R5_LOGICAL_DIR)/logical/heron_mpu/verilog/
++incdir+$(CORTEX_R5_LOGICAL_DIR)/logical/heron_pfu/verilog/
++incdir+$(CORTEX_R5_LOGICAL_DIR)/logical/heron_scu/verilog/
