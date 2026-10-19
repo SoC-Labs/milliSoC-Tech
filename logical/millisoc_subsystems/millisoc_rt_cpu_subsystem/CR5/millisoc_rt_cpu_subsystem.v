@@ -204,7 +204,7 @@ module millisoc_rt_cpu_subsystem #(
 
 
     output wire         nPMUIRQ0,
-    input  wire [239:0] IRQS,
+    input  wire [31:0]  IRQS,
     //
 
     input  wire         nRESET0,
@@ -280,47 +280,17 @@ module millisoc_rt_cpu_subsystem #(
 
     // GIC AXI
     // AXI read address channel
-    input  wire    [GIC_ID_BITS-1:0]  GIC_ARID,
-    input  wire                [14:0] GIC_ARADDR,
-    input  wire                 [7:0] GIC_ARLEN,
-    input  wire                 [2:0] GIC_ARSIZE,
-    input  wire                 [1:0] GIC_ARBURST,
-    input  wire                 [2:0] GIC_ARPROT,
-    input  wire                 [2:0] GIC_ARUSER,
-    input  wire                       GIC_ARVALID,
-    output wire                       GIC_ARREADY,
-
-    // AXI read data channel
-    output wire    [GIC_ID_BITS-1:0]  GIC_RID,
-    output wire                [31:0] GIC_RDATA,
-    output wire                       GIC_RLAST,
-    output wire                 [1:0] GIC_RRESP,
-    output wire                       GIC_RVALID,
-    input  wire                       GIC_RREADY,
-
-    // AXI write address channel
-    input  wire    [GIC_ID_BITS-1:0]  GIC_AWID,
-    input  wire                [14:0] GIC_AWADDR,
-    input  wire                 [7:0] GIC_AWLEN,
-    input  wire                 [2:0] GIC_AWSIZE,
-    input  wire                 [1:0] GIC_AWBURST,
-    input  wire                 [2:0] GIC_AWPROT,
-    input  wire                 [2:0] GIC_AWUSER,
-    input  wire                       GIC_AWVALID,
-    output wire                       GIC_AWREADY,
-
-    // AXI write data channel
-    input  wire                [31:0] GIC_WDATA,
-    input  wire                 [3:0] GIC_WSTRB,
-    input  wire                       GIC_WVALID,
-    output wire                       GIC_WREADY,
-
-    // AXI write response channel
-    output wire    [GIC_ID_BITS-1:0]  GIC_BID,
-    output wire                 [1:0] GIC_BRESP,
-    output wire                       GIC_BVALID,
-    input  wire                       GIC_BREADY,
-
+    input  wire         HSELVIC_GIC,         // VIC slave select
+    input  wire  [11:2] HADDR_GIC,           // AHB address bus
+    input  wire         HWRITE_GIC,          // AHB operation select
+    input  wire         HREADYIN_GIC,        // Transfer done response on AHB from
+    input  wire   [3:0] HPROT_GIC,           // AHB protection mode
+    input  wire   [1:0] HTRANS_GIC,          // AHB transfer type
+    input  wire   [2:0] HSIZE_GIC,           // AHB transfer size
+    input  wire  [31:0] HWDATA_GIC,          // AHB write data
+    output wire         HREADYOUT_GIC,       // Transfer done response for AHB
+    output wire  [1:0]  HRESP_GIC,           // Transfer response to AHB
+    output wire [31:0]  HRDATA_GIC,          // Read data to AHB
 
     // Split/Lock
     input  wire         CLKIN1,
@@ -388,7 +358,9 @@ wire [2:0]   B1TCACCTYPE0;
 
 wire         nFIQ0;
 wire         nIRQ0;
-
+wire   [31:0] VICVECTADDROUT;  // Vector
+wire          VICVECTADDRV;    // Address valid signal
+wire          VICIRQACK;
 CORTEXR5 u_cortexr5(
     //Clocks and Resets
     .CLKIN(CLKIN),
@@ -656,7 +628,7 @@ CORTEXR5 u_cortexr5(
     .CFGBTCMSZ0(4'b0101), // 16kb
     .PARECCENRAM0(3'b000), // No ECC
     .ERRENRAM0(3'b000), // No enable check on TCM
-    .RMWENRAM0(2'b11), // Enable RMW
+    .RMWENRAM0(2'b00), // Enable RMW
     .ENTCM1IF0(1'b1), // enable B1TCM
     .SLBTCMSB0(1'b1), // MSB to select B1TCM
     .INITPPX0(1'b1),
@@ -684,15 +656,15 @@ CORTEXR5 u_cortexr5(
     .DCCMOUT2(DCCMOUT2),
 
     //Interrupts
-    .INTSYNCEN(INTSYNCEN),
-    .IRQADDRVSYNCEN(IRQADDRVSYNCEN),
+    .INTSYNCEN(1'b1),
+    .IRQADDRVSYNCEN(1'b1),
 
 
     .nFIQ0(nFIQ0),
     .nIRQ0(nIRQ0),
-    .IRQADDRV0(1'b0),
-    .IRQADDR0({30{1'b0}}),
-    .IRQACK0(),
+    .IRQADDRV0(VICVECTADDRV),
+    .IRQADDR0(VICVECTADDROUT[31:2]),
+    .IRQACK0(VICIRQACK),
     .nPMUIRQ0(nPMUIRQ0),
 
     //
@@ -872,66 +844,41 @@ u_tcm_ram_b1
     .parity_out                  (B1TCPARITYOUT0));
 
 
-GIC400 #(
-    .NUM_CPUS(1),
-    .NUM_SPIS(240),
-    .NUM_WID_BITS(GIC_ID_BITS),
-    .NUM_RID_BITS(GIC_ID_BITS)
-     ) u_gic400 (
-    .CLK(CLKIN),
-    .nRESET(nRESET0),
-    .DFTRSTDISABLE(1'b0),
-    .DFTSE(1'b0),
-    .CFGSDISABLE(1'b0),
+Vic u_vic(
+    .HCLK(CLKIN),
+    .HRESETn(nRESET0),
+    .HSELVIC(HSELVIC_GIC),
+    .HADDR(HADDR_GIC),
+    .HWRITE(HWRITE_GIC),
+    .HREADYIN(HREADYIN_GIC),
+    .HPROT(HPROT_GIC),
+    .HTRANS(HTRANS_GIC),
+    .HSIZE(HSIZE_GIC),
+    .HWDATA(HWDATA_GIC),
+    .HREADYOUT(HREADYOUT_GIC),
+    .HRESP(HRESP_GIC),
+    .HRDATA(HRDATA_GIC),
 
-    .ARID(GIC_ARID),
-    .ARADDR(GIC_ARADDR),
-    .ARLEN(GIC_ARLEN),
-    .ARSIZE(GIC_ARSIZE),
-    .ARBURST(GIC_ARBURST),
-    .ARPROT(GIC_ARPROT),
-    .ARUSER(GIC_ARUSER),
-    .ARVALID(GIC_ARVALID),
-    .ARREADY(GIC_ARREADY),
-    .RID(GIC_RID),
-    .RDATA(GIC_RDATA),
-    .RLAST(GIC_RLAST),
-    .RRESP(GIC_RRESP),
-    .RVALID(GIC_RVALID),
-    .RREADY(GIC_RREADY),
-    .AWID(GIC_AWID),
-    .AWADDR(GIC_AWADDR),
-    .AWLEN(GIC_AWLEN),
-    .AWSIZE(GIC_AWSIZE),
-    .AWBURST(GIC_AWBURST),
-    .AWPROT(GIC_AWPROT),
-    .AWUSER(GIC_AWUSER),
-    .AWVALID(GIC_AWVALID),
-    .AWREADY(GIC_AWREADY),
-    .WDATA(GIC_WDATA),
-    .WSTRB(GIC_WSTRB),
-    .WVALID(GIC_WVALID),
-    .WREADY(GIC_WREADY),
-    .BID(GIC_BID),
-    .BRESP(GIC_BRESP),
-    .BVALID(GIC_BVALID),
-    .BREADY(GIC_BREADY),
+    .VICINTSOURCE(IRQS),
 
-    .IRQS(IRQS),
+    .nVICFIQIN(1'b1), // No daisy Chain
+    .nVICIRQIN(1'b1), // No daisy Chain
+    .VICVECTADDRIN(32'd0), // No daisy Chain
+    .VICFIQINREG(1'b0),
+    .VICIRQINREG(1'b0),
+    .VICIRQACKOUT(),
 
-    .nLEGACYFIQ(1'b1),
-    .nLEGACYIRQ(1'b1),
-    .nCNTPSIRQ(1'b1),
-    .nCNTPNSIRQ(1'b1),
-    .nCNTVIRQ(1'b1),
-    .nCNTHPIRQ(1'b1),
+    .nVICSYNCEN(1'b1),
+    .VICIRQACK(VICIRQACK),
 
-    .nIRQCPU(nIRQ0),
-    .nFIQCPU(nFIQ0),
-    .nVIRQCPU(),
-    .nVFIQCPU(),
-    .nIRQOUT(),
-    .nFIQOUT()
+    .nVICFIQ(nFIQ0),
+    .nVICIRQ(nIRQ0),
+    .VICVECTADDROUT(VICVECTADDROUT),
+    .VICVECTADDRV(VICVECTADDRV),
+
+    .SCANENABLE(1'b0),
+    .SCANINHCLK(1'b0),
+    .SCANOUTHCLK()
 );
 
 endmodule

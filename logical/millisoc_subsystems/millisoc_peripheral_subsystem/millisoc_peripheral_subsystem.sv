@@ -71,7 +71,7 @@ module millisoc_peripheral_subsystem #(
     output wire         WDOGRESREQ, // Watchdog reset request
 
     // Interrupts
-    output wire [71:0]  PERI_IRQS   // Peripheral interrupts to GIC
+    output wire [55:0]  PERI_IRQS   // Peripheral interrupts to GIC
 );
 
 // APB bus interface
@@ -206,33 +206,23 @@ assign PERI_IRQS[35] = timer1_int;
 assign PERI_IRQS[36] = dualtimer_int1;
 assign PERI_IRQS[37] = dualtimer_int2;
 assign PERI_IRQS[38] = dualtimer_int_comb;
-assign PERI_IRQS[39] = usrt0_txint;
-assign PERI_IRQS[40] = usrt0_rxint;
-assign PERI_IRQS[41] = usrt0_txovrint;
-assign PERI_IRQS[42] = usrt0_rxovrint;
-assign PERI_IRQS[43] = usrt0_combined_int;
-assign PERI_IRQS[44] = usrt1_txint;
-assign PERI_IRQS[45] = usrt1_rxint;
-assign PERI_IRQS[46] = usrt1_txovrint;
-assign PERI_IRQS[47] = usrt1_rxovrint;
-assign PERI_IRQS[48] = usrt1_combined_int;
-assign PERI_IRQS[49] = uart0_txint;
-assign PERI_IRQS[50] = uart0_rxint;
-assign PERI_IRQS[51] = uart0_txovrint;
-assign PERI_IRQS[52] = uart0_rxovrint;
-assign PERI_IRQS[53] = uart0_combined_int;
-assign PERI_IRQS[54] = uart1_txint;
-assign PERI_IRQS[55] = uart1_rxint;
-assign PERI_IRQS[56] = uart1_txovrint;
-assign PERI_IRQS[57] = uart1_rxovrint;
-assign PERI_IRQS[58] = uart1_combined_int;
-assign PERI_IRQS[59] = wdog_int;
-assign PERI_IRQS[60] = rtc_int;
-assign PERI_IRQS[61] = spi_comb_int;
-assign PERI_IRQS[62] = spi_rx_int;
-assign PERI_IRQS[63] = spi_tx_int;
-assign PERI_IRQS[64] = spi_rx_overr_int;
-assign PERI_IRQS[65] = spi_tx_to_int;
+assign PERI_IRQS[39] = uart0_txint;
+assign PERI_IRQS[40] = uart0_rxint;
+assign PERI_IRQS[41] = uart0_txovrint;
+assign PERI_IRQS[42] = uart0_rxovrint;
+assign PERI_IRQS[43] = uart0_combined_int;
+assign PERI_IRQS[44] = uart1_txint;
+assign PERI_IRQS[45] = uart1_rxint;
+assign PERI_IRQS[46] = uart1_txovrint;
+assign PERI_IRQS[47] = uart1_rxovrint;
+assign PERI_IRQS[48] = uart1_combined_int;
+assign PERI_IRQS[49] = wdog_int;
+assign PERI_IRQS[50] = rtc_int;
+assign PERI_IRQS[51] = spi_comb_int;
+assign PERI_IRQS[52] = spi_rx_int;
+assign PERI_IRQS[53] = spi_tx_int;
+assign PERI_IRQS[54] = spi_rx_overr_int;
+assign PERI_IRQS[55] = spi_tx_to_int;
 
 
 cmsdk_ahb_busmatrix_periph_lite u_periph_ahb_bus (

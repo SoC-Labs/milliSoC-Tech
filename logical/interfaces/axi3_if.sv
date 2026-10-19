@@ -5,7 +5,7 @@ interface axi3_if #(
 );
     wire [ID_W-1:0]         AWID;
     wire [ADDR_W-1:0]       AWADDR;
-    wire [7:0]              AWLEN;
+    wire [3:0]              AWLEN;
     wire [2:0]              AWSIZE;
     wire [1:0]              AWBURST;
     wire                    AWLOCK;
@@ -27,7 +27,7 @@ interface axi3_if #(
     wire                    BREADY;
     wire [ID_W-1:0]         ARID;
     wire [ADDR_W-1:0]       ARADDR;
-    wire [7:0]              ARLEN;
+    wire [3:0]              ARLEN;
     wire [2:0]              ARSIZE;
     wire [1:0]              ARBURST;
     wire                    ARLOCK;
@@ -36,7 +36,7 @@ interface axi3_if #(
     wire                    ARVALID;
     wire                    ARREADY;
     wire [ID_W-1:0]         RID;
-    wire [DATA_W:0]         RDATA;
+    wire [DATA_W-1:0]       RDATA;
     wire [1:0]              RRESP;
     wire                    RLAST;
     wire                    RVALID;

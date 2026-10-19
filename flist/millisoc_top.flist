@@ -22,7 +22,7 @@ $(SOCLABS_MILLISOC_TECH_DIR)/logical/ROM/generic/ROM_wrapper.v
 -f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/PL022.flist
 -f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/PL031.flist
 -f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/Corstone101.flist
--f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/GIC400.flist
+-f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/VIC.flist
 
 -f $(SOCLABS_SLDMA350_TECH_DIR)/flist/dma350_axi_millisoc.flist
 

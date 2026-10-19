@@ -1,0 +1,9 @@
+$(ARM_IP_LIBRARY_PATH)/PL192/PL192-BU-01000-r0p0-00rel1/vic_pl192/verilog/rtl_source/Vic.v
+$(ARM_IP_LIBRARY_PATH)/PL192/PL192-BU-01000-r0p0-00rel1/vic_pl192/verilog/rtl_source/VicAhbif.v
+$(ARM_IP_LIBRARY_PATH)/PL192/PL192-BU-01000-r0p0-00rel1/vic_pl192/verilog/rtl_source/VicCpuif.v
+$(ARM_IP_LIBRARY_PATH)/PL192/PL192-BU-01000-r0p0-00rel1/vic_pl192/verilog/rtl_source/VicInterrupt.v
+$(ARM_IP_LIBRARY_PATH)/PL192/PL192-BU-01000-r0p0-00rel1/vic_pl192/verilog/rtl_source/VicIntResolver.v
+$(ARM_IP_LIBRARY_PATH)/PL192/PL192-BU-01000-r0p0-00rel1/vic_pl192/verilog/rtl_source/VicPriority.v
+$(ARM_IP_LIBRARY_PATH)/PL192/PL192-BU-01000-r0p0-00rel1/vic_pl192/verilog/rtl_source/VicRevAnd.v
+
++incdir+$(ARM_IP_LIBRARY_PATH)/PL192/PL192-BU-01000-r0p0-00rel1/vic_pl192/verilog/rtl_source/
