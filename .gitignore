@@ -4,6 +4,7 @@ software/build
 .project
 
 logical/cmsdk
+logical/mhu320*
 logical/nic400_millisoc_main
 logical/nic400_Rx_peripheral
 logical/soc400
@@ -18,3 +19,4 @@ software/src/*/*.bin
 logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical
 
 socrates/*/*/*.log
+socrates/*/*.log

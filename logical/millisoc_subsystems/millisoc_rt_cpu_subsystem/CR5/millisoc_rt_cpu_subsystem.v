@@ -84,7 +84,6 @@ module millisoc_rt_cpu_subsystem #(
     input  wire [1:0]   AWLOCKS0,
     input  wire [3:0]   AWCACHES0,
     input  wire [2:0]   AWPROTS0,
-    input  wire [3:0]   AWCSELS0,
     input  wire         AWUSERPTYS0,
     input  wire         AWVALIDS0,
     input  wire         AWVPTYS0,
@@ -112,7 +111,6 @@ module millisoc_rt_cpu_subsystem #(
     input  wire [1:0]   ARLOCKS0,
     input  wire [3:0]   ARCACHES0,
     input  wire [2:0]   ARPROTS0,
-    input  wire [3:0]   ARCSELS0,
     input  wire         ARUSERPTYS0,
     input  wire         ARVALIDS0,
     input  wire         ARVPTYS0,
@@ -305,6 +303,13 @@ module millisoc_rt_cpu_subsystem #(
     input  wire [7:0]   RAMCONTROL1
 );
 
+wire [3:0]   AWCSELS0;
+wire [3:0]   ARCSELS0;
+
+assign AWCSELS0 = (AWADDRS0[31:24]==8'h80) ? 1'b1: 1'b0;
+assign ARCSELS0 = (ARADDRS0[31:24]==8'h80) ? 1'b1: 1'b0;
+
+
 wire [63:0]  ATCDATAIN0;
 wire [13:0]  ATCPARITYIN0;
 wire         ATCERROR0;
@@ -437,7 +442,7 @@ CORTEXR5 u_cortexr5(
     // AXI-slave
     .ACLKENS0(ACLKENS0),
     .AWIDS0(AWIDS0),
-    .AWADDRS0(AWADDRS0),
+    .AWADDRS0({8'h00,AWADDRS0[23:0]}),
     .AWLENS0(AWLENS0),
     .AWSIZES0(AWSIZES0),
     .AWBURSTS0(AWBURSTS0),
@@ -465,7 +470,7 @@ CORTEXR5 u_cortexr5(
     .BREADYS0(BREADYS0),
     .BRPTYS0(BRPTYS0),
     .ARIDS0(ARIDS0),
-    .ARADDRS0(ARADDRS0),
+    .ARADDRS0({8'h00,ARADDRS0[23:0]}),
     .ARLENS0(ARLENS0),
     .ARSIZES0(ARSIZES0),
     .ARBURSTS0(ARBURSTS0),

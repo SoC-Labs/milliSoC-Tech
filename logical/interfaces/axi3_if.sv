@@ -8,7 +8,7 @@ interface axi3_if #(
     wire [3:0]              AWLEN;
     wire [2:0]              AWSIZE;
     wire [1:0]              AWBURST;
-    wire                    AWLOCK;
+    wire [1:0]              AWLOCK;
     wire [3:0]              AWCACHE;
     wire [2:0]              AWPROT;
     wire                    AWVALID;
@@ -30,7 +30,7 @@ interface axi3_if #(
     wire [3:0]              ARLEN;
     wire [2:0]              ARSIZE;
     wire [1:0]              ARBURST;
-    wire                    ARLOCK;
+    wire [1:0]              ARLOCK;
     wire [3:0]              ARCACHE;
     wire [2:0]              ARPROT;
     wire                    ARVALID;

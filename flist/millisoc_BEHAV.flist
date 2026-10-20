@@ -2,6 +2,8 @@
 
 -f $(SOCLABS_MILLISOC_TECH_DIR)/flist/millisoc_top.flist
 
+-f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/AHB_QSPI_BEHAV.flist
+
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_chip_pads/generic/millisoc_chip_phy.v
 
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/memory_integrations/generic/dtcm.v

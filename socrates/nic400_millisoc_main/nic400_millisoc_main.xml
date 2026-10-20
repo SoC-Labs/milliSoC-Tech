@@ -271,9 +271,9 @@
           <WUSEREnabled>false</WUSEREnabled>
           <BUSEREnabled>false</BUSEREnabled>
           <TrustZoneMaster>secure</TrustZoneMaster>
-          <ReadIssuing>1</ReadIssuing>
+          <ReadIssuing>6</ReadIssuing>
           <WriteIssuing>1</WriteIssuing>
-          <TotalIssuing>1</TotalIssuing>
+          <TotalIssuing>7</TotalIssuing>
           <MultiPorted>false</MultiPorted>
           <IDWidthReduction>true</IDWidthReduction>
           <MultiRegion>false</MultiRegion>
@@ -518,7 +518,7 @@
   <Architecture>
     <NICConfigFile>&lt;periph&gt;
     &lt;product_version_info major_group=&quot;bu&quot; major_revision=&quot;1&quot; major_version=&quot;00&quot; minor_code=&quot;50000&quot; minor_revision=&quot;2&quot; minor_version=&quot;0&quot; part_quality=&quot;rel&quot; product_code=&quot;nic400&quot; /&gt;
-    &lt;validator_version_info major_revision=&quot;22&quot; minor_revision=&quot;1&quot; /&gt;
+    &lt;validator_version_info major_revision=&quot;24&quot; minor_revision=&quot;4&quot; /&gt;
     &lt;global&gt;
         &lt;address0x0 def=&quot;true&quot;&gt;bottom&lt;/address0x0&gt;
         &lt;aruser_width&gt;0&lt;/aruser_width&gt;
@@ -2770,8 +2770,8 @@
         &lt;dest&gt;external&lt;/dest&gt;
         &lt;dest_port&gt;CPU_Rx_S&lt;/dest_port&gt;
         &lt;lock&gt;false&lt;/lock&gt;
-        &lt;out_reads&gt;1&lt;/out_reads&gt;
-        &lt;out_trans&gt;1&lt;/out_trans&gt;
+        &lt;out_reads&gt;6&lt;/out_reads&gt;
+        &lt;out_trans&gt;7&lt;/out_trans&gt;
         &lt;out_writes&gt;1&lt;/out_writes&gt;
         &lt;protocol&gt;axi&lt;/protocol&gt;
         &lt;ruser&gt;false&lt;/ruser&gt;
@@ -2919,8 +2919,8 @@
         &lt;dest&gt;CPU_Rx_S&lt;/dest&gt;
         &lt;dest_port&gt;CPU_Rx_S_s&lt;/dest_port&gt;
         &lt;lock def=&quot;true&quot;&gt;true&lt;/lock&gt;
-        &lt;out_reads&gt;1&lt;/out_reads&gt;
-        &lt;out_trans&gt;1&lt;/out_trans&gt;
+        &lt;out_reads&gt;6&lt;/out_reads&gt;
+        &lt;out_trans&gt;7&lt;/out_trans&gt;
         &lt;out_writes&gt;1&lt;/out_writes&gt;
         &lt;protocol&gt;axi&lt;/protocol&gt;
         &lt;src&gt;bm1&lt;/src&gt;
@@ -2941,8 +2941,8 @@
         &lt;dest&gt;ib2&lt;/dest&gt;
         &lt;dest_port&gt;ib2_s&lt;/dest_port&gt;
         &lt;lock&gt;false&lt;/lock&gt;
-        &lt;out_reads def=&quot;true&quot;&gt;7&lt;/out_reads&gt;
-        &lt;out_trans&gt;14&lt;/out_trans&gt;
+        &lt;out_reads def=&quot;true&quot;&gt;12&lt;/out_reads&gt;
+        &lt;out_trans&gt;19&lt;/out_trans&gt;
         &lt;out_writes def=&quot;true&quot;&gt;7&lt;/out_writes&gt;
         &lt;protocol&gt;axi4&lt;/protocol&gt;
         &lt;src&gt;bm0&lt;/src&gt;
@@ -2952,8 +2952,8 @@
         &lt;dest&gt;bm1&lt;/dest&gt;
         &lt;dest_port&gt;axi_s_0&lt;/dest_port&gt;
         &lt;lock def=&quot;true&quot;&gt;true&lt;/lock&gt;
-        &lt;out_reads def=&quot;true&quot;&gt;7&lt;/out_reads&gt;
-        &lt;out_trans&gt;14&lt;/out_trans&gt;
+        &lt;out_reads def=&quot;true&quot;&gt;12&lt;/out_reads&gt;
+        &lt;out_trans&gt;19&lt;/out_trans&gt;
         &lt;out_writes def=&quot;true&quot;&gt;7&lt;/out_writes&gt;
         &lt;protocol&gt;axi&lt;/protocol&gt;
         &lt;src&gt;ib2&lt;/src&gt;
@@ -2984,49 +2984,49 @@
     &lt;architecture&gt;
         &lt;link&gt;
             &lt;slave_if&gt;
-                &lt;name&gt;CPU_Rx&lt;/name&gt;
-                &lt;master_if&gt;SYS_CTRL&lt;parent&gt;apb_group0&lt;/parent&gt;
-                &lt;/master_if&gt;
-                &lt;master_if&gt;QSPI_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
-                &lt;/master_if&gt;
-                &lt;master_if&gt;DMA_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
-                &lt;/master_if&gt;
-                &lt;master_if&gt;QSPI&lt;/master_if&gt;
-                &lt;master_if&gt;RT_GIC&lt;/master_if&gt;
-                &lt;master_if&gt;ROM&lt;/master_if&gt;
-                &lt;master_if&gt;apb_group0&lt;/master_if&gt;
-            &lt;/slave_if&gt;
-        &lt;/link&gt;
-        &lt;link&gt;
-            &lt;slave_if&gt;
-                &lt;name&gt;DEBUG&lt;/name&gt;
-                &lt;master_if&gt;QSPI_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
-                &lt;/master_if&gt;
-                &lt;master_if&gt;DMA_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
-                &lt;/master_if&gt;
-                &lt;master_if&gt;CPU_S&lt;/master_if&gt;
+                &lt;name&gt;CPU_Mx&lt;/name&gt;
                 &lt;master_if&gt;QSPI&lt;/master_if&gt;
                 &lt;master_if&gt;ROM&lt;/master_if&gt;
                 &lt;master_if&gt;apb_group0&lt;/master_if&gt;
+                &lt;master_if&gt;DMA_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
+                &lt;/master_if&gt;
             &lt;/slave_if&gt;
         &lt;/link&gt;
         &lt;link&gt;
             &lt;slave_if&gt;
                 &lt;name&gt;DMA&lt;/name&gt;
-                &lt;master_if&gt;CPU_Rx_S&lt;/master_if&gt;
-                &lt;master_if&gt;CPU_S&lt;/master_if&gt;
                 &lt;master_if&gt;QSPI&lt;/master_if&gt;
                 &lt;master_if&gt;ROM&lt;/master_if&gt;
+                &lt;master_if&gt;CPU_S&lt;/master_if&gt;
+                &lt;master_if&gt;CPU_Rx_S&lt;/master_if&gt;
             &lt;/slave_if&gt;
         &lt;/link&gt;
         &lt;link&gt;
             &lt;slave_if&gt;
-                &lt;name&gt;CPU_Mx&lt;/name&gt;
-                &lt;master_if&gt;DMA_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
-                &lt;/master_if&gt;
+                &lt;name&gt;DEBUG&lt;/name&gt;
                 &lt;master_if&gt;QSPI&lt;/master_if&gt;
                 &lt;master_if&gt;ROM&lt;/master_if&gt;
+                &lt;master_if&gt;CPU_S&lt;/master_if&gt;
                 &lt;master_if&gt;apb_group0&lt;/master_if&gt;
+                &lt;master_if&gt;DMA_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
+                &lt;/master_if&gt;
+                &lt;master_if&gt;QSPI_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
+                &lt;/master_if&gt;
+            &lt;/slave_if&gt;
+        &lt;/link&gt;
+        &lt;link&gt;
+            &lt;slave_if&gt;
+                &lt;name&gt;CPU_Rx&lt;/name&gt;
+                &lt;master_if&gt;QSPI&lt;/master_if&gt;
+                &lt;master_if&gt;ROM&lt;/master_if&gt;
+                &lt;master_if&gt;RT_GIC&lt;/master_if&gt;
+                &lt;master_if&gt;apb_group0&lt;/master_if&gt;
+                &lt;master_if&gt;DMA_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
+                &lt;/master_if&gt;
+                &lt;master_if&gt;QSPI_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
+                &lt;/master_if&gt;
+                &lt;master_if&gt;SYS_CTRL&lt;parent&gt;apb_group0&lt;/parent&gt;
+                &lt;/master_if&gt;
             &lt;/slave_if&gt;
         &lt;/link&gt;
     &lt;/architecture&gt;

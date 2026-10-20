@@ -26,4 +26,4 @@ $(SOCLABS_MILLISOC_TECH_DIR)/logical/ROM/generic/ROM_wrapper.v
 
 -f $(SOCLABS_SLDMA350_TECH_DIR)/flist/dma350_axi_millisoc.flist
 
--f $(SOCLABS_AHB_QSPI_DIR)/flist/Top/ahb_QSPI_SIM.flist
+-f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/AHB_QSPI.flist
