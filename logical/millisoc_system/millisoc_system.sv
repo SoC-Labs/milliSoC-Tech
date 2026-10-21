@@ -15,8 +15,10 @@
 // Modules instantiated:
 //  millisoc_cpu_ss                 (u_millisoc_cpu_ss)
 //  millisoc_sys_ctrl               (u_millisoc_sys_ctrl)
+//  millisoc_rt_cpu_subsystem       (u_millisoc_rt_cpu_ss)
 //  ada_top_sldma350                (u_dma350)
 //  millisoc_peripheral_subsystem   (u_millisoc_peripheral_subsystem)
+//  millisoc_rt_peripheral_subsystem(u_rt_peripheral)
 //  top_ahb_qspi                    (u_ahb_qspi)
 //  ROM_wrapper                     (u_ROM_wrapper)
 //  nic400_millisoc_main            (u_nic400_millisoc_main)
@@ -115,6 +117,61 @@ axi4_if #(.DATA_W(64), .ID_W(3), .ADDR_W(32)) DEBUG_AXI();
 
 axi3_if #(.DATA_W(64), .ID_W(2), .ADDR_W(32)) CPU_Rx_S_AXI();
 axi3_if #(.DATA_W(32), .ID_W(4), .ADDR_W(32)) Rx_PERI_AXI();
+
+// - APB for MHUs
+apb4_if RT_MHU_SND();
+apb4_if RT_MHU_REC();
+apb4_if MX_MHU_SND();
+apb4_if MX_MHU_REC();
+
+reg    RT_MHU_SND_pwakeup;
+reg    RT_MHU_REC_pwakeup;
+reg    MX_MHU_SND_pwakeup;
+reg    MX_MHU_REC_pwakeup;
+
+always @(posedge FCLK or negedge nPORESET) begin
+    if(~nPORESET)
+        RT_MHU_SND_pwakeup<=1'b0;
+    else begin
+        if(!RT_MHU_SND_pwakeup && RT_MHU_SND.psel)
+            RT_MHU_SND_pwakeup<=1'b1;
+        if(RT_MHU_SND_pwakeup && RT_MHU_SND.pready && !RT_MHU_SND.psel)
+            RT_MHU_SND_pwakeup<=1'b0;
+    end
+end
+
+always @(posedge FCLK or negedge nPORESET) begin
+    if(~nPORESET)
+        RT_MHU_REC_pwakeup<=1'b0;
+    else begin
+        if(!RT_MHU_REC_pwakeup && RT_MHU_REC.psel)
+            RT_MHU_REC_pwakeup<=1'b1;
+        if(RT_MHU_REC_pwakeup && RT_MHU_REC.pready && !RT_MHU_REC.psel)
+            RT_MHU_REC_pwakeup<=1'b0;
+    end
+end
+
+always @(posedge FCLK or negedge nPORESET) begin
+    if(~nPORESET)
+        MX_MHU_SND_pwakeup<=1'b0;
+    else begin
+        if(!MX_MHU_SND_pwakeup && MX_MHU_SND.psel)
+            MX_MHU_SND_pwakeup<=1'b1;
+        if(MX_MHU_SND_pwakeup && MX_MHU_SND.pready && !MX_MHU_SND.psel)
+            MX_MHU_SND_pwakeup<=1'b0;
+    end
+end
+
+always @(posedge FCLK or negedge nPORESET) begin
+    if(~nPORESET)
+        MX_MHU_REC_pwakeup<=1'b0;
+    else begin
+        if(!MX_MHU_REC_pwakeup && MX_MHU_REC.psel)
+            MX_MHU_REC_pwakeup<=1'b1;
+        if(MX_MHU_REC_pwakeup && MX_MHU_REC.pready && !MX_MHU_REC.psel)
+            MX_MHU_REC_pwakeup<=1'b0;
+    end
+end
 
 // - Resets and clock gates for CPU
 wire        CLKEN;
@@ -253,6 +310,71 @@ millisoc_cpu_ss u_millisoc_cpu_ss (
     .BRESP(CPU_AXI.BRESP),
 
     .IRQ(CPU_IRQs)
+);
+
+mhu320ae_mx u_ipc_mx (
+    .clk(FCLK),
+    .reset_n(nSYSRESET),
+
+    .dftcgen(1'b0),
+    .dftrstdisable(1'b0),
+    .dftramhold(1'b0),
+
+    .clkqreqn(1'b1),
+    .clkqacceptn(),
+    .clkqdeny(),
+    .clkqactive(),
+
+    .pwrqreqn(1'b1),
+    .pwrqacceptn(),
+    .pwrqdeny(),
+    .pwrqactive(),
+
+    .paddr_snd(MX_MHU_SND.paddr),
+    .pprot_snd(MX_MHU_SND.pprot),
+    .pnse_snd(1'b0),
+    .psel_snd(MX_MHU_SND.psel),
+    .penable_snd(MX_MHU_SND.penable),
+    .pwrite_snd(MX_MHU_SND.pwrite),
+    .pwdata_snd(MX_MHU_SND.pwdata),
+    .pstrb_snd(MX_MHU_SND.pstrb),
+    .pready_snd(MX_MHU_SND.pready),
+    .prdata_snd(MX_MHU_SND.prdata),
+    .pslverr_snd(MX_MHU_SND.pslverr),
+    .pwakeup_snd(MX_MHU_SND_pwakeup),
+
+    .paddr_rec(MX_MHU_REC.paddr),
+    .pprot_rec(MX_MHU_REC.pprot),
+    .pnse_rec(1'b0),
+    .psel_rec(MX_MHU_REC.psel),
+    .penable_rec(MX_MHU_REC.penable),
+    .pwrite_rec(MX_MHU_REC.pwrite),
+    .pwdata_rec(MX_MHU_REC.pwdata),
+    .pstrb_rec(MX_MHU_REC.pstrb),
+    .pready_rec(MX_MHU_REC.pready),
+    .prdata_rec(MX_MHU_REC.prdata),
+    .pslverr_rec(MX_MHU_REC.pslverr),
+    .pwakeup_rec(MX_MHU_REC_pwakeup),
+
+    .mbistreq(1'b0),
+    .mbistack(),
+    .mbistaddr(),
+    .mbistarray(),
+    .mbistreaden(),
+    .mbistwriteen(),
+    .mbistindata(),
+    .mbistoutdata(),
+    .mbistcfg(),
+    .nmbistreset(1'b1),
+
+    .snd_err_int(),
+    .snd_fault_int(),
+    .pbx_int(),
+
+    .rec_fst_tfr_grp_int(),
+    .rec_err_int(),
+    .rec_fault_int(),
+    .mbx_int()
 );
 
 millisoc_sys_ctrl u_millisoc_sys_ctrl(
@@ -560,6 +682,71 @@ millisoc_rt_cpu_subsystem #(
     .RAMCONTROL0(8'd0)
 );
 
+mhu320ae_rt u_ipc_rt (
+    .clk(FCLK),
+    .reset_n(nSYSRESET),
+
+    .dftcgen(1'b0),
+    .dftrstdisable(1'b0),
+    .dftramhold(1'b0),
+
+    .clkqreqn(1'b1),
+    .clkqacceptn(),
+    .clkqdeny(),
+    .clkqactive(),
+
+    .pwrqreqn(1'b1),
+    .pwrqacceptn(),
+    .pwrqdeny(),
+    .pwrqactive(),
+
+    .paddr_snd(RT_MHU_SND.paddr),
+    .pprot_snd(RT_MHU_SND.pprot),
+    .pnse_snd(1'b0),
+    .psel_snd(RT_MHU_SND.psel),
+    .penable_snd(RT_MHU_SND.penable),
+    .pwrite_snd(RT_MHU_SND.pwrite),
+    .pwdata_snd(RT_MHU_SND.pwdata),
+    .pstrb_snd(RT_MHU_SND.pstrb),
+    .pready_snd(RT_MHU_SND.pready),
+    .prdata_snd(RT_MHU_SND.prdata),
+    .pslverr_snd(RT_MHU_SND.pslverr),
+    .pwakeup_snd(RT_MHU_SND_pwakeup),
+
+    .paddr_rec(RT_MHU_REC.paddr),
+    .pprot_rec(RT_MHU_REC.pprot),
+    .pnse_rec(1'b0),
+    .psel_rec(RT_MHU_REC.psel),
+    .penable_rec(RT_MHU_REC.penable),
+    .pwrite_rec(RT_MHU_REC.pwrite),
+    .pwdata_rec(RT_MHU_REC.pwdata),
+    .pstrb_rec(RT_MHU_REC.pstrb),
+    .pready_rec(RT_MHU_REC.pready),
+    .prdata_rec(RT_MHU_REC.prdata),
+    .pslverr_rec(RT_MHU_REC.pslverr),
+    .pwakeup_rec(RT_MHU_REC_pwakeup),
+
+    .mbistreq(1'b0),
+    .mbistack(),
+    .mbistaddr(),
+    .mbistarray(),
+    .mbistreaden(),
+    .mbistwriteen(),
+    .mbistindata(),
+    .mbistoutdata(),
+    .mbistcfg(),
+    .nmbistreset(1'b1),
+
+    .snd_err_int(),
+    .snd_fault_int(),
+    .pbx_int(),
+
+    .rec_fst_tfr_grp_int(),
+    .rec_err_int(),
+    .rec_fault_int(),
+    .mbx_int()
+);
+
 ada_top_sldma350 u_dma350 (
     .clk(ACLK),
     .resetn(ARESETn),
@@ -705,6 +892,8 @@ millisoc_peripheral_subsystem u_millisoc_peripheral_subsystem (
     .RT_CLK(),
 
     .PERIPH_AHB(PERIPH_AHB),
+    .MHU_REC(RT_MHU_REC),
+    .MHU_SND(MX_MHU_SND),
 
     .UARTRXD0(UARTRXD0),
     .UARTTXD0(UARTTXD0),
@@ -736,7 +925,11 @@ millisoc_rt_peripheral_subsystem u_rt_peripheral(
     .CLK(FCLK),
     .PORESETn(nPORESET),
     .SYSRESETn(nSYSRESET),
+
     .AXI_PERIPH(Rx_PERI_AXI),
+
+    .MHU_SND(RT_MHU_SND),
+    .MHU_REC(MX_MHU_REC),
 
     .UARTRXD0(UARTRXD0_RT),
     .UARTTXD0(UARTTXD0_RT),

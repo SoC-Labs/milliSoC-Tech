@@ -41,11 +41,11 @@
       </Parameter>
       <Parameter>
         <Name>number_of_masters</Name>
-        <Value>3</Value>
+        <Value>5</Value>
       </Parameter>
       <Parameter>
         <Name>number_of_address_regions_s0</Name>
-        <Value>3</Value>
+        <Value>5</Value>
       </Parameter>
       <Parameter>
         <Name>number_of_remap_regions_s0</Name>
@@ -101,15 +101,15 @@
       </Parameter>
       <Parameter>
         <Name>address_region_master_interface_s0_3</Name>
-        <Value>none</Value>
+        <Value>m3</Value>
       </Parameter>
       <Parameter>
         <Name>address_region_mem_lo_s0_3</Name>
-        <Value>0x00000000</Value>
+        <Value>0x40040000</Value>
       </Parameter>
       <Parameter>
         <Name>address_region_mem_hi_s0_3</Name>
-        <Value>0x00000000</Value>
+        <Value>0x4005FFFF</Value>
       </Parameter>
       <Parameter>
         <Name>address_region_remap_s0_3</Name>
@@ -117,15 +117,15 @@
       </Parameter>
       <Parameter>
         <Name>address_region_master_interface_s0_4</Name>
-        <Value>none</Value>
+        <Value>m4</Value>
       </Parameter>
       <Parameter>
         <Name>address_region_mem_lo_s0_4</Name>
-        <Value>0x00000000</Value>
+        <Value>0x40060000</Value>
       </Parameter>
       <Parameter>
         <Name>address_region_mem_hi_s0_4</Name>
-        <Value>0x00000000</Value>
+        <Value>0x4007FFFF</Value>
       </Parameter>
       <Parameter>
         <Name>address_region_remap_s0_4</Name>
@@ -12471,7 +12471,6 @@
         <PowerDomain>
           <Name>pd0</Name>
           <UID>PD-pd0</UID>
-          <Type>AlwaysOn</Type>
           <VoltageDomainRef>VD-vd0</VoltageDomainRef>
         </PowerDomain>
       </PowerDomains>
@@ -12525,6 +12524,44 @@
       <Interface>
         <Name>AHBLiteTarget_Master_m2</Name>
         <UID>IF-AHBLiteTarget_Master_m2</UID>
+        <Requester/>
+        <Protocol>
+          <ProtocolRef>AHBLiteTarget</ProtocolRef>
+          <Parameters>
+            <Parameter>
+              <Name>AddressWidth</Name>
+              <Value>32</Value>
+            </Parameter>
+            <Parameter>
+              <Name>DataWidth</Name>
+              <Value>32</Value>
+            </Parameter>
+          </Parameters>
+        </Protocol>
+        <ClockDomainRef>CD-hclk</ClockDomainRef>
+      </Interface>
+      <Interface>
+        <Name>AHBLiteTarget_Master_m3</Name>
+        <UID>IF-AHBLiteTarget_Master_m3</UID>
+        <Requester/>
+        <Protocol>
+          <ProtocolRef>AHBLiteTarget</ProtocolRef>
+          <Parameters>
+            <Parameter>
+              <Name>AddressWidth</Name>
+              <Value>32</Value>
+            </Parameter>
+            <Parameter>
+              <Name>DataWidth</Name>
+              <Value>32</Value>
+            </Parameter>
+          </Parameters>
+        </Protocol>
+        <ClockDomainRef>CD-hclk</ClockDomainRef>
+      </Interface>
+      <Interface>
+        <Name>AHBLiteTarget_Master_m4</Name>
+        <UID>IF-AHBLiteTarget_Master_m4</UID>
         <Requester/>
         <Protocol>
           <ProtocolRef>AHBLiteTarget</ProtocolRef>

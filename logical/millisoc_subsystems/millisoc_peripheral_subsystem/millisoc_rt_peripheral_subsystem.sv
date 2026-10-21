@@ -1,10 +1,13 @@
 
 module millisoc_rt_peripheral_subsystem(
-    input  wire     CLK,
-    input  wire     PORESETn,
-    input  wire     SYSRESETn,
+    input  wire         CLK,
+    input  wire         PORESETn,
+    input  wire         SYSRESETn,
 
     axi3_if.subordinate AXI_PERIPH,
+
+    apb4_if.master      MHU_SND,
+    apb4_if.master      MHU_REC,
 
     // UART0
     input  wire         UARTRXD0,
@@ -116,6 +119,8 @@ millisoc_peripheral_subsystem u_rx_periphs(
     .RT_CLK(),
 
     .PERIPH_AHB(PERIPH_AHB),
+    .MHU_REC(MHU_REC),
+    .MHU_SND(MHU_SND),
 
     .UARTRXD0(UARTRXD0),
     .UARTTXD0(UARTTXD0),
