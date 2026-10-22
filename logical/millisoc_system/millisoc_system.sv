@@ -190,17 +190,52 @@ wire        ARESETn;
 wire        WDOGRESREQ;
 
 // Interrupts
-wire [239:0]    Rx_CPU_IRQs;
+wire [63:0]     Rx_CPU_IRQs;
 wire [3:0]      SYS_DMA_DONE_IRQ;
 wire            SYS_DMA_COMB_IRQ;
 wire            IRQ_QSPI_FINISHED;
 wire [55:0]     Rx_PERI_IRQS;
+wire            Rx_IPC_SND_err;
+wire            Rx_IPC_SND_fault;
+wire            Rx_IPC_SND_pbx;
+wire            Mx_IPC_REC_fst_grp;
+wire            Mx_IPC_REC_err;
+wire            Mx_IPC_REC_fault;
+wire            Mx_IPC_REC_mbx;
 
-assign Rx_CPU_IRQs[3:0]=   SYS_DMA_DONE_IRQ[3:0];
-assign Rx_CPU_IRQs[4]=     SYS_DMA_COMB_IRQ;
-assign Rx_CPU_IRQs[5]=     IRQ_QSPI_FINISHED;
-assign Rx_CPU_IRQs[61:6]=  Rx_PERI_IRQS;
-assign Rx_CPU_IRQs[239:62]=161'd0;
+assign Rx_CPU_IRQs[1:0]=   SYS_DMA_DONE_IRQ[1:0];
+assign Rx_CPU_IRQs[2]=     IRQ_QSPI_FINISHED;
+assign Rx_CPU_IRQs[3]=     Rx_IPC_SND_err;
+assign Rx_CPU_IRQs[4]=     Rx_IPC_SND_fault;
+assign Rx_CPU_IRQs[5]=     Rx_IPC_SND_pbx;
+assign Rx_CPU_IRQs[6]=     Mx_IPC_REC_fst_grp;
+assign Rx_CPU_IRQs[7]=     Mx_IPC_REC_err;
+assign Rx_CPU_IRQs[8]=     Mx_IPC_REC_fault;
+assign Rx_CPU_IRQs[9]=     Mx_IPC_REC_mbx;
+assign Rx_CPU_IRQs[63:10]= Rx_PERI_IRQS[55:2];
+
+// M class interrupts
+wire [239:0]    Mx_CPU_IRQs;
+wire [55:0]     Mx_PERI_IRQS;
+wire            Mx_IPC_SND_err;
+wire            Mx_IPC_SND_fault;
+wire            Mx_IPC_SND_pbx;
+wire            RT_IPC_REC_fst_grp;
+wire            RT_IPC_REC_err;
+wire            RT_IPC_REC_fault;
+wire            RT_IPC_REC_mbx;
+
+assign Mx_CPU_IRQs[1:0]=    SYS_DMA_DONE_IRQ[3:2];
+assign Mx_CPU_IRQs[2]=      Mx_IPC_SND_err;
+assign Mx_CPU_IRQs[3]=      Mx_IPC_SND_fault;
+assign Mx_CPU_IRQs[4]=      Mx_IPC_SND_pbx;
+assign Mx_CPU_IRQs[5]=      RT_IPC_REC_fst_grp;
+assign Mx_CPU_IRQs[6]=      RT_IPC_REC_err;
+assign Mx_CPU_IRQs[7]=      RT_IPC_REC_fault;
+assign Mx_CPU_IRQs[8]=      RT_IPC_REC_mbx;
+assign Mx_CPU_IRQs[64:9]=   Mx_PERI_IRQS;
+
+assign Mx_CPU_IRQs[239:65] = 175'd0;
 
 // Tie offs (may be used later)
 assign PCLKEN_DMA = 1'b1;
@@ -309,7 +344,7 @@ millisoc_cpu_ss u_millisoc_cpu_ss (
     .BID(CPU_AXI.BID),
     .BRESP(CPU_AXI.BRESP),
 
-    .IRQ(CPU_IRQs)
+    .IRQ(Mx_CPU_IRQs)
 );
 
 mhu320ae_mx u_ipc_mx (
@@ -367,14 +402,14 @@ mhu320ae_mx u_ipc_mx (
     .mbistcfg(),
     .nmbistreset(1'b1),
 
-    .snd_err_int(),
-    .snd_fault_int(),
-    .pbx_int(),
+    .snd_err_int(Mx_IPC_SND_err),
+    .snd_fault_int(Mx_IPC_SND_fault),
+    .pbx_int(Mx_IPC_SND_pbx),
 
-    .rec_fst_tfr_grp_int(),
-    .rec_err_int(),
-    .rec_fault_int(),
-    .mbx_int()
+    .rec_fst_tfr_grp_int(Mx_IPC_REC_fst_grp),
+    .rec_err_int(Mx_IPC_REC_err),
+    .rec_fault_int(Mx_IPC_REC_fault),
+    .mbx_int(Mx_IPC_REC_mbx)
 );
 
 millisoc_sys_ctrl u_millisoc_sys_ctrl(
@@ -659,7 +694,7 @@ millisoc_rt_cpu_subsystem #(
 
     // VIC AHB interface
     .HSELVIC_GIC(CPU_Rx_GIC_AHB.HSEL),
-    .HADDR_GIC(CPU_Rx_GIC_AHB.HADDR[11:2]),
+    .HADDR_GIC(CPU_Rx_GIC_AHB.HADDR[12:2]),
     .HWRITE_GIC(CPU_Rx_GIC_AHB.HWRITE),
     .HREADYIN_GIC(CPU_Rx_GIC_AHB.HREADY),
     .HPROT_GIC(CPU_Rx_GIC_AHB.HPROT),
@@ -737,14 +772,14 @@ mhu320ae_rt u_ipc_rt (
     .mbistcfg(),
     .nmbistreset(1'b1),
 
-    .snd_err_int(),
-    .snd_fault_int(),
-    .pbx_int(),
+    .snd_err_int(Rx_IPC_SND_err),
+    .snd_fault_int(Rx_IPC_SND_fault),
+    .pbx_int(Rx_IPC_SND_pbx),
 
-    .rec_fst_tfr_grp_int(),
-    .rec_err_int(),
-    .rec_fault_int(),
-    .mbx_int()
+    .rec_fst_tfr_grp_int(RT_IPC_REC_fst_grp),
+    .rec_err_int(RT_IPC_REC_err),
+    .rec_fault_int(RT_IPC_REC_fault),
+    .mbx_int(RT_IPC_REC_mbx)
 );
 
 ada_top_sldma350 u_dma350 (
@@ -918,7 +953,7 @@ millisoc_peripheral_subsystem u_millisoc_peripheral_subsystem (
 
     .WDOGRESREQ(WDOGRESREQ),
 
-    .PERI_IRQS()
+    .PERI_IRQS(Mx_PERI_IRQS)
 );
 
 millisoc_rt_peripheral_subsystem u_rt_peripheral(

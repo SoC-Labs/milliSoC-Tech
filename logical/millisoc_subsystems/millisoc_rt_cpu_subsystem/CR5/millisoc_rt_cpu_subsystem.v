@@ -202,7 +202,7 @@ module millisoc_rt_cpu_subsystem #(
 
 
     output wire         nPMUIRQ0,
-    input  wire [31:0]  IRQS,
+    input  wire [63:0]  IRQS,
     //
 
     input  wire         nRESET0,
@@ -279,7 +279,7 @@ module millisoc_rt_cpu_subsystem #(
     // GIC AXI
     // AXI read address channel
     input  wire         HSELVIC_GIC,         // VIC slave select
-    input  wire  [11:2] HADDR_GIC,           // AHB address bus
+    input  wire  [12:2] HADDR_GIC,           // AHB address bus
     input  wire         HWRITE_GIC,          // AHB operation select
     input  wire         HREADYIN_GIC,        // Transfer done response on AHB from
     input  wire   [3:0] HPROT_GIC,           // AHB protection mode
@@ -849,10 +849,99 @@ u_tcm_ram_b1
     .parity_out                  (B1TCPARITYOUT0));
 
 
+wire nVIQFIQ_i;
+wire nVIQIRQ_i;
+wire [31:0] VICVECTADDR_i;
+wire VICIRQACK_i;
+
+wire        vic_hsel0;
+wire        vic_hreadyout0;
+wire [1:0]  vic_hresp0;
+wire [31:0] vic_hrdata0;
+
+wire        vic_hsel1;
+wire        vic_hreadyout1;
+wire [1:0]  vic_hresp1;
+wire [31:0] vic_hrdata1;
+
+assign vic_hsel0 = ~HADDR_GIC[12];
+assign vic_hsel1 = HADDR_GIC[12];
+
+cmsdk_ahb_slave_mux #(
+    .PORT0_ENABLE(1),
+    .PORT1_ENABLE(1),
+    .PORT2_ENABLE(0),
+    .PORT3_ENABLE(0),
+    .PORT4_ENABLE(0),
+    .PORT5_ENABLE(0),
+    .PORT6_ENABLE(0),
+    .PORT7_ENABLE(0),
+    .PORT8_ENABLE(0),
+    .PORT9_ENABLE(0)
+    ) u_vic_ahb_mux (
+    .HCLK(CLKIN),
+    .HRESETn(nRESET0),
+    .HREADY(HREADYIN_GIC),
+
+    .HSEL0(vic_hsel0),
+    .HREADYOUT0(vic_hreadyout0),
+    .HRESP0(vic_hresp0),
+    .HRDATA0(vic_hrdata0),
+
+    .HSEL1(vic_hsel1),
+    .HREADYOUT1(vic_hreadyout1),
+    .HRESP1(vic_hresp1),
+    .HRDATA1(vic_hrdata1),
+
+    .HSEL2(),
+    .HREADYOUT2(),
+    .HRESP2(),
+    .HRDATA2(),
+
+    .HSEL3(),
+    .HREADYOUT3(),
+    .HRESP3(),
+    .HRDATA3(),
+
+    .HSEL4(),
+    .HREADYOUT4(),
+    .HRESP4(),
+    .HRDATA4(),
+
+    .HSEL5(),
+    .HREADYOUT5(),
+    .HRESP5(),
+    .HRDATA5(),
+
+    .HSEL6(),
+    .HREADYOUT6(),
+    .HRESP6(),
+    .HRDATA6(),
+
+    .HSEL7(),
+    .HREADYOUT7(),
+    .HRESP7(),
+    .HRDATA7(),
+
+    .HSEL8(),
+    .HREADYOUT8(),
+    .HRESP8(),
+    .HRDATA8(),
+
+    .HSEL9(),
+    .HREADYOUT9(),
+    .HRESP9(),
+    .HRDATA9(),
+
+    .HREADYOUT(HREADYOUT_GIC),
+    .HRESP(HRESP_GIC),
+    .HRDATA(HRDATA_GIC)
+);
+
 Vic u_vic(
     .HCLK(CLKIN),
     .HRESETn(nRESET0),
-    .HSELVIC(HSELVIC_GIC),
+    .HSELVIC(vic_hsel0),
     .HADDR(HADDR_GIC),
     .HWRITE(HWRITE_GIC),
     .HREADYIN(HREADYIN_GIC),
@@ -860,11 +949,48 @@ Vic u_vic(
     .HTRANS(HTRANS_GIC),
     .HSIZE(HSIZE_GIC),
     .HWDATA(HWDATA_GIC),
-    .HREADYOUT(HREADYOUT_GIC),
-    .HRESP(HRESP_GIC),
-    .HRDATA(HRDATA_GIC),
+    .HREADYOUT(vic_hreadyout0),
+    .HRESP(vic_hresp0),
+    .HRDATA(vic_hrdata0),
 
-    .VICINTSOURCE(IRQS),
+    .VICINTSOURCE(IRQS[31:0]),
+
+    .nVICFIQIN(nVIQFIQ_i),
+    .nVICIRQIN(nVIQIRQ_i),
+    .VICVECTADDRIN(VICVECTADDR_i),
+    .VICFIQINREG(1'b0),
+    .VICIRQINREG(1'b0),
+    .VICIRQACKOUT(VICIRQACK_i),
+
+    .nVICSYNCEN(1'b1),
+    .VICIRQACK(VICIRQACK),
+
+    .nVICFIQ(nFIQ0),
+    .nVICIRQ(nIRQ0),
+    .VICVECTADDROUT(VICVECTADDROUT),
+    .VICVECTADDRV(VICVECTADDRV),
+
+    .SCANENABLE(1'b0),
+    .SCANINHCLK(1'b0),
+    .SCANOUTHCLK()
+);
+
+Vic u_vic1(
+    .HCLK(CLKIN),
+    .HRESETn(nRESET0),
+    .HSELVIC(vic_hsel1),
+    .HADDR(HADDR_GIC),
+    .HWRITE(HWRITE_GIC),
+    .HREADYIN(HREADYIN_GIC),
+    .HPROT(HPROT_GIC),
+    .HTRANS(HTRANS_GIC),
+    .HSIZE(HSIZE_GIC),
+    .HWDATA(HWDATA_GIC),
+    .HREADYOUT(vic_hreadyout1),
+    .HRESP(vic_hresp1),
+    .HRDATA(vic_hrdata1),
+
+    .VICINTSOURCE(IRQS[63:32]),
 
     .nVICFIQIN(1'b1), // No daisy Chain
     .nVICIRQIN(1'b1), // No daisy Chain
@@ -874,12 +1000,12 @@ Vic u_vic(
     .VICIRQACKOUT(),
 
     .nVICSYNCEN(1'b1),
-    .VICIRQACK(VICIRQACK),
+    .VICIRQACK(VICIRQACK_i),
 
-    .nVICFIQ(nFIQ0),
-    .nVICIRQ(nIRQ0),
-    .VICVECTADDROUT(VICVECTADDROUT),
-    .VICVECTADDRV(VICVECTADDRV),
+    .nVICFIQ(nVIQFIQ_i),
+    .nVICIRQ(nVIQIRQ_i),
+    .VICVECTADDROUT(VICVECTADDR_i),
+    .VICVECTADDRV(),
 
     .SCANENABLE(1'b0),
     .SCANINHCLK(1'b0),
