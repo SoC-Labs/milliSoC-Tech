@@ -72,6 +72,10 @@ $(SOCLABS_SOC400_DIR)/logical/cxapbic_1/verilog/cxapbic_slv_intf_1.v
 $(SOCLABS_SOC400_DIR)/logical/cxapbic_1/verilog/cxapbic_slv_mux_1.v
 $(SOCLABS_SOC400_DIR)/logical/cxapbic_1/verilog/cxapbic_1.v
 
+# -- Configurable component: ATB Funnel (3 trace sources) ----------------------
++incdir+$(SOCLABS_SOC400_DIR)/logical/cxatbfunnel_1/verilog
+-y      $(SOCLABS_SOC400_DIR)/logical/cxatbfunnel_1/verilog
+
 # -- Include directories (for the "include of local constants files) ----------
 +incdir+$(SOCLABS_SOC400_DIR)/static/cxdapswjdp/verilog
 +incdir+$(SOCLABS_SOC400_DIR)/static/cxdapapbap/verilog
@@ -80,3 +84,8 @@ $(SOCLABS_SOC400_DIR)/logical/cxapbic_1/verilog/cxapbic_1.v
 +incdir+$(SOCLABS_SOC400_DIR)/logical/cxdapbusic_1/verilog
 +incdir+$(SOCLABS_SOC400_DIR)/logical/cxdapaxiap_1/verilog
 +incdir+$(SOCLABS_SOC400_DIR)/logical/cxapbic_1/verilog
+
+# Static CoreSight TPIU used by the M85 ITM trace path.
++incdir+$(ARM_IP_LIBRARY_PATH)/SoC-400/coresight_soc/shared/logical/cxtpiu/verilog
+$(ARM_IP_LIBRARY_PATH)/SoC-400/coresight_soc/shared/logical/cxtpiu/verilog/cxtpiu.v
+-y      $(ARM_IP_LIBRARY_PATH)/SoC-400/coresight_soc/shared/logical/cxtpiu/verilog

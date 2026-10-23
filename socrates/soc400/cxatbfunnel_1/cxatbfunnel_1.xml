@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ConfiguredComponent version="r1p0">
+  <Name>cxatbfunnel_1</Name>
+  <Suffix>1</Suffix>
+  <ConfigurationGroupName>soc400</ConfigurationGroupName>
+  <ConfigurableComponentRef>
+    <Vendor>arm.com</Vendor>
+    <Library>CoreSight</Library>
+    <Name>cxatbfunnel</Name>
+    <Version>r1p1_0</Version>
+  </ConfigurableComponentRef>
+  <Specification>
+    <Parameters>
+      <Parameter>
+        <Name>ATB_DATA_WIDTH</Name>
+        <Value>32</Value>
+      </Parameter>
+      <Parameter>
+        <Name>NUM_ATB_SLAVES</Name>
+        <Value>3</Value>
+      </Parameter>
+      <Parameter>
+        <Name>PROGRAMMING_INTERFACE_PRESENT</Name>
+        <Value>YES</Value>
+      </Parameter>
+    </Parameters>
+  </Specification>
+</ConfiguredComponent>

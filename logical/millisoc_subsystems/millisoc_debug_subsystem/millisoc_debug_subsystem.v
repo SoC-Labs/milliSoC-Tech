@@ -64,6 +64,10 @@ module millisoc_debug_subsystem(
     input  wire        dapclken,        // DAP clock enable
     input  wire        dapresetn,       // DAP reset (active low)
     input  wire        poresetn,        // Power-on reset (active low)
+    input  wire        traceclkin,
+    output wire        traceclk,
+    output wire [3:0]  tracedata,
+    output wire        tracectl,
 
     // ---- SWD / JTAG pad interface -----------------------------------------
     input  wire        swclktck,        // SW/JTAG clock
@@ -128,6 +132,24 @@ module millisoc_debug_subsystem(
     output wire        m85_pready,
     output wire        m85_pslverr,
 
+    // ---- M85 ITM ATB source -----------------------------------------------
+    input  wire [6:0]  m85_trace_atid,
+    input  wire [7:0]  m85_trace_atdata,
+    input  wire        m85_trace_atvalid,
+    input  wire        m85_trace_afready,
+    output wire        m85_trace_atready,
+    output wire        m85_trace_afvalid,
+    output wire        m85_trace_syncreq,
+
+    // ---- M85 ETM ATB source -----------------------------------------------
+    input  wire [6:0]  m85_etm_atid,
+    input  wire [7:0]  m85_etm_atdata,
+    input  wire        m85_etm_atvalid,
+    input  wire        m85_etm_afready,
+    output wire        m85_etm_atready,
+    output wire        m85_etm_afvalid,
+    output wire        m85_etm_syncreq,
+
     // ---- AP2 : APB master -> Cortex-R5 external debug interface ------------
     output wire        r5_psel,
     output wire [11:2] r5_paddr,
@@ -138,6 +160,21 @@ module millisoc_debug_subsystem(
     input  wire [31:0] r5_prdata,
     input  wire        r5_pready,
     input  wire        r5_pslverr,
+    input  wire        r5_dbgack,
+    output wire        r5_edbgrq,
+
+    // ---- Cortex-R5 ETM processor interface -------------------------------
+    input  wire [13:0] r5_etm_ictl,
+    input  wire [31:1] r5_etm_ia,
+    input  wire [11:0] r5_etm_dctl,
+    input  wire [31:0] r5_etm_da,
+    input  wire [63:0] r5_etm_dd,
+    input  wire [31:0] r5_etm_cid,
+    input  wire        r5_etm_wfipending,
+    input  wire [54:0] r5_evntbus,
+    output wire        r5_etm_pwrup,
+    output wire        r5_etm_wfiready,
+    output wire [1:0]  r5_etm_extout,
 
     // ---- AP3 : AHB master -> Cortex-M85 EPPB -------------------------------
     output wire [31:0] m85_haddr,
@@ -242,6 +279,46 @@ module millisoc_debug_subsystem(
   wire        apb_pslverr0;
   wire [31:0] apb_prdata0;
   wire        apb_pdbgswen0;
+
+  //---------------------------------------------------------------------------
+  // APBIC master interfaces for the ATB funnel and R5 ETM
+  //---------------------------------------------------------------------------
+  wire [11:2] funnel_paddr;
+  wire        funnel_paddr31;
+  wire        funnel_psel;
+  wire        funnel_penable;
+  wire        funnel_pwrite;
+  wire [31:0] funnel_pwdata;
+  wire [31:0] funnel_prdata;
+  wire        funnel_pready;
+
+  wire [11:2] r5_etm_paddr;
+  wire        r5_etm_paddr31;
+  wire        r5_etm_psel;
+  wire        r5_etm_penable;
+  wire        r5_etm_pwrite;
+  wire [31:0] r5_etm_pwdata;
+  wire [31:0] r5_etm_prdata;
+  wire        r5_etm_pready;
+
+  //---------------------------------------------------------------------------
+  // ATB funnel and its three trace-source interfaces
+  //---------------------------------------------------------------------------
+  wire        funnel_atvalid;
+  wire        funnel_afready;
+  wire [6:0]  funnel_atid;
+  wire [31:0] funnel_atdata;
+  wire [1:0]  funnel_atbytes;
+  wire        funnel_atready;
+  wire        funnel_afvalid;
+
+  wire [31:0] r5_trace_atdata;
+  wire [6:0]  r5_trace_atid;
+  wire [1:0]  r5_trace_atbytes;
+  wire        r5_trace_atvalid;
+  wire        r5_trace_afready;
+  wire        r5_trace_atready;
+  wire        r5_trace_afvalid;
 
   //---------------------------------------------------------------------------
   // APBIC input mux: external AP0, NIC400 DEBUG_S, and the M85 EPPB APB port
@@ -515,11 +592,19 @@ module millisoc_debug_subsystem(
   //---------------------------------------------------------------------------
   // Instance: APB interconnect (target of AP0)
   //
-  //  The APBIC master interfaces are not used in Stage 0 - they exist so
-  //  that CoreSight peripherals can be attached to the debug APB fabric in
-  //  a later stage.  Their read data is tied to zero and they always report
-  //  ready, so that an access to an unimplemented window cannot hang the DAP.
+  //  Master interfaces route the TPIU, ATB funnel, and R5 ETM at offsets
+  //  0x1000, 0x2000, and 0x3000 respectively.
   //---------------------------------------------------------------------------
+  wire [11:2] tpiu_paddr;
+  wire        tpiu_paddr31;
+  wire        tpiu_psel;
+  wire        tpiu_penable;
+  wire        tpiu_pwrite;
+  wire [31:0] tpiu_pwdata;
+  wire [31:0] tpiu_prdata;
+  wire        tpiu_pready;
+  wire [31:0] tpiu_tracedata;
+
   cxapbic_1 u_dap_apbic (
 
       // ---- Clock and reset ----
@@ -537,27 +622,38 @@ module millisoc_debug_subsystem(
       .pslverrs0(apb_mux_pslverr),
       .paddr31s0(apb_mux_paddr[31]),
 
-      // ---- Master interface 0 : unused in Stage 0 ----
-      .paddrm0(),
-      .paddr31m0(),
-      .pselm0(),
-      .penablem0(),
-      .pwritem0(),
-      .pwdatam0(),
-      .prdatam0(32'h0000_0000),
-      .preadym0(1'b1),
+      // ---- Master interface 0 : TPIU at APBIC offset 0x1000 ----
+      .paddrm0(tpiu_paddr),
+      .paddr31m0(tpiu_paddr31),
+      .pselm0(tpiu_psel),
+      .penablem0(tpiu_penable),
+      .pwritem0(tpiu_pwrite),
+      .pwdatam0(tpiu_pwdata),
+      .prdatam0(tpiu_prdata),
+      .preadym0(tpiu_pready),
       .pslverrm0(1'b0),
 
-      // ---- Master interface 1 : unused in Stage 0 ----
-      .paddrm1(),
-      .paddr31m1(),
-      .pselm1(),
-      .penablem1(),
-      .pwritem1(),
-      .pwdatam1(),
-      .prdatam1(32'h0000_0000),
-      .preadym1(1'b1),
+      // ---- Master interface 1 : ATB funnel at APBIC offset 0x2000 ----
+      .paddrm1(funnel_paddr),
+      .paddr31m1(funnel_paddr31),
+      .pselm1(funnel_psel),
+      .penablem1(funnel_penable),
+      .pwritem1(funnel_pwrite),
+      .pwdatam1(funnel_pwdata),
+      .prdatam1(funnel_prdata),
+      .preadym1(funnel_pready),
       .pslverrm1(1'b0),
+
+      // ---- Master interface 2 : R5 ETM at APBIC offset 0x3000 ----
+      .paddrm2(r5_etm_paddr),
+      .paddr31m2(r5_etm_paddr31),
+      .pselm2(r5_etm_psel),
+      .penablem2(r5_etm_penable),
+      .pwritem2(r5_etm_pwrite),
+      .pwdatam2(r5_etm_pwdata),
+      .prdatam2(r5_etm_prdata),
+      .preadym2(r5_etm_pready),
+      .pslverrm2(1'b0),
 
       // ---- Target ID ----
       .targetid(APBIC_TARGET_ID),
@@ -567,6 +663,150 @@ module millisoc_debug_subsystem(
       //  dbgswen is wired to 1 at the APBIC top level.
       .dbgswen(1'b1)
   );
+
+  cxatbfunnel_1 u_trace_funnel (
+      .clk(dapclk),
+      .resetn(dapresetn),
+      .pclkendbg(dapclken),
+      .pseldbg(funnel_psel),
+      .penabledbg(funnel_penable),
+      .pwritedbg(funnel_pwrite),
+      .paddrdbg31(funnel_paddr31),
+      .paddrdbg(funnel_paddr),
+      .pwdatadbg(funnel_pwdata),
+
+      .atvalids0(m85_trace_atvalid),
+      .afreadys0(m85_trace_afready),
+      .atids0(m85_trace_atid),
+      .atdatas0({24'b0, m85_trace_atdata}),
+      .atbytess0(2'b00),
+      .atvalids1(m85_etm_atvalid),
+      .afreadys1(m85_etm_afready),
+      .atids1(m85_etm_atid),
+      .atdatas1({24'b0, m85_etm_atdata}),
+      .atbytess1(2'b00),
+      .atvalids2(r5_trace_atvalid),
+      .afreadys2(r5_trace_afready),
+      .atids2(r5_trace_atid),
+      .atdatas2(r5_trace_atdata),
+      .atbytess2(r5_trace_atbytes),
+
+      .atreadym(funnel_atready),
+      .afvalidm(funnel_afvalid),
+      .syncreqm(1'b0),
+      .preadydbg(funnel_pready),
+      .pslverrdbg(),
+      .prdatadbg(funnel_prdata),
+      .atvalidm(funnel_atvalid),
+      .afreadym(funnel_afready),
+      .atidm(funnel_atid),
+      .atdatam(funnel_atdata),
+      .atbytesm(funnel_atbytes),
+
+      .atreadys0(m85_trace_atready),
+      .afvalids0(m85_trace_afvalid),
+      .syncreqs0(m85_trace_syncreq),
+      .atreadys1(m85_etm_atready),
+      .afvalids1(m85_etm_afvalid),
+      .syncreqs1(m85_etm_syncreq),
+      .atreadys2(r5_trace_atready),
+      .afvalids2(r5_trace_afvalid),
+      .syncreqs2()
+  );
+
+  ETMR5 u_r5_etm (
+      .CLK(dapclk),
+      .nSYSPORESET(poresetn),
+      .PCLKDBG(dapclk),
+      .PCLKENDBG(dapclken),
+      .PRESETDBGn(dapresetn),
+      .ATCLK(dapclk),
+      .ATCLKEN(dapclken),
+      .NIDEN(1'b1),
+      .DBGEN(1'b0),
+      .ETMIA(r5_etm_ia),
+      .ETMICTL(r5_etm_ictl),
+      .ETMDA(r5_etm_da),
+      .ETMDCTL(r5_etm_dctl),
+      .ETMDD(r5_etm_dd),
+      .ETMCID(r5_etm_cid),
+      .DBGACK(r5_dbgack),
+      .ETMDBGRQ(r5_edbgrq),
+      .PENABLEDBG(r5_etm_penable),
+      .PSELDBG(r5_etm_psel),
+      .PADDRDBG(r5_etm_paddr),
+      .PADDRDBG31(r5_etm_paddr31),
+      .PWRITEDBG(r5_etm_pwrite),
+      .PWDATADBG(r5_etm_pwdata),
+      .PRDATADBG(r5_etm_prdata),
+      .PREADYDBG(r5_etm_pready),
+      .ETMWFIPENDING(r5_etm_wfipending),
+      .nETMWFIREADY(r5_etm_wfiready),
+      .ATREADY(r5_trace_atready),
+      .AFVALID(r5_trace_afvalid),
+      .TRIGGERACK(1'b0),
+      .TRIGSBYPASS(1'b0),
+      .ATDATA(r5_trace_atdata),
+      .ATVALID(r5_trace_atvalid),
+      .ATBYTES(r5_trace_atbytes),
+      .AFREADY(r5_trace_afready),
+      .TRIGGER(),
+      .ATID(r5_trace_atid),
+      .ETMEN(),
+      .ASICCTL(),
+      .CORESELECT(),
+      .FIFOPEEK(),
+      .EXTOUT(r5_etm_extout),
+      .SE(1'b0),
+      .RSTBYPASS(1'b0),
+      .MAXEXTIN(3'b000),
+      .MAXEXTOUT(2'b00),
+      .EVNTBUS(r5_evntbus),
+      .MAXCORES(3'd1),
+      .EXTIN(4'b0000)
+  );
+
+  cxtpiu cxtpiu (
+      .atclk(dapclk),
+      .pclkdbg(dapclk),
+      .traceclkin(traceclkin),
+      .atclken(dapclken),
+      .pclkendbg(dapclken),
+      .atresetn(dapresetn),
+      .presetdbgn(dapresetn),
+      .tresetn(poresetn),
+
+      .atvalids(funnel_atvalid),
+      .afreadys(funnel_afready),
+      .atbytess(funnel_atbytes),
+      .atids(funnel_atid),
+      .atdatas(funnel_atdata),
+      .atreadys(funnel_atready),
+      .afvalids(funnel_afvalid),
+
+      .pwritedbg(tpiu_pwrite),
+      .penabledbg(tpiu_penable),
+      .pseldbg(tpiu_psel),
+      .paddrdbg(tpiu_paddr),
+      .paddrdbg31(tpiu_paddr31),
+      .pwdatadbg(tpiu_pwdata),
+      .prdatadbg(tpiu_prdata),
+      .preadydbg(tpiu_pready),
+
+      .trigin(1'b0),
+      .flushin(1'b0),
+      .extctlin(8'b0),
+      .tpctl(1'b1),
+      .tpmaxdatasize(5'd3),
+      .traceclk(traceclk),
+      .tracedata(tpiu_tracedata),
+      .tracectl(tracectl),
+      .triginack(),
+      .flushinack(),
+      .extctlout()
+  );
+
+  assign tracedata = tpiu_tracedata[3:0];
 
   //---------------------------------------------------------------------------
   // Instance: AP1 - AXI4 access port -> NIC400 "DEBUG" slave port

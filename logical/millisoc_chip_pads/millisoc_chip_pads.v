@@ -22,7 +22,11 @@ module millisoc_chip_pads(
     input  wire         DAP_SWCLK,
     inout  wire         DAP_SWDIO,
     input  wire         DAP_TDI,
-    output wire         DAP_TDO
+    output wire         DAP_TDO,
+
+    output wire         TRACECLK,
+    output wire [3:0]   TRACEDATA,
+    output wire         TRACECTL
 
 );
 
@@ -112,7 +116,10 @@ millisoc_system u_millisoc_system(
     .P1_IN(p1_in),
     .P1_OUT(p1_out),
     .P1_EN(p1_en),
-    .P1_FUNC(p1_func)
+    .P1_FUNC(p1_func),
+    .TRACECLK(TRACECLK),
+    .TRACEDATA(TRACEDATA),
+    .TRACECTL(TRACECTL)
 );
 
 millisoc_chip_phy u_millisoc_chip_phy(

@@ -88,7 +88,7 @@ build_component() {
 #-----------------------------------------------------------------------------
 COMPONENTS=("$@")
 if [ ${#COMPONENTS[@]} -eq 0 ]; then
-    COMPONENTS=(cxdapbusic cxdapaxiap cxapbic)
+    COMPONENTS=(cxdapbusic cxdapaxiap cxapbic cxatbfunnel)
 fi
 
 echo "=== Building SoC-400 static RTL ==="

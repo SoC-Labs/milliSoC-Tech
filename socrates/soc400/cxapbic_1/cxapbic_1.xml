@@ -13,7 +13,7 @@
     <Parameters>
       <Parameter>
         <Name>NUM_MASTER_INTF</Name>
-        <Value>2</Value>
+        <Value>3</Value>
       </Parameter>
       <Parameter>
         <Name>NUM_SLAVE_INTF</Name>

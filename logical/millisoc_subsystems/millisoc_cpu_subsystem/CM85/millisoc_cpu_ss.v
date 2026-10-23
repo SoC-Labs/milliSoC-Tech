@@ -13,8 +13,6 @@ module millisoc_cpu_ss #(
     input wire          nDBGETMRESET, // Soft reset (for ETM only)
     input wire          CPUWAIT,      // Stall processor out of reset
     input wire          SWCLKTCK,     // SW/JTAG DP clock
-    input wire          TRACECLKIN,   // TPIU trace port clock
-    input wire          TRESETn,      // TPIU trace port reset
 
     output wire [ 1:0]  HTRANSP,
     output wire         HWRITEP,
@@ -70,6 +68,24 @@ module millisoc_cpu_ss #(
     input  wire [31:0] DBG_PRDATA,
     input  wire        DBG_PREADY,
     input  wire        DBG_PSLVERR,
+
+    // CoreSight ITM ATB source interface
+    input  wire         TRACE_ATREADY,
+    input  wire         TRACE_AFVALID,
+    input  wire         TRACE_SYNCREQ,
+    output wire [ 6:0]  TRACE_ATID,
+    output wire [ 7:0]  TRACE_ATDATA,
+    output wire         TRACE_ATVALID,
+    output wire         TRACE_AFREADY,
+
+    // CoreSight ETM ATB source interface
+    input  wire         TRACE_ETM_ATREADY,
+    input  wire         TRACE_ETM_AFVALID,
+    input  wire         TRACE_ETM_SYNCREQ,
+    output wire [ 6:0]  TRACE_ETM_ATID,
+    output wire [ 7:0]  TRACE_ETM_ATDATA,
+    output wire         TRACE_ETM_ATVALID,
+    output wire         TRACE_ETM_AFREADY,
 
     // AXI 
     input wire          ACLKEN,
@@ -168,7 +184,8 @@ assign AWID[2]=1'b0;
 assign WID[2]=1'b0;
 
 OLYMPUS #(
-    .BUSPROT(0)
+    .BUSPROT(0),
+    .ETM(1)
     ) u_cortexm85 (
     // Clock and Resets
     .CLKIN(FCLK),
@@ -369,6 +386,13 @@ OLYMPUS #(
     .CTICHIN(),
     .CTICHOUT(),
     .CTIIRQ(),
+    .ATREADYE(TRACE_ETM_ATREADY),
+    .AFVALIDE(TRACE_ETM_AFVALID),
+    .SYNCREQE(TRACE_ETM_SYNCREQ),
+    .ATIDE(TRACE_ETM_ATID),
+    .ATDATAE(TRACE_ETM_ATDATA),
+    .ATVALIDE(TRACE_ETM_ATVALID),
+    .AFREADYE(TRACE_ETM_AFREADY),
 
     .DFTRAMHOLD(1'b0),
 
@@ -384,6 +408,16 @@ OLYMPUS #(
     .TRCENA(),
 
     .DSYNC(),
+
+    .ATREADYI(TRACE_ATREADY),
+    .AFVALIDI(TRACE_AFVALID),
+    .SYNCREQI(TRACE_SYNCREQ),
+    .TPIUBAUD(1'b0),
+    .TPIUACTV(1'b1),
+    .ATIDI(TRACE_ATID),
+    .ATDATAI(TRACE_ATDATA),
+    .ATVALIDI(TRACE_ATVALID),
+    .AFREADYI(TRACE_AFREADY),
 
     .TSVALUEB(TSVALUEB),
 

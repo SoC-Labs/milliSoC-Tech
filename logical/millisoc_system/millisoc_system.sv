@@ -24,8 +24,8 @@
 //  nic400_millisoc_main            (u_nic400_millisoc_main)
 
 module millisoc_system(
-    input  wire     FCLK,
-    input  wire     nPORESET,
+    input  wire             FCLK,
+    input  wire             nPORESET,
 
     // QSPI Signals
     output wire             QSPI_SCLK,
@@ -72,7 +72,12 @@ module millisoc_system(
     input  wire [15:0]      P1_IN,
     output wire [15:0]      P1_OUT,
     output wire [15:0]      P1_EN,
-    output wire [15:0]      P1_FUNC
+    output wire [15:0]      P1_FUNC,
+
+    // M85 ITM trace output through the CoreSight TPIU
+    output wire             TRACECLK,
+    output wire [3:0]       TRACEDATA,
+    output wire             TRACECTL
 );
 
 
@@ -186,7 +191,6 @@ wire        SYSRESETREQ;
 wire        nDBGETMRESET;
 wire        CPUWAIT;
 wire        TRACECLKIN;
-wire        TRESETn;
 wire        ARESETn;
 wire        WDOGRESREQ;
 
@@ -221,6 +225,34 @@ wire [31:0] M85_DBG_PWDATA;
 wire [31:0] M85_DBG_PRDATA;
 wire        M85_DBG_PREADY;
 wire        M85_DBG_PSLVERR;
+wire [ 6:0] M85_TRACE_ATID;
+wire [ 7:0] M85_TRACE_ATDATA;
+wire        M85_TRACE_ATVALID;
+wire        M85_TRACE_AFREADY;
+wire        M85_TRACE_ATREADY;
+wire        M85_TRACE_AFVALID;
+wire        M85_TRACE_SYNCREQ;
+wire [ 6:0] M85_ETM_TRACE_ATID;
+wire [ 7:0] M85_ETM_TRACE_ATDATA;
+wire        M85_ETM_TRACE_ATVALID;
+wire        M85_ETM_TRACE_AFREADY;
+wire        M85_ETM_TRACE_ATREADY;
+wire        M85_ETM_TRACE_AFVALID;
+wire        M85_ETM_TRACE_SYNCREQ;
+
+wire        R5_DBGACK;
+wire        R5_EDBGRQ;
+wire [13:0] R5_ETM_ICTL;
+wire [31:1] R5_ETM_IA;
+wire [11:0] R5_ETM_DCTL;
+wire [31:0] R5_ETM_DA;
+wire [63:0] R5_ETM_DD;
+wire [31:0] R5_ETM_CID;
+wire        R5_ETM_WFIPENDING;
+wire [54:0] R5_EVNTBUS;
+wire        R5_ETM_PWRUP;
+wire        R5_ETM_WFIREADY;
+wire [1:0]  R5_ETM_EXTOUT;
 
 // Interrupts
 wire [63:0]     Rx_CPU_IRQs;
@@ -277,7 +309,7 @@ assign FCLKEN = 1'b1;
 assign HCLKEN = 1'b1;
 assign ETMCLKEN = 1'b1;
 assign nDBGETMRESET = nPORESET;
-assign TRESETn = nPORESET;
+assign TRACECLKIN = FCLK;
 assign CPU_ACLKEN  = 1'b1;
 assign HCLK = FCLK;
 assign PCLK = FCLK;
@@ -302,8 +334,20 @@ millisoc_cpu_ss u_millisoc_cpu_ss (
     .nDBGETMRESET(nDBGETMRESET),
     .CPUWAIT(CPUWAIT),
     .SWCLKTCK(SWCLKTCK),
-    .TRACECLKIN(TRACECLKIN),
-    .TRESETn(TRESETn),
+    .TRACE_ATREADY(M85_TRACE_ATREADY),
+    .TRACE_AFVALID(M85_TRACE_AFVALID),
+    .TRACE_SYNCREQ(M85_TRACE_SYNCREQ),
+    .TRACE_ATID(M85_TRACE_ATID),
+    .TRACE_ATDATA(M85_TRACE_ATDATA),
+    .TRACE_ATVALID(M85_TRACE_ATVALID),
+    .TRACE_AFREADY(M85_TRACE_AFREADY),
+    .TRACE_ETM_ATREADY(M85_ETM_TRACE_ATREADY),
+    .TRACE_ETM_AFVALID(M85_ETM_TRACE_AFVALID),
+    .TRACE_ETM_SYNCREQ(M85_ETM_TRACE_SYNCREQ),
+    .TRACE_ETM_ATID(M85_ETM_TRACE_ATID),
+    .TRACE_ETM_ATDATA(M85_ETM_TRACE_ATDATA),
+    .TRACE_ETM_ATVALID(M85_ETM_TRACE_ATVALID),
+    .TRACE_ETM_AFREADY(M85_ETM_TRACE_AFREADY),
 
     .HTRANSP(PERIPH_AHB.HTRANS),
     .HWRITEP(PERIPH_AHB.HWRITE),
@@ -420,6 +464,7 @@ millisoc_debug_subsystem u_millisoc_debug_subsystem (
     .dapclken(1'b1),
     .dapresetn(nPORESET),
     .poresetn(nPORESET),
+    .traceclkin(TRACECLKIN),
 
     // ---- SWD / JTAG pad interface ----
     .swclktck(SWCLKTCK),
@@ -483,6 +528,23 @@ millisoc_debug_subsystem u_millisoc_debug_subsystem (
     .m85_prdata(M85_DBG_PRDATA),
     .m85_pready(M85_DBG_PREADY),
     .m85_pslverr(M85_DBG_PSLVERR),
+    .m85_trace_atid(M85_TRACE_ATID),
+    .m85_trace_atdata(M85_TRACE_ATDATA),
+    .m85_trace_atvalid(M85_TRACE_ATVALID),
+    .m85_trace_afready(M85_TRACE_AFREADY),
+    .m85_trace_atready(M85_TRACE_ATREADY),
+    .m85_trace_afvalid(M85_TRACE_AFVALID),
+    .m85_trace_syncreq(M85_TRACE_SYNCREQ),
+    .m85_etm_atid(M85_ETM_TRACE_ATID),
+    .m85_etm_atdata(M85_ETM_TRACE_ATDATA),
+    .m85_etm_atvalid(M85_ETM_TRACE_ATVALID),
+    .m85_etm_afready(M85_ETM_TRACE_AFREADY),
+    .m85_etm_atready(M85_ETM_TRACE_ATREADY),
+    .m85_etm_afvalid(M85_ETM_TRACE_AFVALID),
+    .m85_etm_syncreq(M85_ETM_TRACE_SYNCREQ),
+    .traceclk(TRACECLK),
+    .tracedata(TRACEDATA),
+    .tracectl(TRACECTL),
 
     // ---- AP2 : APB master -> Cortex-R5 external debug interface ----
     .r5_psel(R5_DBG_PSEL),
@@ -494,6 +556,19 @@ millisoc_debug_subsystem u_millisoc_debug_subsystem (
     .r5_prdata(R5_DBG_PRDATA),
     .r5_pready(R5_DBG_PREADY),
     .r5_pslverr(R5_DBG_PSLVERR),
+    .r5_dbgack(R5_DBGACK),
+    .r5_edbgrq(R5_EDBGRQ),
+    .r5_etm_ictl(R5_ETM_ICTL),
+    .r5_etm_ia(R5_ETM_IA),
+    .r5_etm_dctl(R5_ETM_DCTL),
+    .r5_etm_da(R5_ETM_DA),
+    .r5_etm_dd(R5_ETM_DD),
+    .r5_etm_cid(R5_ETM_CID),
+    .r5_etm_wfipending(R5_ETM_WFIPENDING),
+    .r5_evntbus(R5_EVNTBUS),
+    .r5_etm_pwrup(R5_ETM_PWRUP),
+    .r5_etm_wfiready(R5_ETM_WFIREADY),
+    .r5_etm_extout(R5_ETM_EXTOUT),
 
     // ---- AP3 : AHB master -> Cortex-M85 EPPB ----
     .m85_haddr(M85_DBG_HADDR),
@@ -742,10 +817,11 @@ millisoc_rt_cpu_subsystem #(
     .DBGNOPWRDWN(),
 
     .DBGEN0(1'b0),
-    .NIDEN0(1'b0),
-    .EDBGRQ0(1'b0),
+    // Non-invasive debug is enabled to permit ETM trace; invasive debug stays off.
+    .NIDEN0(1'b1),
+    .EDBGRQ0(R5_EDBGRQ),
     .DBGTRIGGER0(),
-    .DBGACK0(),
+    .DBGACK0(R5_DBGACK),
     .COMMRX0(),
     .COMMTX0(),
     .PSELDBG0(R5_DBG_PSEL),
@@ -764,17 +840,17 @@ millisoc_rt_cpu_subsystem #(
     .DBGRSTREQ0(),
 
     // ETM
-    .ETMICTL0(),
-    .ETMIA0(),
-    .ETMDCTL0(),
-    .ETMDA0(),
-    .ETMDD0(),
-    .ETMCID0(),
-    .ETMWFIPENDING0(),
-    .EVNTBUS0(),
-    .ETMPWRUP0(1'b0),
-    .nETMWFIREADY0(1'b0),
-    .ETMEXTOUT0(2'b0),
+    .ETMICTL0(R5_ETM_ICTL),
+    .ETMIA0(R5_ETM_IA),
+    .ETMDCTL0(R5_ETM_DCTL),
+    .ETMDA0(R5_ETM_DA),
+    .ETMDD0(R5_ETM_DD),
+    .ETMCID0(R5_ETM_CID),
+    .ETMWFIPENDING0(R5_ETM_WFIPENDING),
+    .EVNTBUS0(R5_EVNTBUS),
+    .ETMPWRUP0(R5_ETM_PWRUP),
+    .nETMWFIREADY0(R5_ETM_WFIREADY),
+    .ETMEXTOUT0(R5_ETM_EXTOUT),
 
     // FPU
     .FPIXC0(),

@@ -53,7 +53,7 @@ $(CORTEX_M85_LOGICAL_DIR)/logical/shared/verilog/olympus_ecc_pkg.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_dcu/verilog/olympus_dcu_pkg.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_biu/verilog/olympus_biu_pkg.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_lsu/verilog/olympus_lsu_pkg.sv
-// $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_etm/verilog/olympus_etm_pkg.sv
+$(CORTEX_M85_ETM_LOGICAL_DIR)/logical/olympus_etm/verilog/olympus_etm_pkg.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_mau/verilog/olympus_mau_pkg.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_nvic/verilog/olympus_nvic_pkg.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_core/verilog/olympus_core_pkg.sv
@@ -87,8 +87,8 @@ $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_dcls/verilog/olympus_dcls_pkg.sv
 -y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_epu/verilog
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_pmu/verilog
 -y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_pmu/verilog
-//+incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_etm/verilog
-//-y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_etm/verilog
++incdir+$(CORTEX_M85_ETM_LOGICAL_DIR)/logical/olympus_etm/verilog
+-y      $(CORTEX_M85_ETM_LOGICAL_DIR)/logical/olympus_etm/verilog
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_icu/verilog
 -y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_icu/verilog
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_itm/verilog
@@ -212,4 +212,3 @@ $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_dcls/verilog/olympus_dcls_pkg.sv
 
 +incdir+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/millisoc_cpu_ss.v
-

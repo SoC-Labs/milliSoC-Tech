@@ -22,3 +22,10 @@ $(CORTEX_R5_LOGICAL_DIR)/logical/cortexr5/verilog/CORTEXR5.v
 +incdir+$(CORTEX_R5_LOGICAL_DIR)/logical/heron_mpu/verilog/
 +incdir+$(CORTEX_R5_LOGICAL_DIR)/logical/heron_pfu/verilog/
 +incdir+$(CORTEX_R5_LOGICAL_DIR)/logical/heron_scu/verilog/
+
+// Licensed CoreSight ETM-R5 RTL; kept in the Arm IP library, not copied here.
++incdir+$(CORTEX_R5_ETM_LOGICAL_DIR)/logical/etmr5/verilog
++incdir+$(CORTEX_R5_ETM_LOGICAL_DIR)/logical/models/cells/generic
+$(CORTEX_R5_ETM_LOGICAL_DIR)/logical/etmr5/verilog/ETMR5.v
+-y      $(CORTEX_R5_ETM_LOGICAL_DIR)/logical/etmr5/verilog
+-y      $(CORTEX_R5_ETM_LOGICAL_DIR)/logical/models/cells/generic

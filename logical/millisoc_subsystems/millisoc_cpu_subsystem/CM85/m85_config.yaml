@@ -158,7 +158,7 @@ ITM: TRUE
 # TRUE:  ETM included
 # If ETM is set to TRUE the partner must have licensed the ETM unit.
 #
-ETM: FALSE
+ETM: TRUE
 
 # Specifies whether the Internal Wake-up Interrupt Controller (IWIC) is included
 # FALSE: IWIC not included
