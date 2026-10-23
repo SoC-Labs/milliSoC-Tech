@@ -62,7 +62,15 @@ module millisoc_chip_phy(
     output wire           uart_txd0_pad_RT,
     input  wire           uart_rxd0_pad_RT,
     output wire           uart_txd1_pad_RT,
-    input  wire           uart_rxd1_pad_RT
+    input  wire           uart_rxd1_pad_RT,
+
+    // DAP-LITE to Pads
+    input  wire           dap_ntrst_pad,
+    output wire           dap_swclk_pad,
+    inout  wire           dap_swdio_pad,
+    output wire           dap_tdi_pad,
+    output wire           dap_tdo_pad,
+    output wire           dap_ntdoen_pad
 
 );
 
@@ -88,5 +96,21 @@ assign uartrxd0_RT     = uart_rxd0_pad_RT;
 
 assign uart_txd1_pad_RT = uarttxen1_RT ? uarttxd1_RT : 1'bz;
 assign uartrxd1_RT     = uart_rxd1_pad_RT;
+
+// DAP-LITE pad interface.
+//
+//  SWDIO is a bidirectional pad: it carries the SWD data in / out in SW-DP
+//  mode and the JTAG TMS signal in JTAG-DP mode.  The debug port drives the
+//  pad only while its SW data out enable is asserted, and always reads the
+//  pin value back onto the SWD data in / JTAG TMS input.
+assign ntrst            = dap_ntrst_pad;
+assign swclktck        = dap_swclk_pad;
+assign tdi              = dap_tdi_pad;
+// ntdoen is an active low output enable: the SoC-400 drives TDO while
+// ntdoen is low and releases the pad while ntdoen is high.
+assign dap_tdo_pad      = ntdoen ? 1'bz : tdo;
+assign dap_ntdoen_pad   = ntdoen;
+assign dap_swdio_pad    = swdoen ? swdo : 1'bz;
+assign swditms          = dap_swdio_pad;
 
 endmodule

@@ -44,6 +44,33 @@ module millisoc_cpu_ss #(
     input wire [31:0]   HADDRS,
     input wire [63:0]   HWDATAS,
 
+    // Debug (EPPB) AHB slave port of the Cortex-M85.
+    // This is the port by which an external debugger reaches the core
+    // debug registers (DCRSR/DCRDR etc.) and the MCU CoreSight ROM table.
+    // It is driven by the SoC-400 AHB access port in the debug subsystem.
+    output wire [31:0]  DBG_HADDR,
+    output wire [ 1:0]  DBG_HTRANS,
+    output wire         DBG_HWRITE,
+    output wire [ 2:0]  DBG_HSIZE,
+    output wire [ 6:0]  DBG_HPROT,
+    output wire [31:0]  DBG_HWDATA,
+    input  wire [31:0]  DBG_HRDATA,
+    input  wire         DBG_HREADY,
+    input  wire [ 1:0]  DBG_HRESP,
+
+    // CoreSight APB master interface from the M85 EPPB.
+    output wire        DBG_PSEL,
+    output wire        DBG_PENABLE,
+    output wire        DBG_PWRITE,
+    output wire [19:2] DBG_PADDR,
+    output wire        DBG_PADDR31,
+    output wire [ 2:0] DBG_PPROT,
+    output wire [ 3:0] DBG_PSTRB,
+    output wire [31:0] DBG_PWDATA,
+    input  wire [31:0] DBG_PRDATA,
+    input  wire        DBG_PREADY,
+    input  wire        DBG_PSLVERR,
+
     // AXI 
     input wire          ACLKEN,
     output wire         ARVALID,
@@ -362,21 +389,21 @@ OLYMPUS #(
 
     .LOCKDCAIC(1'b0),
 
-    .PREADY(),
-    .PRDATA(),
-    .PSLVERR(),
+    .PREADY(DBG_PREADY),
+    .PRDATA(DBG_PRDATA),
+    .PSLVERR(DBG_PSLVERR),
     .PREADYCHK(),
     .PRDATACHK(),
 
-    .PSEL(),
+    .PSEL(DBG_PSEL),
 
-    .PENABLE(),
-    .PWRITE(),
-    .PADDR(),
-    .PADDR31(),
-    .PPROT(),
-    .PSTRB(),
-    .PWDATA(),
+    .PENABLE(DBG_PENABLE),
+    .PWRITE(DBG_PWRITE),
+    .PADDR(DBG_PADDR),
+    .PADDR31(DBG_PADDR31),
+    .PPROT(DBG_PPROT),
+    .PSTRB(DBG_PSTRB),
+    .PWDATA(DBG_PWDATA),
     .PENABLECHK(),
     .PADDRCHK(),
     .PWDATACHK(),
@@ -547,6 +574,27 @@ OLYMPUS #(
     .HPROTCHKS(),
     .HCTRLCHK1S(),
     .HSELCHKS(),
+
+    // Debug (EPPB) AHB slave port - driven by the SoC-400 AHB access port
+    .HADDRD(DBG_HADDR),
+    .HTRANSD(DBG_HTRANS),
+    .HWRITED(DBG_HWRITE),
+    .HPROTD(DBG_HPROT),
+    .HNONSECD(1'b0),
+    .HBURSTD(2'b00),
+    .HSIZED(DBG_HSIZE),
+    .HWDATAD(DBG_HWDATA),
+    .HTRANSCHKD(),
+    .HADDRCHKD(),
+    .HWDATACHKD(),
+    .HCTRLCHK1D(),
+    .HPROTCHKD(),
+    .HREADYD(DBG_HREADY),
+    .HRDATAD(DBG_HRDATA),
+    .HRESPD(DBG_HRESP),
+    .HREADYCHKD(),
+    .HRDATACHKD(),
+    .HRESPCHKD(),
 
     .ITCMCS(ITCMCS),
     .ITCMADDR(ITCMADDR),

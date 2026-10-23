@@ -259,6 +259,17 @@
         <ClockRef>clk0</ClockRef>
       </MasterInterface>
       <MasterInterface>
+        <Name>DEBUG_S</Name>
+        <APB4MasterProtocol>
+          <AddressWidth>32</AddressWidth>
+          <DataWidth>32</DataWidth>
+          <TrustZoneMasterAPB>secure</TrustZoneMasterAPB>
+          <APBGroupRef>apb_group0</APBGroupRef>
+        </APB4MasterProtocol>
+        <GeographicDomainRef>gd0</GeographicDomainRef>
+        <ClockRef>clk0</ClockRef>
+      </MasterInterface>
+      <MasterInterface>
         <Name>CPU_Rx_S</Name>
         <AXIMasterProtocol>
           <AddressWidth>32</AddressWidth>
@@ -301,6 +312,12 @@
         <MemoryMapSource>
           <InterfaceRef>CPU_Rx</InterfaceRef>
         </MemoryMapSource>
+        <MappedBlock>
+          <InterfaceRef>DEBUG_S</InterfaceRef>
+          <Offset>3759079424</Offset>
+          <Range>16384</Range>
+          <Visibility>true</Visibility>
+        </MappedBlock>
         <MappedBlock>
           <InterfaceRef>QSPI</InterfaceRef>
           <Offset>1610612736</Offset>
@@ -403,12 +420,30 @@
           <Range>1073741824</Range>
           <Visibility>true</Visibility>
         </MappedBlock>
+        <MappedBlock>
+          <InterfaceRef>CPU_Rx_S</InterfaceRef>
+          <Offset>2147483648</Offset>
+          <Range>268435456</Range>
+          <Visibility>true</Visibility>
+        </MappedBlock>
+        <MappedBlock>
+          <InterfaceRef>SYS_CTRL</InterfaceRef>
+          <Offset>1141047296</Offset>
+          <Range>4096</Range>
+          <Visibility>true</Visibility>
+        </MappedBlock>
       </MemoryMap>
       <MemoryMap>
         <Name>mclass_map</Name>
         <MemoryMapSource>
           <InterfaceRef>CPU_Mx</InterfaceRef>
         </MemoryMapSource>
+        <MappedBlock>
+          <InterfaceRef>DEBUG_S</InterfaceRef>
+          <Offset>3759079424</Offset>
+          <Range>16384</Range>
+          <Visibility>true</Visibility>
+        </MappedBlock>
         <MappedBlock>
           <InterfaceRef>QSPI</InterfaceRef>
           <Offset>1610612736</Offset>
@@ -437,6 +472,9 @@
         <Targets>
           <Target>
             <InterfaceRef>QSPI</InterfaceRef>
+          </Target>
+          <Target>
+            <InterfaceRef>DEBUG_S</InterfaceRef>
           </Target>
           <Target>
             <InterfaceRef>DMA_CFG</InterfaceRef>
@@ -485,6 +523,12 @@
           <Target>
             <InterfaceRef>CPU_S</InterfaceRef>
           </Target>
+          <Target>
+            <InterfaceRef>CPU_Rx_S</InterfaceRef>
+          </Target>
+          <Target>
+            <InterfaceRef>SYS_CTRL</InterfaceRef>
+          </Target>
         </Targets>
       </Path>
       <Path>
@@ -492,6 +536,9 @@
           <InterfaceRef>CPU_Rx</InterfaceRef>
         </Source>
         <Targets>
+          <Target>
+            <InterfaceRef>DEBUG_S</InterfaceRef>
+          </Target>
           <Target>
             <InterfaceRef>QSPI</InterfaceRef>
           </Target>
@@ -570,6 +617,16 @@
                     &lt;present&gt;true&lt;/present&gt;
                     &lt;region&gt;0&lt;/region&gt;
                     &lt;target&gt;DMA_CFG&lt;/target&gt;
+                &lt;/remap&gt;
+            &lt;/range&gt;
+            &lt;range&gt;
+                &lt;addr_max&gt;0xE00F3FFF&lt;/addr_max&gt;
+                &lt;addr_min&gt;0xE00F0000&lt;/addr_min&gt;
+                &lt;remap&gt;
+                    &lt;bit&gt;default&lt;/bit&gt;
+                    &lt;present&gt;true&lt;/present&gt;
+                    &lt;region&gt;0&lt;/region&gt;
+                    &lt;target&gt;DEBUG_S&lt;/target&gt;
                 &lt;/remap&gt;
             &lt;/range&gt;
             &lt;range&gt;
@@ -936,6 +993,26 @@
                     &lt;target&gt;CPU_S&lt;/target&gt;
                 &lt;/remap&gt;
             &lt;/range&gt;
+            &lt;range&gt;
+                &lt;addr_max&gt;0x8FFFFFFF&lt;/addr_max&gt;
+                &lt;addr_min&gt;0x80000000&lt;/addr_min&gt;
+                &lt;remap&gt;
+                    &lt;bit&gt;default&lt;/bit&gt;
+                    &lt;present&gt;true&lt;/present&gt;
+                    &lt;region&gt;0&lt;/region&gt;
+                    &lt;target&gt;CPU_Rx_S&lt;/target&gt;
+                &lt;/remap&gt;
+            &lt;/range&gt;
+            &lt;range&gt;
+                &lt;addr_max&gt;0x44030FFF&lt;/addr_max&gt;
+                &lt;addr_min&gt;0x44030000&lt;/addr_min&gt;
+                &lt;remap&gt;
+                    &lt;bit&gt;default&lt;/bit&gt;
+                    &lt;present&gt;true&lt;/present&gt;
+                    &lt;region&gt;0&lt;/region&gt;
+                    &lt;target&gt;SYS_CTRL&lt;/target&gt;
+                &lt;/remap&gt;
+            &lt;/range&gt;
         &lt;/address_ranges&gt;
         &lt;apb_config&gt;false&lt;/apb_config&gt;
         &lt;apb_slave_no def=&quot;true&quot;&gt;2&lt;/apb_slave_no&gt;
@@ -1126,6 +1203,16 @@
                     &lt;present&gt;true&lt;/present&gt;
                     &lt;region&gt;0&lt;/region&gt;
                     &lt;target&gt;SYS_CTRL&lt;/target&gt;
+                &lt;/remap&gt;
+            &lt;/range&gt;
+            &lt;range&gt;
+                &lt;addr_max&gt;0xE00F3FFF&lt;/addr_max&gt;
+                &lt;addr_min&gt;0xE00F0000&lt;/addr_min&gt;
+                &lt;remap&gt;
+                    &lt;bit&gt;default&lt;/bit&gt;
+                    &lt;present&gt;true&lt;/present&gt;
+                    &lt;region&gt;0&lt;/region&gt;
+                    &lt;target&gt;DEBUG_S&lt;/target&gt;
                 &lt;/remap&gt;
             &lt;/range&gt;
         &lt;/address_ranges&gt;
@@ -1781,6 +1868,13 @@
             &lt;x&gt;0&lt;/x&gt;
             &lt;y&gt;0&lt;/y&gt;
         &lt;/apb_port&gt;
+        &lt;apb_port&gt;
+            &lt;clock_domain&gt;clk0&lt;/clock_domain&gt;
+            &lt;name&gt;DEBUG_S&lt;/name&gt;
+            &lt;trustzone&gt;sec&lt;/trustzone&gt;
+            &lt;x&gt;0&lt;/x&gt;
+            &lt;y&gt;0&lt;/y&gt;
+        &lt;/apb_port&gt;
         &lt;apb_slave_no&gt;60&lt;/apb_slave_no&gt;
         &lt;clock_boundary&gt;none&lt;/clock_boundary&gt;
         &lt;clock_domain_name_master_if&gt;clk0&lt;/clock_domain_name_master_if&gt;
@@ -1871,7 +1965,7 @@
         &lt;vn_external_bridge def=&quot;true&quot;&gt;none&lt;/vn_external_bridge&gt;
         &lt;x&gt;0&lt;/x&gt;
         &lt;y&gt;120&lt;/y&gt;
-        &lt;master_if_port_name&gt;DMA_CFG,QSPI_CFG,SYS_CTRL&lt;/master_if_port_name&gt;
+        &lt;master_if_port_name&gt;DMA_CFG,QSPI_CFG,SYS_CTRL,DEBUG_S&lt;/master_if_port_name&gt;
         &lt;slave_if_port_name&gt;apb_group0_s&lt;/slave_if_port_name&gt;
     &lt;/amib&gt;
     &lt;inter&gt;
@@ -2828,6 +2922,22 @@
         &lt;wuser&gt;false&lt;/wuser&gt;
     &lt;/connect&gt;
     &lt;connect&gt;
+        &lt;aruser&gt;false&lt;/aruser&gt;
+        &lt;awuser&gt;false&lt;/awuser&gt;
+        &lt;buser&gt;false&lt;/buser&gt;
+        &lt;dest&gt;external&lt;/dest&gt;
+        &lt;dest_port&gt;DEBUG_S&lt;/dest_port&gt;
+        &lt;lock&gt;false&lt;/lock&gt;
+        &lt;out_reads&gt;1&lt;/out_reads&gt;
+        &lt;out_trans&gt;1&lt;/out_trans&gt;
+        &lt;out_writes&gt;1&lt;/out_writes&gt;
+        &lt;protocol&gt;apb4&lt;/protocol&gt;
+        &lt;ruser&gt;false&lt;/ruser&gt;
+        &lt;src&gt;apb_group0&lt;/src&gt;
+        &lt;src_port&gt;DEBUG_S&lt;/src_port&gt;
+        &lt;wuser&gt;false&lt;/wuser&gt;
+    &lt;/connect&gt;
+    &lt;connect&gt;
         &lt;dest&gt;bm0&lt;/dest&gt;
         &lt;dest_port&gt;axi_s_0&lt;/dest_port&gt;
         &lt;lock&gt;false&lt;/lock&gt;
@@ -2990,6 +3100,8 @@
                 &lt;master_if&gt;apb_group0&lt;/master_if&gt;
                 &lt;master_if&gt;DMA_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
                 &lt;/master_if&gt;
+                &lt;master_if&gt;DEBUG_S&lt;parent&gt;apb_group0&lt;/parent&gt;
+                &lt;/master_if&gt;
             &lt;/slave_if&gt;
         &lt;/link&gt;
         &lt;link&gt;
@@ -3007,10 +3119,13 @@
                 &lt;master_if&gt;QSPI&lt;/master_if&gt;
                 &lt;master_if&gt;ROM&lt;/master_if&gt;
                 &lt;master_if&gt;CPU_S&lt;/master_if&gt;
+                &lt;master_if&gt;CPU_Rx_S&lt;/master_if&gt;
                 &lt;master_if&gt;apb_group0&lt;/master_if&gt;
                 &lt;master_if&gt;DMA_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
                 &lt;/master_if&gt;
                 &lt;master_if&gt;QSPI_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
+                &lt;/master_if&gt;
+                &lt;master_if&gt;SYS_CTRL&lt;parent&gt;apb_group0&lt;/parent&gt;
                 &lt;/master_if&gt;
             &lt;/slave_if&gt;
         &lt;/link&gt;
@@ -3026,6 +3141,8 @@
                 &lt;master_if&gt;QSPI_CFG&lt;parent&gt;apb_group0&lt;/parent&gt;
                 &lt;/master_if&gt;
                 &lt;master_if&gt;SYS_CTRL&lt;parent&gt;apb_group0&lt;/parent&gt;
+                &lt;/master_if&gt;
+                &lt;master_if&gt;DEBUG_S&lt;parent&gt;apb_group0&lt;/parent&gt;
                 &lt;/master_if&gt;
             &lt;/slave_if&gt;
         &lt;/link&gt;

@@ -15,7 +15,14 @@ module millisoc_chip_pads(
     output wire         UARTTXD0_RT,
     input  wire         UARTRXD0_RT,
     output wire         UARTTXD1_RT,
-    input  wire         UARTRXD1_RT
+    input  wire         UARTRXD1_RT,
+
+    // DAP-LITE (SWD / JTAG debug port)
+    input  wire         DAP_nTRST,
+    input  wire         DAP_SWCLK,
+    inout  wire         DAP_SWDIO,
+    input  wire         DAP_TDI,
+    output wire         DAP_TDO
 
 );
 
@@ -164,7 +171,14 @@ millisoc_chip_phy u_millisoc_chip_phy(
     .uart_txd0_pad_RT(UARTTXD0_RT),
     .uart_rxd0_pad_RT(UARTRXD0_RT),
     .uart_txd1_pad_RT(UARTTXD1_RT),
-    .uart_rxd1_pad_RT(UARTRXD1_RT)
+    .uart_rxd1_pad_RT(UARTRXD1_RT),
+
+    .dap_ntrst_pad(DAP_nTRST),
+    .dap_swclk_pad(DAP_SWCLK),
+    .dap_swdio_pad(DAP_SWDIO),
+    .dap_tdi_pad(DAP_TDI),
+    .dap_tdo_pad(DAP_TDO),
+    .dap_ntdoen_pad()
 
 );
 

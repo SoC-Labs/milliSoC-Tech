@@ -96,6 +96,7 @@ ahb_if #(.DATA_W(32), .ADDR_W(32)) QSPI_AHB(); // - AHB to QSPI
 apb4_if QSPI_CFG_APB(); // - APB to QSPI
 
 apb4_if SYS_CTRL_APB();
+apb4_if DEBUG_APB();
 
 // - AHB to ROM
 ahb_if #(.DATA_W(64), .ADDR_W(32)) ROM_AHB();
@@ -113,7 +114,7 @@ ahb_if #(.DATA_W(32), .ADDR_W(32)) CPU_Rx_GIC_AHB();
 wire         CPU_ACLKEN;
 axi4_if #(.DATA_W(64), .ID_W(3), .ADDR_W(32)) CPU_AXI();
 axi3_if #(.DATA_W(64), .ID_W(4), .ADDR_W(32)) CPU_Rx_AXI();
-axi4_if #(.DATA_W(64), .ID_W(3), .ADDR_W(32)) DEBUG_AXI();
+axi4_if #(.DATA_W(64), .ID_W(2), .ADDR_W(32)) DEBUG_AXI();
 
 axi3_if #(.DATA_W(64), .ID_W(2), .ADDR_W(32)) CPU_Rx_S_AXI();
 axi3_if #(.DATA_W(32), .ID_W(4), .ADDR_W(32)) Rx_PERI_AXI();
@@ -188,6 +189,38 @@ wire        TRACECLKIN;
 wire        TRESETn;
 wire        ARESETn;
 wire        WDOGRESREQ;
+
+// Debug subsystem (Arm CoreSight SoC-400)
+wire        DAP_PWUPREQ;
+wire        R5_DBG_PSEL;
+wire        R5_DBG_PENABLE;
+wire        R5_DBG_PWRITE;
+wire [11:2] R5_DBG_PADDR;
+wire        R5_DBG_PADDR31;
+wire [31:0] R5_DBG_PWDATA;
+wire [31:0] R5_DBG_PRDATA;
+wire        R5_DBG_PREADY;
+wire        R5_DBG_PSLVERR;
+wire [31:0] M85_DBG_HADDR;
+wire [ 1:0] M85_DBG_HTRANS;
+wire        M85_DBG_HWRITE;
+wire [ 2:0] M85_DBG_HSIZE;
+wire [ 6:0] M85_DBG_HPROT;
+wire [31:0] M85_DBG_HWDATA;
+wire [31:0] M85_DBG_HRDATA;
+wire        M85_DBG_HREADY;
+wire [ 1:0] M85_DBG_HRESP;
+wire        M85_DBG_PSEL;
+wire        M85_DBG_PENABLE;
+wire        M85_DBG_PWRITE;
+wire [19:2] M85_DBG_PADDR;
+wire        M85_DBG_PADDR31;
+wire [ 2:0] M85_DBG_PPROT;
+wire [ 3:0] M85_DBG_PSTRB;
+wire [31:0] M85_DBG_PWDATA;
+wire [31:0] M85_DBG_PRDATA;
+wire        M85_DBG_PREADY;
+wire        M85_DBG_PSLVERR;
 
 // Interrupts
 wire [63:0]     Rx_CPU_IRQs;
@@ -299,6 +332,28 @@ millisoc_cpu_ss u_millisoc_cpu_ss (
     .HADDRS(CPU_S_AHB.HADDR),
     .HWDATAS(CPU_S_AHB.HWDATA),
 
+    // Debug (EPPB) AHB slave port of the Cortex-M85
+    .DBG_HADDR(M85_DBG_HADDR),
+    .DBG_HTRANS(M85_DBG_HTRANS),
+    .DBG_HWRITE(M85_DBG_HWRITE),
+    .DBG_HSIZE(M85_DBG_HSIZE),
+    .DBG_HPROT(M85_DBG_HPROT),
+    .DBG_HWDATA(M85_DBG_HWDATA),
+    .DBG_HRDATA(M85_DBG_HRDATA),
+    .DBG_HREADY(M85_DBG_HREADY),
+    .DBG_HRESP(M85_DBG_HRESP),
+    .DBG_PSEL(M85_DBG_PSEL),
+    .DBG_PENABLE(M85_DBG_PENABLE),
+    .DBG_PWRITE(M85_DBG_PWRITE),
+    .DBG_PADDR(M85_DBG_PADDR),
+    .DBG_PADDR31(M85_DBG_PADDR31),
+    .DBG_PPROT(M85_DBG_PPROT),
+    .DBG_PSTRB(M85_DBG_PSTRB),
+    .DBG_PWDATA(M85_DBG_PWDATA),
+    .DBG_PRDATA(M85_DBG_PRDATA),
+    .DBG_PREADY(M85_DBG_PREADY),
+    .DBG_PSLVERR(M85_DBG_PSLVERR),
+
     .ACLKEN(CPU_ACLKEN),
     .ARVALID(CPU_AXI.ARVALID),
     .ARADDR(CPU_AXI.ARADDR),
@@ -346,6 +401,119 @@ millisoc_cpu_ss u_millisoc_cpu_ss (
 
     .IRQ(Mx_CPU_IRQs)
 );
+
+//-----------------------------------------------------------------------------
+// Debug subsystem - Arm CoreSight SoC-400
+//
+//  A single SWJ debug port at the chip boundary fans out to four access
+//  ports:
+//
+//    AP0 : APB-AP -> APB interconnect (CoreSight debug peripherals)
+//    AP1 : AXI-AP -> NIC400 "DEBUG" port (system memory and peripherals)
+//    AP2 : APB-AP -> Cortex-R5 external debug interface
+//    AP3 : AHB-AP -> Cortex-M85 EPPB (core debug registers)
+//-----------------------------------------------------------------------------
+millisoc_debug_subsystem u_millisoc_debug_subsystem (
+
+    // ---- Clock and reset ----
+    .dapclk(FCLK),
+    .dapclken(1'b1),
+    .dapresetn(nPORESET),
+    .poresetn(nPORESET),
+
+    // ---- SWD / JTAG pad interface ----
+    .swclktck(SWCLKTCK),
+    .swditms(SWDITMS),
+    .tdi(TDI),
+    .ntrst(nTRST),
+    .swdo(SWDO),
+    .swdoen(SWDOEN),
+    .tdo(TDO),
+    .ntdoen(nTDOEN),
+
+    // ---- AP1 : AXI4 master -> NIC400 DEBUG port ----
+    .dap_awaddr(DEBUG_AXI.AWADDR),
+    .dap_awlen(DEBUG_AXI.AWLEN),
+    .dap_awsize(DEBUG_AXI.AWSIZE),
+    .dap_awburst(DEBUG_AXI.AWBURST),
+    .dap_awlock(DEBUG_AXI.AWLOCK),
+    .dap_awcache(DEBUG_AXI.AWCACHE),
+    .dap_awprot(DEBUG_AXI.AWPROT),
+    .dap_awvalid(DEBUG_AXI.AWVALID),
+    .dap_awready(DEBUG_AXI.AWREADY),
+    .dap_wdata(DEBUG_AXI.WDATA),
+    .dap_wstrb(DEBUG_AXI.WSTRB),
+    .dap_wlast(DEBUG_AXI.WLAST),
+    .dap_wvalid(DEBUG_AXI.WVALID),
+    .dap_wready(DEBUG_AXI.WREADY),
+    .dap_bresp(DEBUG_AXI.BRESP),
+    .dap_bvalid(DEBUG_AXI.BVALID),
+    .dap_bready(DEBUG_AXI.BREADY),
+    .dap_araddr(DEBUG_AXI.ARADDR),
+    .dap_arlen(DEBUG_AXI.ARLEN),
+    .dap_arsize(DEBUG_AXI.ARSIZE),
+    .dap_arburst(DEBUG_AXI.ARBURST),
+    .dap_arlock(DEBUG_AXI.ARLOCK),
+    .dap_arcache(DEBUG_AXI.ARCACHE),
+    .dap_arprot(DEBUG_AXI.ARPROT),
+    .dap_arvalid(DEBUG_AXI.ARVALID),
+    .dap_arready(DEBUG_AXI.ARREADY),
+    .dap_rdata(DEBUG_AXI.RDATA),
+    .dap_rresp(DEBUG_AXI.RRESP),
+    .dap_rlast(DEBUG_AXI.RLAST),
+    .dap_rvalid(DEBUG_AXI.RVALID),
+    .dap_rready(DEBUG_AXI.RREADY),
+
+    // ---- CPU/system bus APB access to the CoreSight APBIC -----------------
+    .sys_paddr(DEBUG_APB.paddr),
+    .sys_pwdata(DEBUG_APB.pwdata),
+    .sys_psel(DEBUG_APB.psel),
+    .sys_penable(DEBUG_APB.penable),
+    .sys_pwrite(DEBUG_APB.pwrite),
+    .sys_prdata(DEBUG_APB.prdata),
+    .sys_pready(DEBUG_APB.pready),
+    .sys_pslverr(DEBUG_APB.pslverr),
+
+    // ---- M85 EPPB APB master -> CoreSight APBIC ----------------------------
+    .m85_paddr({M85_DBG_PADDR31, 11'b0, M85_DBG_PADDR, 2'b00}),
+    .m85_pwdata(M85_DBG_PWDATA),
+    .m85_psel(M85_DBG_PSEL),
+    .m85_penable(M85_DBG_PENABLE),
+    .m85_pwrite(M85_DBG_PWRITE),
+    .m85_prdata(M85_DBG_PRDATA),
+    .m85_pready(M85_DBG_PREADY),
+    .m85_pslverr(M85_DBG_PSLVERR),
+
+    // ---- AP2 : APB master -> Cortex-R5 external debug interface ----
+    .r5_psel(R5_DBG_PSEL),
+    .r5_paddr(R5_DBG_PADDR),
+    .r5_paddr31(R5_DBG_PADDR31),
+    .r5_penable(R5_DBG_PENABLE),
+    .r5_pwrite(R5_DBG_PWRITE),
+    .r5_pwdata(R5_DBG_PWDATA),
+    .r5_prdata(R5_DBG_PRDATA),
+    .r5_pready(R5_DBG_PREADY),
+    .r5_pslverr(R5_DBG_PSLVERR),
+
+    // ---- AP3 : AHB master -> Cortex-M85 EPPB ----
+    .m85_haddr(M85_DBG_HADDR),
+    .m85_htrans(M85_DBG_HTRANS),
+    .m85_hwrite(M85_DBG_HWRITE),
+    .m85_hsize(M85_DBG_HSIZE),
+    .m85_hprot(M85_DBG_HPROT),
+    .m85_hwdata(M85_DBG_HWDATA),
+    .m85_hrdata(M85_DBG_HRDATA),
+    .m85_hready(M85_DBG_HREADY),
+    .m85_hresp(M85_DBG_HRESP),
+
+    // ---- Debug power-up request ----
+    .dap_pwrupreq(DAP_PWUPREQ)
+);
+
+// The AXI access port does not generate AXI IDs, so the IDs on the NIC400
+// DEBUG port are tied off.
+assign DEBUG_AXI.AWID = 2'b00;
+assign DEBUG_AXI.ARID = 2'b00;
 
 mhu320ae_mx u_ipc_mx (
     .clk(FCLK),
@@ -564,7 +732,11 @@ millisoc_rt_cpu_subsystem #(
     .SERRCSEL0(),
 
     // Debug
-    .PCLKENDBG(1'b0),
+    // PCLKENDBG must be asserted for the external debug APB interface to
+    // accept accesses: with the enable low the R5 does not load the debug
+    // read data register and ignores debug writes.  There is no dynamic
+    // debug clock gating in this SoC, so the enable is tied high.
+    .PCLKENDBG(1'b1),
     .DBGROMADDR(20'b0),
     .DBGROMADDRV(1'b0),
     .DBGNOPWRDWN(),
@@ -576,15 +748,15 @@ millisoc_rt_cpu_subsystem #(
     .DBGACK0(),
     .COMMRX0(),
     .COMMTX0(),
-    .PSELDBG0(1'b0),
-    .PADDRDBG0(10'b0),
-    .PADDRDBG310(1'b0),
-    .PRDATADBG0(),
-    .PWDATADBG0(32'b0),
-    .PENABLEDBG0(1'b0),
-    .PREADYDBG0(),
-    .PSLVERRDBG0(),
-    .PWRITEDBG0(1'b0),
+    .PSELDBG0(R5_DBG_PSEL),
+    .PADDRDBG0(R5_DBG_PADDR),
+    .PADDRDBG310(R5_DBG_PADDR31),
+    .PRDATADBG0(R5_DBG_PRDATA),
+    .PWDATADBG0(R5_DBG_PWDATA),
+    .PENABLEDBG0(R5_DBG_PENABLE),
+    .PREADYDBG0(R5_DBG_PREADY),
+    .PSLVERRDBG0(R5_DBG_PSLVERR),
+    .PWRITEDBG0(R5_DBG_PWRITE),
     .DBGSELFADDR0(20'b0),
     .DBGSELFADDRV0(1'b0),
     .DBGRESTART0(1'b0),
@@ -1165,6 +1337,17 @@ nic400_millisoc_main u_nic400_millisoc_main (
     .PSLVERR_SYS_CTRL(SYS_CTRL_APB.pslverr),
     .PREADY_SYS_CTRL(SYS_CTRL_APB.pready),
 
+    .PADDR_DEBUG_S(DEBUG_APB.paddr),
+    .PWDATA_DEBUG_S(DEBUG_APB.pwdata),
+    .PWRITE_DEBUG_S(DEBUG_APB.pwrite),
+    .PPROT_DEBUG_S(DEBUG_APB.pprot),
+    .PSTRB_DEBUG_S(DEBUG_APB.pstrb),
+    .PENABLE_DEBUG_S(DEBUG_APB.penable),
+    .PSELx_DEBUG_S(DEBUG_APB.psel),
+    .PRDATA_DEBUG_S(DEBUG_APB.prdata),
+    .PSLVERR_DEBUG_S(DEBUG_APB.pslverr),
+    .PREADY_DEBUG_S(DEBUG_APB.pready),
+
     .AWID_CPU_Mx(CPU_AXI.AWID),
     .AWADDR_CPU_Mx(CPU_AXI.AWADDR),
     .AWLEN_CPU_Mx(CPU_AXI.AWLEN),
@@ -1238,6 +1421,7 @@ nic400_millisoc_main u_nic400_millisoc_main (
     .RVALID_CPU_Rx(CPU_Rx_AXI.RVALID),
     .RREADY_CPU_Rx(CPU_Rx_AXI.RREADY),
 
+    .AWID_DEBUG(DEBUG_AXI.AWID),
     .AWADDR_DEBUG(DEBUG_AXI.AWADDR),
     .AWLEN_DEBUG(DEBUG_AXI.AWLEN),
     .AWSIZE_DEBUG(DEBUG_AXI.AWSIZE),
@@ -1255,6 +1439,8 @@ nic400_millisoc_main u_nic400_millisoc_main (
     .BRESP_DEBUG(DEBUG_AXI.BRESP),
     .BVALID_DEBUG(DEBUG_AXI.BVALID),
     .BREADY_DEBUG(DEBUG_AXI.BREADY),
+    .BID_DEBUG(DEBUG_AXI.BID),
+    .ARID_DEBUG(DEBUG_AXI.ARID),
     .ARADDR_DEBUG(DEBUG_AXI.ARADDR),
     .ARLEN_DEBUG(DEBUG_AXI.ARLEN),
     .ARSIZE_DEBUG(DEBUG_AXI.ARSIZE),
@@ -1269,6 +1455,7 @@ nic400_millisoc_main u_nic400_millisoc_main (
     .RLAST_DEBUG(DEBUG_AXI.RLAST),
     .RVALID_DEBUG(DEBUG_AXI.RVALID),
     .RREADY_DEBUG(DEBUG_AXI.RREADY),
+    .RID_DEBUG(DEBUG_AXI.RID),
 
 
     .AWID_DMA(DMA_AXI.AWID),
@@ -1313,12 +1500,5 @@ nic400_millisoc_main u_nic400_millisoc_main (
     .clk0clken(1'b1),
     .clk0resetn(nPORESET)
 );
-
-// Temporary tie off's for DEBUG AXI and CPU_Rx AXI
-assign DEBUG_AXI.AWVALID = 1'b0;
-assign DEBUG_AXI.WREADY = 1'b0;
-assign DEBUG_AXI.BREADY = 1'b0;
-assign DEBUG_AXI.ARVALID = 1'b0;
-assign DEBUG_AXI.RREADY = 1'b0;
 
 endmodule

@@ -1,0 +1,82 @@
+#-----------------------------------------------------------------------------
+# Arm CoreSight SoC-400 debug subsystem
+#
+# The content under $SOCLABS_SOC400_DIR is produced by
+#   millisoc_tech/tools/build_soc400.sh   (make target: build_soc400)
+# which copies the static RTL out of the Arm IP delivery and renders the
+# configurable components from their IP-XACT.
+#
+# Nothing in this list is hand maintained Arm source; it is all either
+# copied verbatim or generated.  See millisoc_tech/.gitignore.
+#-----------------------------------------------------------------------------
+
+# -- Generic cells -----------------------------------------------------------
+$(SOCLABS_SOC400_DIR)/static/models/cells/generic/cx_cdc_corrupt_gry.v
+$(SOCLABS_SOC400_DIR)/static/models/cells/generic/cx_comb_mux2.v
+$(SOCLABS_SOC400_DIR)/static/models/cells/generic/cx_en_cdc_corrupt_gry.v
+$(SOCLABS_SOC400_DIR)/static/models/cells/generic/cx_en_sync.v
+$(SOCLABS_SOC400_DIR)/static/models/cells/generic/cx_en_sync_high.v
+$(SOCLABS_SOC400_DIR)/static/models/cells/generic/cx_sync.v
+$(SOCLABS_SOC400_DIR)/static/models/cells/generic/cxdapswjdp_clk_inverter.v
+$(SOCLABS_SOC400_DIR)/static/models/cells/generic/cxdapswjdp_dp_sync.v
+
+# -- Static component: SWJ-DP (SW-DP / JTAG-DP) ------------------------------
+$(SOCLABS_SOC400_DIR)/static/cxdapswjdp/verilog/cxdapswjdp_dp_apb_constants.v
+$(SOCLABS_SOC400_DIR)/static/cxdapswjdp/verilog/cxdapswjdp_jtag_dp_constants.v
+$(SOCLABS_SOC400_DIR)/static/cxdapswjdp/verilog/cxdapswjdp_sw_dp_constants.v
+$(SOCLABS_SOC400_DIR)/static/cxdapswjdp/verilog/cxdapswjdp_swj_dp_constants.v
+$(SOCLABS_SOC400_DIR)/static/cxdapswjdp/verilog/cxdapswjdp_dp_apb_sync.v
+$(SOCLABS_SOC400_DIR)/static/cxdapswjdp/verilog/cxdapswjdp_dp_i_mux.v
+$(SOCLABS_SOC400_DIR)/static/cxdapswjdp/verilog/cxdapswjdp_dp_or.v
+$(SOCLABS_SOC400_DIR)/static/cxdapswjdp/verilog/cxdapswjdp_jtag_dp_protocol.v
+$(SOCLABS_SOC400_DIR)/static/cxdapswjdp/verilog/cxdapswjdp_sw_dp_apb_if.v
+$(SOCLABS_SOC400_DIR)/static/cxdapswjdp/verilog/cxdapswjdp_sw_dp_protocol.v
+$(SOCLABS_SOC400_DIR)/static/cxdapswjdp/verilog/cxdapswjdp_sw_dp_sync.v
+$(SOCLABS_SOC400_DIR)/static/cxdapswjdp/verilog/cxdapswjdp_swclktck.v
+$(SOCLABS_SOC400_DIR)/static/cxdapswjdp/verilog/cxdapswjdp_swj_watcher.v
+$(SOCLABS_SOC400_DIR)/static/cxdapswjdp/verilog/cxdapswjdp_dapclk.v
+$(SOCLABS_SOC400_DIR)/static/cxdapswjdp/verilog/cxdapswjdp.v
+
+# -- Static component: APB Access Port ---------------------------------------
+$(SOCLABS_SOC400_DIR)/static/cxdapapbap/verilog/cxdapapbap_constants.v
+$(SOCLABS_SOC400_DIR)/static/cxdapapbap/verilog/cxdapapbap_apb_if.v
+$(SOCLABS_SOC400_DIR)/static/cxdapapbap/verilog/cxdapapbap_dap_if.v
+$(SOCLABS_SOC400_DIR)/static/cxdapapbap/verilog/cxdapapbap.v
+
+# -- Static component: AHB Access Port ---------------------------------------
+$(SOCLABS_SOC400_DIR)/static/cxdapahbap/verilog/cxdapahbap_constants.v
+$(SOCLABS_SOC400_DIR)/static/cxdapahbap/verilog/cxdapahbap_dap_sync.v
+$(SOCLABS_SOC400_DIR)/static/cxdapahbap/verilog/cxdapahbap_mst.v
+$(SOCLABS_SOC400_DIR)/static/cxdapahbap/verilog/cxdapahbap_slv.v
+$(SOCLABS_SOC400_DIR)/static/cxdapahbap/verilog/cxdapahbap_ahb_sync.v
+$(SOCLABS_SOC400_DIR)/static/cxdapahbap/verilog/cxdapahbap.v
+
+# -- Configurable component: DAPBUS interconnect (4 masters) ----------------
+$(SOCLABS_SOC400_DIR)/logical/cxdapbusic_1/verilog/cxdapbusic_1.v
+$(SOCLABS_SOC400_DIR)/logical/cxdapbusic_1/verilog/cxdapbusic_decoder_1.v
+$(SOCLABS_SOC400_DIR)/logical/cxdapbusic_1/verilog/cxdapbusic_mux_1.v
+
+# -- Configurable component: AXI Access Port ---------------------------------
+$(SOCLABS_SOC400_DIR)/logical/cxdapaxiap_1/verilog/cxdapaxiap_constants.v
+$(SOCLABS_SOC400_DIR)/logical/cxdapaxiap_1/verilog/cxdapaxiapdapslvif_1.v
+$(SOCLABS_SOC400_DIR)/logical/cxdapaxiap_1/verilog/cxdapaxiapfsm_1.v
+$(SOCLABS_SOC400_DIR)/logical/cxdapaxiap_1/verilog/cxdapaxiapmstif_1.v
+$(SOCLABS_SOC400_DIR)/logical/cxdapaxiap_1/verilog/cxdapaxiapregblk_1.v
+$(SOCLABS_SOC400_DIR)/logical/cxdapaxiap_1/verilog/cxdapaxiap_1.v
+
+# -- Configurable component: APB Interconnect (APBIC) -------------------------
+$(SOCLABS_SOC400_DIR)/logical/cxapbic_1/verilog/cxapbic_constants_1.v
+$(SOCLABS_SOC400_DIR)/logical/cxapbic_1/verilog/cxapbic_resp_mux_1.v
+$(SOCLABS_SOC400_DIR)/logical/cxapbic_1/verilog/cxapbic_rom_table_1.v
+$(SOCLABS_SOC400_DIR)/logical/cxapbic_1/verilog/cxapbic_slv_intf_1.v
+$(SOCLABS_SOC400_DIR)/logical/cxapbic_1/verilog/cxapbic_slv_mux_1.v
+$(SOCLABS_SOC400_DIR)/logical/cxapbic_1/verilog/cxapbic_1.v
+
+# -- Include directories (for the "include of local constants files) ----------
++incdir+$(SOCLABS_SOC400_DIR)/static/cxdapswjdp/verilog
++incdir+$(SOCLABS_SOC400_DIR)/static/cxdapapbap/verilog
++incdir+$(SOCLABS_SOC400_DIR)/static/cxdapahbap/verilog
++incdir+$(SOCLABS_SOC400_DIR)/static/models/cells/generic
++incdir+$(SOCLABS_SOC400_DIR)/logical/cxdapbusic_1/verilog
++incdir+$(SOCLABS_SOC400_DIR)/logical/cxdapaxiap_1/verilog
++incdir+$(SOCLABS_SOC400_DIR)/logical/cxapbic_1/verilog
