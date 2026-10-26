@@ -4,10 +4,12 @@ software/build
 .project
 
 logical/cmsdk
+logical/ethos_u85
 logical/mhu320*
 logical/nic400_millisoc_main
 logical/nic400_Rx_peripheral
 logical/soc400
+logical/sie300
 logical/shared
 
 software/src/*/*.hex

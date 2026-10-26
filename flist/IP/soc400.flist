@@ -74,7 +74,10 @@ $(SOCLABS_SOC400_DIR)/logical/cxapbic_1/verilog/cxapbic_1.v
 
 # -- Configurable component: ATB Funnel (3 trace sources) ----------------------
 +incdir+$(SOCLABS_SOC400_DIR)/logical/cxatbfunnel_1/verilog
--y      $(SOCLABS_SOC400_DIR)/logical/cxatbfunnel_1/verilog
+$(SOCLABS_SOC400_DIR)/logical/cxatbfunnel_1/verilog/cxatbfunnel_1.v
+$(SOCLABS_SOC400_DIR)/logical/cxatbfunnel_1/verilog/cxatbfunnel_apb_if_1.v
+$(SOCLABS_SOC400_DIR)/logical/cxatbfunnel_1/verilog/cxatbfunnel_arbiter_1.v
+$(SOCLABS_SOC400_DIR)/logical/cxatbfunnel_1/verilog/cxatbfunnel_reg_blk_1.v
 
 # -- Include directories (for the "include of local constants files) ----------
 +incdir+$(SOCLABS_SOC400_DIR)/static/cxdapswjdp/verilog
@@ -88,4 +91,19 @@ $(SOCLABS_SOC400_DIR)/logical/cxapbic_1/verilog/cxapbic_1.v
 # Static CoreSight TPIU used by the M85 ITM trace path.
 +incdir+$(ARM_IP_LIBRARY_PATH)/SoC-400/coresight_soc/shared/logical/cxtpiu/verilog
 $(ARM_IP_LIBRARY_PATH)/SoC-400/coresight_soc/shared/logical/cxtpiu/verilog/cxtpiu.v
--y      $(ARM_IP_LIBRARY_PATH)/SoC-400/coresight_soc/shared/logical/cxtpiu/verilog
+$(ARM_IP_LIBRARY_PATH)/SoC-400/coresight_soc/shared/logical/cxtpiu/verilog/cxtpiu_apb_if.v
+$(ARM_IP_LIBRARY_PATH)/SoC-400/coresight_soc/shared/logical/cxtpiu/verilog/cxtpiu_apb_sync.v
+$(ARM_IP_LIBRARY_PATH)/SoC-400/coresight_soc/shared/logical/cxtpiu/verilog/cxtpiu_atb_fifo.v
+$(ARM_IP_LIBRARY_PATH)/SoC-400/coresight_soc/shared/logical/cxtpiu/verilog/cxtpiu_atb_sync.v
+$(ARM_IP_LIBRARY_PATH)/SoC-400/coresight_soc/shared/logical/cxtpiu/verilog/cxtpiu_constants.v
+$(ARM_IP_LIBRARY_PATH)/SoC-400/coresight_soc/shared/logical/cxtpiu/verilog/cxtpiu_formatter.v
+$(ARM_IP_LIBRARY_PATH)/SoC-400/coresight_soc/shared/logical/cxtpiu/verilog/cxtpiu_ft_ctl.v
+$(ARM_IP_LIBRARY_PATH)/SoC-400/coresight_soc/shared/logical/cxtpiu/verilog/cxtpiu_reg_a.v
+$(ARM_IP_LIBRARY_PATH)/SoC-400/coresight_soc/shared/logical/cxtpiu/verilog/cxtpiu_reg_p.v
+$(ARM_IP_LIBRARY_PATH)/SoC-400/coresight_soc/shared/logical/cxtpiu/verilog/cxtpiu_reg_t.v
+$(ARM_IP_LIBRARY_PATH)/SoC-400/coresight_soc/shared/logical/cxtpiu/verilog/cxtpiu_trace_bridge.v
+$(ARM_IP_LIBRARY_PATH)/SoC-400/coresight_soc/shared/logical/cxtpiu/verilog/cxtpiu_trace_clk.v
+$(ARM_IP_LIBRARY_PATH)/SoC-400/coresight_soc/shared/logical/cxtpiu/verilog/cxtpiu_trace_fifo.v
+$(ARM_IP_LIBRARY_PATH)/SoC-400/coresight_soc/shared/logical/cxtpiu/verilog/cxtpiu_trace_out.v
+$(ARM_IP_LIBRARY_PATH)/SoC-400/coresight_soc/shared/logical/cxtpiu/verilog/cxtpiu_trace_pattern.v
+$(ARM_IP_LIBRARY_PATH)/SoC-400/coresight_soc/shared/logical/cxtpiu/verilog/cxtpiu_trace_sync.v

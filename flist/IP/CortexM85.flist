@@ -64,93 +64,501 @@ $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_stb/verilog/olympus_stb_pkg.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_ewic/verilog/olympus_ewic_pkg.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_sbist/verilog/olympus_sbist_pkg.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_dcls/verilog/olympus_dcls_pkg.sv
+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_piu/verilog/olympus_piu_pkg.sv
 
 // ============= Include file search path =============
 // Blocks directories
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_biu/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_biu/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_biu/verilog/olympus_biu_axi_interface_chk.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_biu/verilog/olympus_biu_axi_interface.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_biu/verilog/olympus_biu_hazarding.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_biu/verilog/olympus_biu_linefill_buffer_ev_fsm.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_biu/verilog/olympus_biu_linefill_buffer.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_biu/verilog/olympus_biu_linefill.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_biu/verilog/olympus_biu_prefetch_buffer.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_biu/verilog/olympus_biu_prefetch_fsm.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_biu/verilog/olympus_biu_prefetch.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_biu/verilog/olympus_biu_read_arbiter.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_biu/verilog/olympus_biu_read_buffer.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_biu/verilog/olympus_biu_waddr_buf.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_biu/verilog/olympus_biu_write_arbiter.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_biu/verilog/olympus_biu.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_bpu/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_bpu/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_bpu/verilog/olympus_bpu.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_core/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_core/verilog
+// /research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_core_instrid.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_core_ppb.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_core.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_agu.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_alu_au.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_alu_clz.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_alu_extract.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_alu_gen_sat.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_alu_lu.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_alu_maskgen.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_alu_masksel.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_alu_rbit.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_alu_sat_dbl.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_alu_shift.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_alu_simd_sat.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_alu.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_btq.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_byp_cntl_srcc.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_byp_cntl.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_byp_mux_iss.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_byp_mux.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_byp_noepu_mux_ex2.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_byp_rec_ex1.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_byp_rec_srcc_ex2.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_byp_rec.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_ctrl_reg.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_ctrl.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_data_pipe.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_dec_cde_checker.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_div.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_ex1_shift.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_exception.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_fdq.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_front_end.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_full_alu.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_hazard.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_instr_reg.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_iq_entry.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_iq.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_iss_decode.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_issdec_t16.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_issdec_t32.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_it_shadow.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_it.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_lsu_intf.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_mac.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_mc.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_mveshift.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_norm_alu.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_pac.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_predec_t16.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_predec_t32.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_predecode_fusion.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_predecode.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_reg_ctl_entry.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_rf.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_simple_ilock_iss.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_sleep.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_src_dst_byp_cntl_no_super.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu_src_dst_byp_cntl_vec.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_dpu.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_ifu_btac.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_ifu_fifo.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_ifu_ubpd.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_ifu_ucrs.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_core/verilog/olympus_ifu.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_cpc/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_cpc/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_cpc/verilog/olympus_cpc.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_dcu/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_dcu/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dcu/verilog/olympus_dcu_cachearb.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dcu/verilog/olympus_dcu_ecc_maint.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dcu/verilog/olympus_dcu_prioritize_dme.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dcu/verilog/olympus_dcu_utag_way.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dcu/verilog/olympus_dcu_utag.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dcu/verilog/olympus_dcu.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_dpc/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_dpc/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dpc/verilog/olympus_dpc.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_dbg/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_dbg/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dbg/verilog/olympus_dbg_chk.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dbg/verilog/olympus_dbg.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_dwt/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_dwt/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dwt/verilog/olympus_dwt_comp_data.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dwt/verilog/olympus_dwt_comp.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dwt/verilog/olympus_dwt_data_trace_fifo.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dwt/verilog/olympus_dwt_data_trace_str_fifo.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dwt/verilog/olympus_dwt_dv_shifter.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dwt/verilog/olympus_dwt_if.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dwt/verilog/olympus_dwt_ord_fifo_dest.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dwt/verilog/olympus_dwt_ord_fifo_pack.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dwt/verilog/olympus_dwt_ord_fifo.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dwt/verilog/olympus_dwt_packet_arb.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dwt/verilog/olympus_dwt_packet_buffer_str.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dwt/verilog/olympus_dwt_packet_buffer.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dwt/verilog/olympus_dwt_packet_gen.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dwt/verilog/olympus_dwt.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dwt/verilog/olympus_trc_if_compact.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dwt/verilog/olympus_trc_if.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_epu/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_epu/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_agu_bypass.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_cde_checker.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_cde_wrapper.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_ctl.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_ctz_32.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_decode.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_dp_fpadd_wrapper.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_dp_fpadd.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_dp_round.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_erf_fwd.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_erf.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_ex3_fwd_mux.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_ex4_fwd_mux.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_ex5_fwd_mux.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fadd_explim32.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fadd_explim64.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fadd_first1_mask16.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fadd_first1_mask32.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fadd_first1_smask16.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fadd_first1_smask32.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fadd_lza32em.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fadd_lza64em.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fadd16.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fadd32.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fclz16.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fclz32.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fclz64.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fmul_b4enc.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fmul_b4mux.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fmul32_array_booth4.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fp_clz_16.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fp_clz_32.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fp_clz_64_simd.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fp_clz_64.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fp_cmp.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fp_cmpflag_sl.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fp_cvt_div.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fp_denorm.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fp_div_quot_sel.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fp_div.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fp_mul_carry_mask.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fp_neg_abs_vsel.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fp_norm.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fp_round.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fp_unpack_fp16.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fp_unpack_fp32.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fp_unpack_fp64.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fp_unpack_op64.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_fpminmaxav.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_gen_rounding.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpa_2fadd32_top.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpa_abs.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpa_add.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpa_arith.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpa_bitwise.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpa_clz.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpa_dup.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpa_fp_rot.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpa_halve.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpa_min_max_abs.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpa_min_max_acr_sep.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpa_min_max_acr.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpa_min_max_comp_b.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpa_min_max_comp.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpa_min_max_comp16.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpa_min.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpa_op_mux.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpa_pipe.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpa_polymul.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpa_sat.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpa_shifter_combine.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpa_shifter_permute.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpa_shifter_rot_8x3.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpa_shifter.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpa_vabav_acr.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpb_2fmul32_top.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpb_bitwise.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpb_fmul32.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpb_imac_array.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpb_imac_cpa.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpb_imac_header.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpb_imac_opc_fmt.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpb_imac_ppaccu_6to2.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpb_imac_ppred_4to2.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpb_imac_ppred_7to2_63_24.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpb_imac_ppred_13to2.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpb_imac_res_mux.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpb_imac_rshift2.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpb_imac.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpb_pipe.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpc_cmp.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpc_cmpflag_sl.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpc_pipe.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpc_unpack_fp16.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpc_unpack_fp32.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpc_unpack_fp64.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_grpc_unpack_op64.sv
+// /research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_instrid.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_ls_pipe.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_mov.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_recirc_fwd.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_stall.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_sysregs.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu_uop.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_epu/verilog/olympus_epu.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_pmu/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_pmu/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_pmu/verilog/olympus_pmu.sv
+
 +incdir+$(CORTEX_M85_ETM_LOGICAL_DIR)/logical/olympus_etm/verilog
--y      $(CORTEX_M85_ETM_LOGICAL_DIR)/logical/olympus_etm/verilog
+/research/AAA/ip_library/ETM-M85/TM982-BU-50000-r1p1-00rel0/olympus/logical/olympus_etm/verilog/olympus_etm_apb.sv
+/research/AAA/ip_library/ETM-M85/TM982-BU-50000-r1p1-00rel0/olympus/logical/olympus_etm/verilog/olympus_etm_cgate.sv
+/research/AAA/ip_library/ETM-M85/TM982-BU-50000-r1p1-00rel0/olympus/logical/olympus_etm/verilog/olympus_etm_cgctl.sv
+/research/AAA/ip_library/ETM-M85/TM982-BU-50000-r1p1-00rel0/olympus/logical/olympus_etm/verilog/olympus_etm_ctl.sv
+/research/AAA/ip_library/ETM-M85/TM982-BU-50000-r1p1-00rel0/olympus/logical/olympus_etm/verilog/olympus_etm_event_selector.sv
+/research/AAA/ip_library/ETM-M85/TM982-BU-50000-r1p1-00rel0/olympus/logical/olympus_etm/verilog/olympus_etm_fifo_dest_16.sv
+/research/AAA/ip_library/ETM-M85/TM982-BU-50000-r1p1-00rel0/olympus/logical/olympus_etm/verilog/olympus_etm_fifo_pack_16x8.sv
+/research/AAA/ip_library/ETM-M85/TM982-BU-50000-r1p1-00rel0/olympus/logical/olympus_etm/verilog/olympus_etm_i_addr.sv
+/research/AAA/ip_library/ETM-M85/TM982-BU-50000-r1p1-00rel0/olympus/logical/olympus_etm/verilog/olympus_etm_i_atom.sv
+/research/AAA/ip_library/ETM-M85/TM982-BU-50000-r1p1-00rel0/olympus/logical/olympus_etm/verilog/olympus_etm_i_cond.sv
+/research/AAA/ip_library/ETM-M85/TM982-BU-50000-r1p1-00rel0/olympus/logical/olympus_etm/verilog/olympus_etm_i_ctrl.sv
+/research/AAA/ip_library/ETM-M85/TM982-BU-50000-r1p1-00rel0/olympus/logical/olympus_etm/verilog/olympus_etm_i_fifo.sv
+/research/AAA/ip_library/ETM-M85/TM982-BU-50000-r1p1-00rel0/olympus/logical/olympus_etm/verilog/olympus_etm_i_misc.sv
+/research/AAA/ip_library/ETM-M85/TM982-BU-50000-r1p1-00rel0/olympus/logical/olympus_etm/verilog/olympus_etm_i_pipe.sv
+/research/AAA/ip_library/ETM-M85/TM982-BU-50000-r1p1-00rel0/olympus/logical/olympus_etm/verilog/olympus_etm_r_complete.sv
+/research/AAA/ip_library/ETM-M85/TM982-BU-50000-r1p1-00rel0/olympus/logical/olympus_etm/verilog/olympus_etm_r_counter.sv
+/research/AAA/ip_library/ETM-M85/TM982-BU-50000-r1p1-00rel0/olympus/logical/olympus_etm/verilog/olympus_etm_r_event.sv
+/research/AAA/ip_library/ETM-M85/TM982-BU-50000-r1p1-00rel0/olympus/logical/olympus_etm/verilog/olympus_etm_r_sshot_rs.sv
+/research/AAA/ip_library/ETM-M85/TM982-BU-50000-r1p1-00rel0/olympus/logical/olympus_etm/verilog/olympus_etm_res_sel.sv
+/research/AAA/ip_library/ETM-M85/TM982-BU-50000-r1p1-00rel0/olympus/logical/olympus_etm/verilog/olympus_etm_resources.sv
+/research/AAA/ip_library/ETM-M85/TM982-BU-50000-r1p1-00rel0/olympus/logical/olympus_etm/verilog/olympus_etm.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_icu/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_icu/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_icu/verilog/olympus_icu_ecc_check.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_icu/verilog/olympus_icu_ippb.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_icu/verilog/olympus_icu_prioritize_dme.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_icu/verilog/olympus_icu.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_itm/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_itm/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_itm/verilog/olympus_itm_arb.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_itm/verilog/olympus_itm_defs.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_itm/verilog/olympus_itm_emit.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_itm/verilog/olympus_itm_fifo_byte.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_itm/verilog/olympus_itm_fifo.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_itm/verilog/olympus_itm_if.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_itm/verilog/olympus_itm_lts.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_itm/verilog/olympus_itm.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_lsu/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_lsu/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_lsu/verilog/olympus_lsu_control.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_lsu/verilog/olympus_lsu_dwt_st_omnimux.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_lsu/verilog/olympus_lsu_dwt.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_lsu/verilog/olympus_lsu_ld_datapath.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_lsu/verilog/olympus_lsu_ld_fault_mux.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_lsu/verilog/olympus_lsu_ld_linker.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_lsu/verilog/olympus_lsu_ld_linksel.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_lsu/verilog/olympus_lsu_ld_omnimux.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_lsu/verilog/olympus_lsu_prioritize_dme.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_lsu/verilog/olympus_lsu_st_datapath.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_lsu/verilog/olympus_lsu_st_linker.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_lsu/verilog/olympus_lsu_st_linksel.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_lsu/verilog/olympus_lsu_st_omnimux.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_lsu/verilog/olympus_lsu_tcm_ld_req_mux.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_lsu/verilog/olympus_lsu.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_piu/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_piu/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_piu/verilog/olympus_piu_epiu_chk.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_piu/verilog/olympus_piu_epiu_predic_fsm_dff.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_piu/verilog/olympus_piu_epiu_predic_fsm.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_piu/verilog/olympus_piu_epiu.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_piu/verilog/olympus_piu_ewic_fsm.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_piu/verilog/olympus_piu_ippb.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_piu/verilog/olympus_piu.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_ras/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_ras/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_ras/verilog/olympus_ras.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_watchcat/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_watchcat/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_watchcat/verilog/olympus_watchcat.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_mau/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_mau/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_mau/verilog/olympus_mau_cmp.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_mau/verilog/olympus_mau_ctrl.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_mau/verilog/olympus_mau_defs.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_mau/verilog/olympus_mau_ppb.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_mau/verilog/olympus_mau_reg.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_mau/verilog/olympus_mau_sau_cmp.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_mau/verilog/olympus_mau_sau.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_mau/verilog/olympus_mau_tgu_cmp.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_mau/verilog/olympus_mau_tgu_ctrl.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_mau/verilog/olympus_mau_tgu.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_mau/verilog/olympus_mau_tt.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_mau/verilog/olympus_mau.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_miu/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_miu/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_miu/verilog/olympus_miu.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_nvic/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_nvic/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_nvic/verilog/olympus_nvic_actv_cnt.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_nvic/verilog/olympus_nvic_main_ctrl.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_nvic/verilog/olympus_nvic_main_fsm.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_nvic/verilog/olympus_nvic_main.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_nvic/verilog/olympus_nvic_merge.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_nvic/verilog/olympus_nvic_reg.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_nvic/verilog/olympus_nvic_tree.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_nvic/verilog/olympus_nvic_wic.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_nvic/verilog/olympus_nvic.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_scb/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_scb/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_scb/verilog/olympus_scb.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_stb/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_stb/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_stb/verilog/olympus_stb_slot.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_stb/verilog/olympus_stb.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_tcu/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_tcu/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tcu/verilog/olympus_tcu_ahbs_chk.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tcu/verilog/olympus_tcu_ahbs_fifo.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tcu/verilog/olympus_tcu_ahbs_rdchan.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tcu/verilog/olympus_tcu_ahbs_rdpipe.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tcu/verilog/olympus_tcu_ahbs_wq.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tcu/verilog/olympus_tcu_ahbs.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tcu/verilog/olympus_tcu_ebr.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tcu/verilog/olympus_tcu_lsu.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tcu/verilog/olympus_tcu_miu.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tcu/verilog/olympus_tcu_pfu.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tcu/verilog/olympus_tcu_sqarb.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tcu/verilog/olympus_tcu_stb.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tcu/verilog/olympus_tcu_tcm.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tcu/verilog/olympus_tcu.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_tpiu/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_tpiu/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tpiu/verilog/olympus_tpiu_atb_apb_if.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tpiu/verilog/olympus_tpiu_atb_apb_regslice.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tpiu/verilog/olympus_tpiu_atb_fifo.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tpiu/verilog/olympus_tpiu_atb_flush_ctl.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tpiu/verilog/olympus_tpiu_atb_sync.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tpiu/verilog/olympus_tpiu_decl.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tpiu/verilog/olympus_tpiu_formatter.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tpiu/verilog/olympus_tpiu_idle_fsm.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tpiu/verilog/olympus_tpiu_lpislave.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tpiu/verilog/olympus_tpiu_top.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tpiu/verilog/olympus_tpiu_trace_apb_if.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tpiu/verilog/olympus_tpiu_trace_clk.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tpiu/verilog/olympus_tpiu_trace_fifo.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tpiu/verilog/olympus_tpiu_trace_flush_ctl.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tpiu/verilog/olympus_tpiu_trace_out.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tpiu/verilog/olympus_tpiu_trace_sync.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tpiu/verilog/OLYMPUS_TPIU.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_tpium/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_tpium/verilog
-+incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_mcu/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_mcu/verilog
+// /research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_tpium/verilog/TPIUM.sv
+
+// +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_mcu/verilog
+// -y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_mcu/verilog
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_cti/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_cti/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_cti/verilog/olympus_cti_apbif.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_cti/verilog/olympus_cti_ci.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_cti/verilog/olympus_cti_clkgate.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_cti/verilog/olympus_cti_defs.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_cti/verilog/olympus_cti_mapper.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_cti/verilog/olympus_cti_ti.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_cti/verilog/olympus_cti.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_ewic/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_ewic/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_ewic/verilog/olympus_ewic.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_sbist/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_sbist/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_sbist/verilog/olympus_sbist_ahb_interconnect.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_sbist/verilog/olympus_sbist_ahb_master.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_sbist/verilog/olympus_sbist_axi_interconnect.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_sbist/verilog/olympus_sbist_axi_slave.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_sbist/verilog/olympus_sbist_trickbox.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_sbist/verilog/olympus_sbistc_wrapper_defs.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_sbist/verilog/olympus_sbistc_wrapper.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_sbist/verilog/olympus_sbistc.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_pmc/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_pmc/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_pmc/verilog/olympus_pmc.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_mem/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_mem/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_mem/verilog/olympus_mem.sv
+
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_dcls/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_dcls/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dcls/verilog/olympus_dcls_clk_checker.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dcls/verilog/olympus_dcls_clock_control.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dcls/verilog/olympus_dcls_comparator_block.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dcls/verilog/olympus_dcls_comparator_logic.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dcls/verilog/olympus_dcls_comparator.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dcls/verilog/olympus_dcls_core_compare_wrapper.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dcls/verilog/olympus_dcls_ctl.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dcls/verilog/olympus_dcls_delay_logic.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dcls/verilog/olympus_dcls_delay_wrapper_iwic.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dcls/verilog/olympus_dcls_delay_wrapper_pdcore.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dcls/verilog/olympus_dcls_delay.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dcls/verilog/olympus_dcls_ia.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dcls/verilog/olympus_dcls_iwic_compare_wrapper.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dcls/verilog/olympus_dcls_iwic.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dcls/verilog/olympus_dcls_pdcore.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dcls/verilog/olympus_dcls_ram_compare_wrapper.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus_dcls/verilog/olympus_dcls_rst_checker.sv
 
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus/verilog/olympus_apb_arb.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus/verilog/olympus_bptx.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus/verilog/olympus_corewrapper.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus/verilog/olympus_ecc_check32.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus/verilog/olympus_ecc_check64.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus/verilog/olympus_ecc_fatal32.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus/verilog/olympus_ecc_fatal64.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus/verilog/olympus_ecc_generate32.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus/verilog/olympus_ecc_generate64.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus/verilog/olympus_ecc_repair32.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus/verilog/olympus_ecc_repair64.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus/verilog/olympus_iwic.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus/verilog/olympus_iwicwrapper.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus/verilog/olympus_mbist.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus/verilog/olympus_pdcore.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus/verilog/olympus_pddbg.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus/verilog/olympus_pdepu.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus/verilog/olympus_pdrams.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus/verilog/olympus_ramwrapper.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus/verilog/olympus_romtable.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/olympus/verilog/OLYMPUS.sv
 
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/shared/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/shared/verilog
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/shared/verilog/olympus_aci_checker.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/shared/verilog/olympus_bitwise_and.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/shared/verilog/olympus_bitwise_or.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/shared/verilog/olympus_ecc_check.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/shared/verilog/olympus_ecc_generate.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/shared/verilog/olympus_ecc_mask.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/shared/verilog/olympus_ecc_repair.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/shared/verilog/olympus_flop_parity_fault_detection.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/shared/verilog/olympus_flop_parity_fault_tree.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/shared/verilog/olympus_onehot_logic_mux.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/shared/verilog/olympus_onehot_mux.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/shared/verilog/olympus_onehot2bin.sv
 
 // Cells
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/models/cells/generic/olympus_cdc_comb_and2.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/models/cells/generic/olympus_cdc_comb_mux4.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/models/cells/generic/olympus_cdc_connect.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/models/cells/generic/olympus_cell_and_gate.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/models/cells/generic/olympus_cell_cdc_and.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/models/cells/generic/olympus_cell_cdc_or2.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/models/cells/generic/olympus_cell_flop.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/models/cells/generic/olympus_cell_inter_clkgate.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/models/cells/generic/olympus_cell_semi_sync_flop.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/models/cells/generic/olympus_cell_sync.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/models/cells/generic/olympus_cell_xor2.sv
 
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/models/rams/generic
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/models/rams/generic
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/models/rams/generic/bit_ram.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/models/rams/generic/olympus_ram.sv
 
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/testbench/execution_tb/verilog/models
 -y      $(CORTEX_M85_LOGICAL_DIR)/logical/testbench/execution_tb/verilog/models
 
 // Generic CDE
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/models/modules
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/models/modules
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/models/modules/olympus_core_cde.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/models/modules/olympus_dec_cde.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/models/modules/olympus_dec_epcde.sv
+/research/AAA/ip_library/Cortex-M85/AT640-BU-50000-r1p0-00rel0/olympus/logical/models/modules/olympus_epu_cde.sv
 
 //DAP
 +incdir+$(CORTEX_M85_DAPLITE_DIR)/logical/daplite2_m/verilog

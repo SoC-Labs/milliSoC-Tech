@@ -1,7 +1,29 @@
--y $(CORTEX_R5_LOGICAL_DIR)/logical/models/cells/generic
--y $(CORTEX_R5_LOGICAL_DIR)/logical/models/modules
--y $(CORTEX_R5_LOGICAL_DIR)/logical/models/rams/generic_all
--y $(CORTEX_R5_LOGICAL_DIR)/logical/cortexr5_intkit/verilog/ApbChecker
+$(CORTEX_R5_LOGICAL_DIR)/logical/models/cells/generic/heron_cell_clkgate.v
+$(CORTEX_R5_LOGICAL_DIR)/logical/models/cells/generic/heron_cell_sync_en.v
+$(CORTEX_R5_LOGICAL_DIR)/logical/models/cells/generic/heron_cell_sync.v
+$(CORTEX_R5_LOGICAL_DIR)/logical/models/cells/generic/heroncell_dccm.v
+$(CORTEX_R5_LOGICAL_DIR)/logical/models/cells/generic/heroncell_dcctl.v
+$(CORTEX_R5_LOGICAL_DIR)/logical/models/cells/generic/heroncell_dcreg.v
+$(CORTEX_R5_LOGICAL_DIR)/logical/models/cells/generic/heroncell_slc.v
+$(CORTEX_R5_LOGICAL_DIR)/logical/models/cells/generic/heroncell_slm.v
+
+
+$(CORTEX_R5_LOGICAL_DIR)/logical/models/modules/DS01_absval.v
+$(CORTEX_R5_LOGICAL_DIR)/logical/models/modules/DS01_add.v
+$(CORTEX_R5_LOGICAL_DIR)/logical/models/modules/DS01_csa.v
+$(CORTEX_R5_LOGICAL_DIR)/logical/models/modules/DS01_dec.v
+$(CORTEX_R5_LOGICAL_DIR)/logical/models/modules/DS01_inc.v
+$(CORTEX_R5_LOGICAL_DIR)/logical/models/modules/DS02_multp.v
+$(CORTEX_R5_LOGICAL_DIR)/logical/models/modules/DS02_tree.v
+$(CORTEX_R5_LOGICAL_DIR)/logical/models/modules/mdl_csa.v
+
+$(CORTEX_R5_LOGICAL_DIR)/logical/models/rams/generic_all/bit_ram2.v
+$(CORTEX_R5_LOGICAL_DIR)/logical/models/rams/generic_all/byte_ram.v
+$(CORTEX_R5_LOGICAL_DIR)/logical/models/rams/generic_all/cortexr5_caches_rams0.v
+$(CORTEX_R5_LOGICAL_DIR)/logical/models/rams/generic_all/cortexr5_caches_rams1.v
+
+$(CORTEX_R5_LOGICAL_DIR)/logical/cortexr5_intkit/verilog/ApbChecker/ApbLogger.v
+$(CORTEX_R5_LOGICAL_DIR)/logical/cortexr5_intkit/verilog/ApbChecker/ApbPC.v
 
 -y $(CORTEX_R5_LOGICAL_DIR)/logical/heron_loggers/verilog
 

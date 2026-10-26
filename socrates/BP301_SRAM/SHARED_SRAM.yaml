@@ -1,0 +1,28 @@
+#----------------------------------------------------------------------------
+# The confidential and proprietary information contained in this file may
+# only be used by a person authorised under and to the extent permitted
+# by a subsisting licensing agreement from Arm Limited or its affiliates.
+#
+# (C) COPYRIGHT 2019 Arm Limited or its affiliates.
+# ALL RIGHTS RESERVED
+#
+# This entire notice must be reproduced on all copies of this file
+# and copies of this file may only be made by a person if such person is
+# permitted to do so under the terms of a subsisting license agreement
+# from Arm Limited or its affiliates.
+#----------------------------------------------------------------------------
+COMPONENT      : sie300_axi5_sram_ctrl
+CONFIG_NAME    : 1
+ADDR_WIDTH : 20
+DATA_WIDTH : 64
+ID_WIDTH : 10
+QCLK_SYNC_EN : 0
+QPWR_SYNC_EN : 0
+QEXT_SYNC_EN : 0
+EXCLUSIVE_MONITORS : 2
+AR_BUF_SIZE : 4
+AW_BUF_SIZE : 4
+W_BUF_SIZE : 16
+AXI5_POISON_EN : 0
+REGISTER_AXI_AR : FULL
+REGISTER_AXI_R : FULL

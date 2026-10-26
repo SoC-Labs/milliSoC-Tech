@@ -1,5 +1,7 @@
 -f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/OVL.flist 
 
+-f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/EthosU85_256.flist
+
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_chip_pads/millisoc_chip_pads.v
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_system/millisoc_system.sv
 
@@ -12,9 +14,12 @@ $(SOCLABS_MILLISOC_TECH_DIR)/logical/interfaces/axi4_if.sv
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/interfaces/axi3_if.sv
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/interfaces/apb3_if.sv
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/interfaces/apb4_if.sv
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/interfaces/qchannel_if.sv
+
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_ai_subsystem/millisoc_ai_subsystem.sv
 
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_sys_ctrl/millisoc_sys_ctrl.sv
-
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_sram_wrapper/millisoc_sram_wrapper.sv
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/ROM/generic/ROM_wrapper.v
 
 -f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/NIC400.flist
@@ -24,6 +29,7 @@ $(SOCLABS_MILLISOC_TECH_DIR)/logical/ROM/generic/ROM_wrapper.v
 -f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/Corstone101.flist
 -f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/VIC.flist
 -f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/MHU.flist
+-f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/SIE300.flist
 
 -f $(SOCLABS_SLDMA350_TECH_DIR)/flist/dma350_axi_millisoc.flist
 
