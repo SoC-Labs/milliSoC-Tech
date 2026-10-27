@@ -39,7 +39,7 @@ module millisoc_rt_peripheral_subsystem(
     output wire         WDOGRESREQ, // Watchdog reset request
 
     // Interrupts
-    output wire [71:0]  PERI_IRQS   // Peripheral interrupts to GIC
+    output wire [55:0]  PERI_IRQS   // Peripheral interrupts to GIC
 
 
 );

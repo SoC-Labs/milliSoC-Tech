@@ -287,7 +287,7 @@ module millisoc_rt_cpu_subsystem #(
     input  wire   [2:0] HSIZE_GIC,           // AHB transfer size
     input  wire  [31:0] HWDATA_GIC,          // AHB write data
     output wire         HREADYOUT_GIC,       // Transfer done response for AHB
-    output wire  [1:0]  HRESP_GIC,           // Transfer response to AHB
+    output wire         HRESP_GIC,           // Transfer response to AHB
     output wire [31:0]  HRDATA_GIC,          // Read data to AHB
 
     // Split/Lock

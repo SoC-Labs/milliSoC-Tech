@@ -31,25 +31,25 @@ module millisoc_chip_pads(
 );
 
 // QSPI internal Signals
-wire             qspi_sclk;
-wire             qspi_ncs;
+wire             qspi_sclk_soc;
+wire             qspi_ncs_soc;
 wire [3:0]       qspi_io_o;
 wire [3:0]       qspi_io_i;
 wire [3:0]       qspi_io_e;
 // UART internal signals
-wire             uartrxd0;
-wire             uarttxd0;
-wire             uarttxen0;
-wire             uartrxd1;
-wire             uarttxd1;
-wire             uarttxen1;
+wire             uartrxd0_soc;
+wire             uarttxd0_soc;
+wire             uarttxen0_soc;
+wire             uartrxd1_soc;
+wire             uarttxd1_soc;
+wire             uarttxen1_soc;
 
-wire             uartrxd0_RT;
-wire             uarttxd0_RT;
-wire             uarttxen0_RT;
-wire             uartrxd1_RT;
-wire             uarttxd1_RT;
-wire             uarttxen1_RT;
+wire             uartrxd0_RT_soc;
+wire             uarttxd0_RT_soc;
+wire             uarttxen0_RT_soc;
+wire             uartrxd1_RT_soc;
+wire             uarttxd1_RT_soc;
+wire             uarttxen1_RT_soc;
 
 // DAP-LITE internal signals
 wire             ntrst;
@@ -78,24 +78,24 @@ wire [15:0]      p1_func;
 millisoc_system u_millisoc_system(
     .FCLK(CLK),
     .nPORESET(nPORST),
-    .QSPI_SCLK(qspi_sclk),
-    .QSPI_nCS(qspi_ncs),
+    .QSPI_SCLK(qspi_sclk_soc),
+    .QSPI_nCS(qspi_ncs_soc),
     .QSPI_IO_o(qspi_io_o),
     .QSPI_IO_i(qspi_io_i),
     .QSPI_IO_e(qspi_io_e),
-    .UARTRXD0(uartrxd0),
-    .UARTTXD0(uarttxd0),
-    .UARTTXEN0(uarttxen0),
-    .UARTRXD1(uartrxd1),
-    .UARTTXD1(uarttxd1),
-    .UARTTXEN1(uarttxen1),
+    .UARTRXD0(uartrxd0_soc),
+    .UARTTXD0(uarttxd0_soc),
+    .UARTTXEN0(uarttxen0_soc),
+    .UARTRXD1(uartrxd1_soc),
+    .UARTTXD1(uarttxd1_soc),
+    .UARTTXEN1(uarttxen1_soc),
 
-    .UARTRXD0_RT(uartrxd0_RT),
-    .UARTTXD0_RT(uarttxd0_RT),
-    .UARTTXEN0_RT(uarttxen0_RT),
-    .UARTRXD1_RT(uartrxd1_RT),
-    .UARTTXD1_RT(uarttxd1_RT),
-    .UARTTXEN1_RT(uarttxen1_RT),
+    .UARTRXD0_RT(uartrxd0_RT_soc),
+    .UARTTXD0_RT(uarttxd0_RT_soc),
+    .UARTTXEN0_RT(uarttxen0_RT_soc),
+    .UARTRXD1_RT(uartrxd1_RT_soc),
+    .UARTTXD1_RT(uarttxd1_RT_soc),
+    .UARTTXEN1_RT(uarttxen1_RT_soc),
 
     .nTRST(ntrst),
     .SWCLKTCK(swclktck),
@@ -123,25 +123,25 @@ millisoc_system u_millisoc_system(
 );
 
 millisoc_chip_phy u_millisoc_chip_phy(
-    .qspi_sclk(qspi_sclk),
-    .qspi_ncs(qspi_ncs),
+    .qspi_sclk(qspi_sclk_soc),
+    .qspi_ncs(qspi_ncs_soc),
     .qspi_io_o(qspi_io_o),
     .qspi_io_i(qspi_io_i),
     .qspi_io_e(qspi_io_e),
 
-    .uartrxd0(uartrxd0),
-    .uarttxd0(uarttxd0),
-    .uarttxen0(uarttxen0),
-    .uartrxd1(uartrxd1),
-    .uarttxd1(uarttxd1),
-    .uarttxen1(uarttxen1),
+    .uartrxd0(uartrxd0_soc),
+    .uarttxd0(uarttxd0_soc),
+    .uarttxen0(uarttxen0_soc),
+    .uartrxd1(uartrxd1_soc),
+    .uarttxd1(uarttxd1_soc),
+    .uarttxen1(uarttxen1_soc),
 
-    .uartrxd0_RT(uartrxd0_RT),
-    .uarttxd0_RT(uarttxd0_RT),
-    .uarttxen0_RT(uarttxen0_RT),
-    .uartrxd1_RT(uartrxd1_RT),
-    .uarttxd1_RT(uarttxd1_RT),
-    .uarttxen1_RT(uarttxen1_RT),
+    .uartrxd0_RT(uartrxd0_RT_soc),
+    .uarttxd0_RT(uarttxd0_RT_soc),
+    .uarttxen0_RT(uarttxen0_RT_soc),
+    .uartrxd1_RT(uartrxd1_RT_soc),
+    .uarttxd1_RT(uarttxd1_RT_soc),
+    .uarttxen1_RT(uarttxen1_RT_soc),
 
     .ntrst(ntrst),
     .swclktck(swclktck),

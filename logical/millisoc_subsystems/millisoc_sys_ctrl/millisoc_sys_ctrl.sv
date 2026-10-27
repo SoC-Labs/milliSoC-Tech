@@ -99,7 +99,7 @@ wire nsysreset_en;
 assign nsysreset_en = (~nporeset) | watchdogreq | sysresetreq;
 assign nsysreset = nsysreset_sync[3];
 
-always @(posedge pclk or posedge nsysreset_en)begin
+always @(posedge pclk)begin
     if (nsysreset_en) begin
         nsysreset_i <= 1'b1;
         nsysreset_sync <= 4'h0;
