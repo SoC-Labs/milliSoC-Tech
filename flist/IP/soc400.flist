@@ -12,8 +12,6 @@
 
 # -- Generic cells -----------------------------------------------------------
 $(SOCLABS_SOC400_DIR)/static/models/cells/generic/cx_cdc_corrupt_gry.v
-$(SOCLABS_SOC400_DIR)/static/models/cells/generic/cx_comb_mux2.v
-$(SOCLABS_SOC400_DIR)/static/models/cells/generic/cx_en_cdc_corrupt_gry.v
 $(SOCLABS_SOC400_DIR)/static/models/cells/generic/cx_en_sync.v
 $(SOCLABS_SOC400_DIR)/static/models/cells/generic/cx_en_sync_high.v
 $(SOCLABS_SOC400_DIR)/static/models/cells/generic/cx_sync.v

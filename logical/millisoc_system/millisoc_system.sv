@@ -668,7 +668,7 @@ mhu320ae_mx u_ipc_mx (
     .pwrqdeny(),
     .pwrqactive(),
 
-    .paddr_snd(MX_MHU_SND.paddr),
+    .paddr_snd(MX_MHU_SND.paddr[16:0]),
     .pprot_snd(MX_MHU_SND.pprot),
     .pnse_snd(1'b0),
     .psel_snd(MX_MHU_SND.psel),
@@ -681,7 +681,7 @@ mhu320ae_mx u_ipc_mx (
     .pslverr_snd(MX_MHU_SND.pslverr),
     .pwakeup_snd(MX_MHU_SND_pwakeup),
 
-    .paddr_rec(MX_MHU_REC.paddr),
+    .paddr_rec(MX_MHU_REC.paddr[16:0]),
     .pprot_rec(MX_MHU_REC.pprot),
     .pnse_rec(1'b0),
     .psel_rec(MX_MHU_REC.psel),
@@ -808,7 +808,7 @@ millisoc_rt_cpu_subsystem #(
     // AXI Subordinate
     .ACLKENS0(1'b1),
     .AWIDS0({5'h00, CPU_Rx_S_AXI.AWID}),
-    .AWADDRS0({8'h0, CPU_Rx_S_AXI.AWADDR[23:0]}),
+    .AWADDRS0(CPU_Rx_S_AXI.AWADDR),
     .AWLENS0(CPU_Rx_S_AXI.AWLEN),
     .AWSIZES0(CPU_Rx_S_AXI.AWSIZE),
     .AWBURSTS0(CPU_Rx_S_AXI.AWBURST),
@@ -835,7 +835,7 @@ millisoc_rt_cpu_subsystem #(
     .BREADYS0(CPU_Rx_S_AXI.BREADY),
     .BRPTYS0(1'b0),
     .ARIDS0({5'h00,CPU_Rx_S_AXI.ARID}),
-    .ARADDRS0({8'h0, CPU_Rx_S_AXI.ARADDR[23:0]}),
+    .ARADDRS0(CPU_Rx_S_AXI.ARADDR),
     .ARLENS0(CPU_Rx_S_AXI.ARLEN),
     .ARSIZES0(CPU_Rx_S_AXI.ARSIZE),
     .ARBURSTS0(CPU_Rx_S_AXI.ARBURST),
@@ -1046,7 +1046,7 @@ mhu320ae_rt u_ipc_rt (
     .pwrqdeny(),
     .pwrqactive(),
 
-    .paddr_snd(RT_MHU_SND.paddr),
+    .paddr_snd(RT_MHU_SND.paddr[16:0]),
     .pprot_snd(RT_MHU_SND.pprot),
     .pnse_snd(1'b0),
     .psel_snd(RT_MHU_SND.psel),
@@ -1059,7 +1059,7 @@ mhu320ae_rt u_ipc_rt (
     .pslverr_snd(RT_MHU_SND.pslverr),
     .pwakeup_snd(RT_MHU_SND_pwakeup),
 
-    .paddr_rec(RT_MHU_REC.paddr),
+    .paddr_rec(RT_MHU_REC.paddr[16:0]),
     .pprot_rec(RT_MHU_REC.pprot),
     .pnse_rec(1'b0),
     .psel_rec(RT_MHU_REC.psel),

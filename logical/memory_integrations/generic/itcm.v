@@ -12,7 +12,7 @@ module itcm #(parameter ADDR_WIDTH=16)(
 );
 
 spram #(
-    .ADDR_WIDTH(ADDR_WIDTH-2-2),
+    .ADDR_WIDTH(ADDR_WIDTH-2),
     .DATA_WIDTH(8)
 ) u_itcm_ram (
     .clk(CLK),

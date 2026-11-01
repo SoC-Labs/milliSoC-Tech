@@ -45,7 +45,6 @@ $(CORTEX_R5_LOGICAL_DIR)/logical/heron_caches_axim/verilog/heron_dc_stb.v
 
 $(CORTEX_R5_LOGICAL_DIR)/logical/heron_dpu/verilog/heron_dpu_add9.v
 $(CORTEX_R5_LOGICAL_DIR)/logical/heron_dpu/verilog/heron_dpu_add23.v
-$(CORTEX_R5_LOGICAL_DIR)/logical/heron_dpu/verilog/heron_dpu_add32.v
 $(CORTEX_R5_LOGICAL_DIR)/logical/heron_dpu/verilog/heron_dpu_add35.v
 $(CORTEX_R5_LOGICAL_DIR)/logical/heron_dpu/verilog/heron_dpu_agu.v
 $(CORTEX_R5_LOGICAL_DIR)/logical/heron_dpu/verilog/heron_dpu_alu_au.v
@@ -219,7 +218,6 @@ $(CORTEX_R5_LOGICAL_DIR)/logical/heron_scu/verilog/heron_scu.v
 +incdir+$(CORTEX_R5_ETM_LOGICAL_DIR)/logical/models/cells/generic
 $(CORTEX_R5_ETM_LOGICAL_DIR)/logical/etmr5/verilog/ETMR5.v
 
-$(CORTEX_R5_ETM_LOGICAL_DIR)/logical/etmr5/verilog/etmr5_check_fifohazard.v
 $(CORTEX_R5_ETM_LOGICAL_DIR)/logical/etmr5/verilog/EtmR5AddrAsy.v
 $(CORTEX_R5_ETM_LOGICAL_DIR)/logical/etmr5/verilog/EtmR5AddrBls.v
 $(CORTEX_R5_ETM_LOGICAL_DIR)/logical/etmr5/verilog/EtmR5AddrCmp.v
@@ -254,7 +252,6 @@ $(CORTEX_R5_ETM_LOGICAL_DIR)/logical/etmr5/verilog/EtmR5FifoIn.v
 $(CORTEX_R5_ETM_LOGICAL_DIR)/logical/etmr5/verilog/EtmR5FifoOut.v
 $(CORTEX_R5_ETM_LOGICAL_DIR)/logical/etmr5/verilog/EtmR5FifoPeek.v
 $(CORTEX_R5_ETM_LOGICAL_DIR)/logical/etmr5/verilog/EtmR5FifoRotate.v
-$(CORTEX_R5_ETM_LOGICAL_DIR)/logical/etmr5/verilog/EtmR5IFOvl.v
 $(CORTEX_R5_ETM_LOGICAL_DIR)/logical/etmr5/verilog/EtmR5PowerReset.v
 $(CORTEX_R5_ETM_LOGICAL_DIR)/logical/etmr5/verilog/EtmR5ProcIF.v
 $(CORTEX_R5_ETM_LOGICAL_DIR)/logical/etmr5/verilog/EtmR5ResControl.v

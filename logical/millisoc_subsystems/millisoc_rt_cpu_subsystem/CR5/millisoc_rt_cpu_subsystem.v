@@ -306,8 +306,18 @@ module millisoc_rt_cpu_subsystem #(
 wire [3:0]   AWCSELS0;
 wire [3:0]   ARCSELS0;
 
-assign AWCSELS0 = (AWADDRS0[31:24]==8'h80) ? 1'b1: 1'b0;
-assign ARCSELS0 = (ARADDRS0[31:24]==8'h80) ? 1'b1: 1'b0;
+assign AWCSELS0[0] = (AWADDRS0[31:24]==8'h80) ? 1'b1: 1'b0;
+assign ARCSELS0[0] = (ARADDRS0[31:24]==8'h80) ? 1'b1: 1'b0;
+
+assign AWCSELS0[1] = (AWADDRS0[31:24]==8'h81) ? 1'b1: 1'b0;
+assign ARCSELS0[1] = (ARADDRS0[31:24]==8'h81) ? 1'b1: 1'b0;
+
+assign AWCSELS0[2] = (AWADDRS0[31:24]==8'h82) ? 1'b1: 1'b0;
+assign ARCSELS0[2] = (ARADDRS0[31:24]==8'h82) ? 1'b1: 1'b0;
+
+assign AWCSELS0[3] = (AWADDRS0[31:24]==8'h83) ? 1'b1: 1'b0;
+assign ARCSELS0[3] = (ARADDRS0[31:24]==8'h83) ? 1'b1: 1'b0;
+
 
 
 wire [63:0]  ATCDATAIN0;
@@ -864,6 +874,9 @@ wire        vic_hreadyout1;
 wire [1:0]  vic_hresp1;
 wire [31:0] vic_hrdata1;
 
+assign vic_hresp1[1]=1'b0;
+assign vic_hresp0[1]=1'b0;
+
 assign vic_hsel0 = ~HADDR_GIC[12];
 assign vic_hsel1 = HADDR_GIC[12];
 
@@ -885,12 +898,12 @@ cmsdk_ahb_slave_mux #(
 
     .HSEL0(vic_hsel0),
     .HREADYOUT0(vic_hreadyout0),
-    .HRESP0(vic_hresp0),
+    .HRESP0(vic_hresp0[0]),
     .HRDATA0(vic_hrdata0),
 
     .HSEL1(vic_hsel1),
     .HREADYOUT1(vic_hreadyout1),
-    .HRESP1(vic_hresp1),
+    .HRESP1(vic_hresp1[0]),
     .HRDATA1(vic_hrdata1),
 
     .HSEL2(),

@@ -2,10 +2,8 @@
 
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/sie300/logical/models/cells/generic/sie300_arm_and2.v
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/sie300/logical/models/cells/generic/sie300_arm_or2.v
-$(SOCLABS_MILLISOC_TECH_DIR)/logical/sie300/logical/models/cells/generic/sie300_arm_sdff2yrpq.v
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/sie300/logical/models/cells/generic/sie300_arm_xor2.v
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/sie300/logical/shared/verilog/sie300_or_tree/verilog/sie300_or_tree.sv
-$(SOCLABS_MILLISOC_TECH_DIR)/logical/sie300/logical/shared/verilog/sie300_sync/verilog/sie300_sync.sv
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/sie300/logical/sie300_axi5_sram_ctrl_1/verilog/sie300_axi5_sram_ctrl_1.sv
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/sie300/logical/sie300_axi5_sram_ctrl_1/verilog/sie300_axi5_sram_ctrl_1_addr_dec.sv
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/sie300/logical/sie300_axi5_sram_ctrl_1/verilog/sie300_axi5_sram_ctrl_1_arb.sv

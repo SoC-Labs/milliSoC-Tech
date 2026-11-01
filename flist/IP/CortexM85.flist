@@ -116,7 +116,6 @@ $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_core/verilog/olympus_dpu_byp_rec.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_core/verilog/olympus_dpu_ctrl_reg.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_core/verilog/olympus_dpu_ctrl.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_core/verilog/olympus_dpu_data_pipe.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_core/verilog/olympus_dpu_dec_cde_checker.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_core/verilog/olympus_dpu_div.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_core/verilog/olympus_dpu_ex1_shift.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_core/verilog/olympus_dpu_exception.sv
@@ -193,7 +192,6 @@ $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_dwt/verilog/olympus_trc_if.sv
 
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_epu/verilog
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_epu/verilog/olympus_epu_agu_bypass.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_epu/verilog/olympus_epu_cde_checker.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_epu/verilog/olympus_epu_cde_wrapper.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_epu/verilog/olympus_epu_ctl.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_epu/verilog/olympus_epu_ctz_32.sv
@@ -254,7 +252,6 @@ $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_epu/verilog/olympus_epu_grpa_halve.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_epu/verilog/olympus_epu_grpa_min_max_abs.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_epu/verilog/olympus_epu_grpa_min_max_acr_sep.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_epu/verilog/olympus_epu_grpa_min_max_acr.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_epu/verilog/olympus_epu_grpa_min_max_comp_b.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_epu/verilog/olympus_epu_grpa_min_max_comp.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_epu/verilog/olympus_epu_grpa_min_max_comp16.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_epu/verilog/olympus_epu_grpa_min.sv
@@ -359,8 +356,6 @@ $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_lsu/verilog/olympus_lsu.sv
 
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_piu/verilog
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_piu/verilog/olympus_piu_epiu_chk.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_piu/verilog/olympus_piu_epiu_predic_fsm_dff.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_piu/verilog/olympus_piu_epiu_predic_fsm.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_piu/verilog/olympus_piu_epiu.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_piu/verilog/olympus_piu_ewic_fsm.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_piu/verilog/olympus_piu_ippb.sv
@@ -458,16 +453,10 @@ $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_cti/verilog/olympus_cti_ti.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_cti/verilog/olympus_cti.sv
 
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_ewic/verilog
-$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_ewic/verilog/olympus_ewic.sv
 
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_sbist/verilog
-$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_sbist/verilog/olympus_sbist_ahb_interconnect.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_sbist/verilog/olympus_sbist_ahb_master.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_sbist/verilog/olympus_sbist_axi_interconnect.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_sbist/verilog/olympus_sbist_axi_slave.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_sbist/verilog/olympus_sbist_trickbox.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_sbist/verilog/olympus_sbistc_wrapper_defs.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_sbist/verilog/olympus_sbistc_wrapper.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_sbist/verilog/olympus_sbistc.sv
 
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_pmc/verilog
@@ -499,14 +488,6 @@ $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_dcls/verilog/olympus_dcls_rst_checker.
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus/verilog/olympus_apb_arb.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus/verilog/olympus_bptx.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus/verilog/olympus_corewrapper.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/olympus/verilog/olympus_ecc_check32.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/olympus/verilog/olympus_ecc_check64.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/olympus/verilog/olympus_ecc_fatal32.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/olympus/verilog/olympus_ecc_fatal64.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/olympus/verilog/olympus_ecc_generate32.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/olympus/verilog/olympus_ecc_generate64.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/olympus/verilog/olympus_ecc_repair32.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/olympus/verilog/olympus_ecc_repair64.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus/verilog/olympus_iwic.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus/verilog/olympus_iwicwrapper.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus/verilog/olympus_mbist.sv

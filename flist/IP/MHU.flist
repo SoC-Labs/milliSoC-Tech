@@ -56,7 +56,6 @@ $(SOCLABS_MILLISOC_TECH_DIR)/logical/mhu320ae_rt/mhu320ae_rt/logical/mhu320ae_ra
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/mhu320ae_rt/mhu320ae_rt/logical/mhu320ae_ram_pipe_rt/verilog/mhu320ae_ecc_check_repair_rt.v
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/mhu320ae_rt/mhu320ae_rt/logical/mhu320ae_ram_pipe_rt/verilog/mhu320ae_ram_pipe_rt.v
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/mhu320ae_rt/mhu320ae_rt/logical/models/rams/generic/mhu320ae_generic_1rw_ram_model.sv
-$(SOCLABS_MILLISOC_TECH_DIR)/logical/mhu320ae_rt/mhu320ae_rt/logical/models/rams/generic/mhu320ae_snd_ram_rt.sv
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/mhu320ae_rt/mhu320ae_rt/logical/models/rams/generic/mhu320ae_rec_ram_rt.sv
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/mhu320ae_rt/mhu320ae_rt/logical/mhu320ae_snd_rt/verilog/mhu320ae_snd_decoder_rt.sv
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/mhu320ae_rt/mhu320ae_rt/logical/mhu320ae_snd_rt/verilog/mhu320ae_snd_register_rt.sv
@@ -124,7 +123,6 @@ $(SOCLABS_MILLISOC_TECH_DIR)/logical/mhu320ae_mx/mhu320ae_mx/logical/mhu320ae_ra
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/mhu320ae_mx/mhu320ae_mx/logical/mhu320ae_ram_pipe_mx/verilog/mhu320ae_ecc_repair_mx.v
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/mhu320ae_mx/mhu320ae_mx/logical/mhu320ae_ram_pipe_mx/verilog/mhu320ae_ecc_check_repair_mx.v
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/mhu320ae_mx/mhu320ae_mx/logical/mhu320ae_ram_pipe_mx/verilog/mhu320ae_ram_pipe_mx.v
-$(SOCLABS_MILLISOC_TECH_DIR)/logical/mhu320ae_mx/mhu320ae_mx/logical/models/rams/generic/mhu320ae_snd_ram_mx.sv
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/mhu320ae_mx/mhu320ae_mx/logical/models/rams/generic/mhu320ae_rec_ram_mx.sv
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/mhu320ae_mx/mhu320ae_mx/logical/mhu320ae_snd_mx/verilog/mhu320ae_snd_mx_pkg.sv
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/mhu320ae_mx/mhu320ae_mx/logical/mhu320ae_snd_mx/verilog/mhu320ae_snd_decoder_mx.sv

@@ -1,6 +1,25 @@
 +libext+.v+.vlib
 
 +incdir+/research/downloads/std_ovl
--y /research/downloads/std_ovl
 
+/research/downloads/std_ovl/assert_window.vlib
+/research/downloads/std_ovl/assert_no_underflow.vlib
+/research/downloads/std_ovl/assert_never.vlib
+/research/downloads/std_ovl/assert_transition.vlib
+/research/downloads/std_ovl/assert_no_overflow.vlib
 /research/downloads/std_ovl/assert_proposition.vlib
+/research/downloads/std_ovl/assert_unchange.vlib
+/research/downloads/std_ovl/assert_never_unknown.vlib
+/research/downloads/std_ovl/assert_no_transition.vlib
+/research/downloads/std_ovl/assert_handshake.vlib
+/research/downloads/std_ovl/assert_one_hot.vlib
+/research/downloads/std_ovl/assert_width.vlib
+/research/downloads/std_ovl/assert_always.vlib
+/research/downloads/std_ovl/assert_frame.vlib
+/research/downloads/std_ovl/assert_zero_one_hot.vlib
+/research/downloads/std_ovl/assert_fifo_index.vlib
+/research/downloads/std_ovl/assert_always_on_edge.vlib
+/research/downloads/std_ovl/assert_implication.vlib
+/research/downloads/std_ovl/assert_win_unchange.vlib
+/research/downloads/std_ovl/assert_next.vlib
+/research/downloads/std_ovl/assert_cycle_sequence.vlib

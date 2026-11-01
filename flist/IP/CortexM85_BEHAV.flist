@@ -24,9 +24,6 @@
 // ============= Include file search path =============
 
 
-+incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/testbench/execution_tb/verilog/models
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/testbench/execution_tb/verilog/models
-
 // Cells
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic
 $(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic/olympus_cdc_comb_and2.sv
@@ -43,10 +40,6 @@ $(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic/olympus_cell_xor2.sv
 
 // OLYMPUS_CONFIG.v
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus/verilog
-
-// MCU layer
-+incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus_aab/verilog
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_aab/verilog
 
 
 +libext+.v+.sv+.vlib

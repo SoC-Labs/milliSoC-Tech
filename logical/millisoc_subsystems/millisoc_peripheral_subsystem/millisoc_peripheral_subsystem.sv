@@ -337,7 +337,7 @@ cmsdk_ahb_busmatrix_periph_lite u_periph_ahb_bus (
 
 // AHB to APB bus bridge
 cmsdk_ahb_to_apb #(
-    .ADDRWIDTH      (16),
+    .ADDRWIDTH      (17),
     .REGISTER_RDATA (1),
     .REGISTER_WDATA (0)
 )   u_ahb_to_apb_mhu_snd (
@@ -345,7 +345,7 @@ cmsdk_ahb_to_apb #(
     .HCLK     (HCLK),
     .HRESETn  (HRESETn),
     .HSEL     (MHU_SND_AHB.HSEL),
-    .HADDR    (MHU_SND_AHB.HADDR),
+    .HADDR    (MHU_SND_AHB.HADDR[16:0]),
     .HTRANS   (MHU_SND_AHB.HTRANS),
     .HSIZE    (MHU_SND_AHB.HSIZE),
     .HPROT    (MHU_SND_AHB.HPROT),
@@ -357,7 +357,7 @@ cmsdk_ahb_to_apb #(
     .HRDATA   (MHU_SND_AHB.HRDATA),
     .HRESP    (MHU_SND_AHB.HRESP),
 
-    .PADDR    (MHU_SND.paddr),
+    .PADDR    (MHU_SND.paddr[16:0]),
     .PSEL     (MHU_SND.psel),
     .PENABLE  (MHU_SND.penable),
     .PSTRB    (MHU_SND.pstrb),
@@ -374,7 +374,7 @@ cmsdk_ahb_to_apb #(
 );
 
 cmsdk_ahb_to_apb #(
-    .ADDRWIDTH      (16),
+    .ADDRWIDTH      (17),
     .REGISTER_RDATA (1),
     .REGISTER_WDATA (0)
 )   u_ahb_to_apb_mhu_rec (
@@ -382,7 +382,7 @@ cmsdk_ahb_to_apb #(
     .HCLK     (HCLK),
     .HRESETn  (HRESETn),
     .HSEL     (MHU_REC_AHB.HSEL),
-    .HADDR    (MHU_REC_AHB.HADDR),
+    .HADDR    (MHU_REC_AHB.HADDR[16:0]),
     .HTRANS   (MHU_REC_AHB.HTRANS),
     .HSIZE    (MHU_REC_AHB.HSIZE),
     .HPROT    (MHU_REC_AHB.HPROT),
@@ -394,7 +394,7 @@ cmsdk_ahb_to_apb #(
     .HRDATA   (MHU_REC_AHB.HRDATA),
     .HRESP    (MHU_REC_AHB.HRESP),
 
-    .PADDR    (MHU_REC.paddr),
+    .PADDR    (MHU_REC.paddr[16:0]),
     .PSEL     (MHU_REC.psel),
     .PENABLE  (MHU_REC.penable),
     .PSTRB    (MHU_REC.pstrb),
