@@ -25,9 +25,15 @@ $(CORTEX_R5_LOGICAL_DIR)/logical/models/rams/generic_all/cortexr5_caches_rams1.v
 $(CORTEX_R5_LOGICAL_DIR)/logical/cortexr5_intkit/verilog/ApbChecker/ApbLogger.v
 $(CORTEX_R5_LOGICAL_DIR)/logical/cortexr5_intkit/verilog/ApbChecker/ApbPC.v
 
--y $(CORTEX_R5_LOGICAL_DIR)/logical/heron_loggers/verilog
+$(CORTEX_R5_LOGICAL_DIR)/logical/heron_loggers/verilog/heron_loggers.v
+$(CORTEX_R5_LOGICAL_DIR)/logical/heron_loggers/verilog/ecs_logger.v
+$(CORTEX_R5_LOGICAL_DIR)/logical/heron_loggers/verilog/dpu_iq_fifo.v
+$(CORTEX_R5_LOGICAL_DIR)/logical/heron_loggers/verilog/loggers.v
+$(CORTEX_R5_LOGICAL_DIR)/logical/heron_loggers/verilog/loggers.vh
+$(CORTEX_R5_LOGICAL_DIR)/logical/heron_loggers/verilog/tarmac_logger.v
+$(CORTEX_R5_LOGICAL_DIR)/logical/heron_loggers/verilog/dpu_pipe_follower.v
 
 +incdir+$(CORTEX_R5_LOGICAL_DIR)/logical/heron_loggers/verilog
 +incdir+$(CORTEX_R5_LOGICAL_DIR)/logical/heron_loggers/verilog/dt2_disass
 
-$(CORTEX_R5_LOGICAL_DIR)/logical/cortexr5_integration/verilog/cortexr5_tcm.v
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/memory_integrations/generic/cortexr5_tcm.v

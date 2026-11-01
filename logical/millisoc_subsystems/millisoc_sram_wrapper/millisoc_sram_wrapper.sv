@@ -99,9 +99,9 @@ sie300_axi5_sram_ctrl_1 u_SMC(
     .memwen(memwen)
 );
 
-SRAM u_SRAM(
+SRAM #(.ADDR_WIDTH(16)) u_SRAM(
     .clk(ACLK),
-    .memaddr(memaddr),
+    .memaddr(memaddr[15:0]),
     .memd(memd),
     .memq(memq),
     .memcen(memcen),

@@ -532,26 +532,10 @@ $(CORTEX_M85_LOGICAL_DIR)/logical/shared/verilog/olympus_onehot_logic_mux.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/shared/verilog/olympus_onehot_mux.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/shared/verilog/olympus_onehot2bin.sv
 
-// Cells
-+incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic
-$(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic/olympus_cdc_comb_and2.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic/olympus_cdc_comb_mux4.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic/olympus_cdc_connect.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic/olympus_cell_and_gate.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic/olympus_cell_cdc_and.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic/olympus_cell_cdc_or2.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic/olympus_cell_flop.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic/olympus_cell_inter_clkgate.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic/olympus_cell_semi_sync_flop.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic/olympus_cell_sync.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic/olympus_cell_xor2.sv
 
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/models/rams/generic
 $(CORTEX_M85_LOGICAL_DIR)/logical/models/rams/generic/bit_ram.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/models/rams/generic/olympus_ram.sv
-
-+incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/testbench/execution_tb/verilog/models
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/testbench/execution_tb/verilog/models
 
 // Generic CDE
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/models/modules
@@ -561,28 +545,28 @@ $(CORTEX_M85_LOGICAL_DIR)/logical/models/modules/olympus_dec_epcde.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/models/modules/olympus_epu_cde.sv
 
 //DAP
-+incdir+$(CORTEX_M85_DAPLITE_DIR)/logical/daplite2_m/verilog
--y      $(CORTEX_M85_DAPLITE_DIR)/logical/daplite2_m/verilog
-+incdir+$(CORTEX_M85_DAPLITE_DIR)/logical/shared/css600_or_tree/verilog
--y      $(CORTEX_M85_DAPLITE_DIR)/logical/shared/css600_or_tree/verilog
-+incdir+$(CORTEX_M85_DAPLITE_DIR)/logical/shared/css600_ecorevnum/verilog
--y      $(CORTEX_M85_DAPLITE_DIR)/logical/shared/css600_ecorevnum/verilog
-+incdir+$(CORTEX_M85_DAPLITE_DIR)/logical/shared/css600_lpislave/verilog
--y      $(CORTEX_M85_DAPLITE_DIR)/logical/shared/css600_lpislave/verilog
-+incdir+$(CORTEX_M85_DAPLITE_DIR)/logical/shared/css600_pulseasyncbridge/verilog
--y      $(CORTEX_M85_DAPLITE_DIR)/logical/shared/css600_pulseasyncbridge/verilog
-+incdir+$(CORTEX_M85_DAPLITE_DIR)/logical/shared/css600_claimtags/verilog
--y      $(CORTEX_M85_DAPLITE_DIR)/logical/shared/css600_claimtags/verilog
-+incdir+$(CORTEX_M85_DAPLITE_DIR)/logical/shared/css600_one_hot_mux/verilog
--y      $(CORTEX_M85_DAPLITE_DIR)/logical/shared/css600_one_hot_mux/verilog
-+incdir+$(CORTEX_M85_DAPLITE_DIR)/logical/models/cells/generic
--y      $(CORTEX_M85_DAPLITE_DIR)/logical/models/cells/generic
-+incdir+$(CORTEX_M85_DAPLITE_DIR)/logical/css600_dp/verilog
--y      $(CORTEX_M85_DAPLITE_DIR)/logical/css600_dp/verilog
-+incdir+$(CORTEX_M85_DAPLITE_DIR)/logical/css600_ahbap/verilog
--y      $(CORTEX_M85_DAPLITE_DIR)/logical/css600_ahbap/verilog
-+incdir+$(CORTEX_M85_DAPLITE_DIR)/logical/css600_apbrom/verilog
--y      $(CORTEX_M85_DAPLITE_DIR)/logical/css600_apbrom/verilog
+// +incdir+$(CORTEX_M85_DAPLITE_DIR)/logical/daplite2_m/verilog
+// -y      $(CORTEX_M85_DAPLITE_DIR)/logical/daplite2_m/verilog
+// +incdir+$(CORTEX_M85_DAPLITE_DIR)/logical/shared/css600_or_tree/verilog
+// -y      $(CORTEX_M85_DAPLITE_DIR)/logical/shared/css600_or_tree/verilog
+// +incdir+$(CORTEX_M85_DAPLITE_DIR)/logical/shared/css600_ecorevnum/verilog
+// -y      $(CORTEX_M85_DAPLITE_DIR)/logical/shared/css600_ecorevnum/verilog
+// +incdir+$(CORTEX_M85_DAPLITE_DIR)/logical/shared/css600_lpislave/verilog
+// -y      $(CORTEX_M85_DAPLITE_DIR)/logical/shared/css600_lpislave/verilog
+// +incdir+$(CORTEX_M85_DAPLITE_DIR)/logical/shared/css600_pulseasyncbridge/verilog
+// -y      $(CORTEX_M85_DAPLITE_DIR)/logical/shared/css600_pulseasyncbridge/verilog
+// +incdir+$(CORTEX_M85_DAPLITE_DIR)/logical/shared/css600_claimtags/verilog
+// -y      $(CORTEX_M85_DAPLITE_DIR)/logical/shared/css600_claimtags/verilog
+// +incdir+$(CORTEX_M85_DAPLITE_DIR)/logical/shared/css600_one_hot_mux/verilog
+// -y      $(CORTEX_M85_DAPLITE_DIR)/logical/shared/css600_one_hot_mux/verilog
+// +incdir+$(CORTEX_M85_DAPLITE_DIR)/logical/models/cells/generic
+// -y      $(CORTEX_M85_DAPLITE_DIR)/logical/models/cells/generic
+// +incdir+$(CORTEX_M85_DAPLITE_DIR)/logical/css600_dp/verilog
+// -y      $(CORTEX_M85_DAPLITE_DIR)/logical/css600_dp/verilog
+// +incdir+$(CORTEX_M85_DAPLITE_DIR)/logical/css600_ahbap/verilog
+// -y      $(CORTEX_M85_DAPLITE_DIR)/logical/css600_ahbap/verilog
+// +incdir+$(CORTEX_M85_DAPLITE_DIR)/logical/css600_apbrom/verilog
+// -y      $(CORTEX_M85_DAPLITE_DIR)/logical/css600_apbrom/verilog
 
 //PMC-100 Sources
 // /home/dwn1c21/SoC-Labs/millisoc_project/millisoc_tech/logical/millisoc_subsystems/millisoc_cpu_subsystem/CM85/logical/pmc100/logical/pmc100/verilog/pmc100_pkg.sv

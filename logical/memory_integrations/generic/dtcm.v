@@ -1,5 +1,5 @@
 
-module dtcm (
+module dtcm #(parameter ADDR_WIDTH=16) (
     input  wire         CLK,
 
     input  wire         D0TCMCS,    // D0 TCM Chip Select
@@ -17,109 +17,93 @@ module dtcm (
     output wire [31:0]  D1TCMRDATA  // D1 TCM Read Data
 );
 
-bit_ram #(
-    .ADDR_BITS(20),
-    .DATA_BITS(8),
-    .RESET(0),
-    .RESET_HIGH(0)
+spram #(
+    .ADDR_WIDTH(ADDR_WIDTH-2),
+    .DATA_WIDTH(8)
 ) u_dtcm0_ram_0 (
     .clk(CLK),
-    .addr_i(D0TCMADDR),
-    .rd_o(D0TCMRDATA[7:0]),
-    .wd_i(D0TCMWDATA[7:0]),
-    .cs_i(D0TCMCS),
-    .we_i({8{D0TCMWR&D0TCMBYTEWR[0]}})
+    .cs(D0TCMCS),
+    .addr(D0TCMADDR[ADDR_WIDTH:3]),
+    .dout(D0TCMRDATA[7:0]),
+    .din(D0TCMWDATA[7:0]),
+    .we(D0TCMWR&D0TCMBYTEWR[0])
 );
-bit_ram #(
-    .ADDR_BITS(20),
-    .DATA_BITS(8),
-    .RESET(0),
-    .RESET_HIGH(0)
+spram #(
+    .ADDR_WIDTH(ADDR_WIDTH-2),
+    .DATA_WIDTH(8)
 ) u_dtcm0_ram_1 (
     .clk(CLK),
-    .addr_i(D0TCMADDR),
-    .rd_o(D0TCMRDATA[15:8]),
-    .wd_i(D0TCMWDATA[15:8]),
-    .cs_i(D0TCMCS),
-    .we_i({8{D0TCMWR&D0TCMBYTEWR[1]}})
+    .cs(D0TCMCS),
+    .addr(D0TCMADDR[ADDR_WIDTH:3]),
+    .dout(D0TCMRDATA[15:8]),
+    .din(D0TCMWDATA[15:8]),
+    .we(D0TCMWR&D0TCMBYTEWR[1])
 );
-bit_ram #(
-    .ADDR_BITS(20),
-    .DATA_BITS(8),
-    .RESET(0),
-    .RESET_HIGH(0)
+spram #(
+    .ADDR_WIDTH(ADDR_WIDTH-2),
+    .DATA_WIDTH(8)
 ) u_dtcm0_ram_2 (
     .clk(CLK),
-    .addr_i(D0TCMADDR),
-    .rd_o(D0TCMRDATA[23:16]),
-    .wd_i(D0TCMWDATA[23:16]),
-    .cs_i(D0TCMCS),
-    .we_i({8{D0TCMWR&D0TCMBYTEWR[2]}})
+    .cs(D0TCMCS),
+    .addr(D0TCMADDR[ADDR_WIDTH:3]),
+    .dout(D0TCMRDATA[23:16]),
+    .din(D0TCMWDATA[23:16]),
+    .we(D0TCMWR&D0TCMBYTEWR[2])
 );
-bit_ram #(
-    .ADDR_BITS(20),
-    .DATA_BITS(8),
-    .RESET(0),
-    .RESET_HIGH(0)
+spram #(
+    .ADDR_WIDTH(ADDR_WIDTH-2),
+    .DATA_WIDTH(8)
 ) u_dtcm0_ram_3 (
     .clk(CLK),
-    .addr_i(D0TCMADDR),
-    .rd_o(D0TCMRDATA[31:24]),
-    .wd_i(D0TCMWDATA[31:24]),
-    .cs_i(D0TCMCS),
-    .we_i({8{D0TCMWR&D0TCMBYTEWR[3]}})
+    .cs(D0TCMCS),
+    .addr(D0TCMADDR[ADDR_WIDTH:3]),
+    .dout(D0TCMRDATA[31:24]),
+    .din(D0TCMWDATA[31:24]),
+    .we(D0TCMWR&D0TCMBYTEWR[3])
 );
-bit_ram #(
-    .ADDR_BITS(20),
-    .DATA_BITS(8),
-    .RESET(0),
-    .RESET_HIGH(0)
+spram #(
+    .ADDR_WIDTH(ADDR_WIDTH-2),
+    .DATA_WIDTH(8)
 ) u_dtcm1_ram_0 (
     .clk(CLK),
-    .addr_i(D1TCMADDR),
-    .rd_o(D1TCMRDATA[7:0]),
-    .wd_i(D1TCMWDATA[7:0]),
-    .cs_i(D1TCMCS),
-    .we_i({8{D1TCMWR&D1TCMBYTEWR[0]}})
+    .cs(D1TCMCS),
+    .addr(D1TCMADDR[ADDR_WIDTH:3]),
+    .dout(D1TCMRDATA[7:0]),
+    .din(D1TCMWDATA[7:0]),
+    .we(D1TCMWR&D1TCMBYTEWR[0])
 );
-bit_ram #(
-    .ADDR_BITS(20),
-    .DATA_BITS(8),
-    .RESET(0),
-    .RESET_HIGH(0)
+spram #(
+    .ADDR_WIDTH(ADDR_WIDTH-2),
+    .DATA_WIDTH(8)
 ) u_dtcm1_ram_1 (
     .clk(CLK),
-    .addr_i(D1TCMADDR),
-    .rd_o(D1TCMRDATA[15:8]),
-    .wd_i(D1TCMWDATA[15:8]),
-    .cs_i(D1TCMCS),
-    .we_i({8{D1TCMWR&D1TCMBYTEWR[1]}})
+    .cs(D1TCMCS),
+    .addr(D1TCMADDR[ADDR_WIDTH:3]),
+    .dout(D1TCMRDATA[15:8]),
+    .din(D1TCMWDATA[15:8]),
+    .we(D1TCMWR&D1TCMBYTEWR[1])
 );
-bit_ram #(
-    .ADDR_BITS(20),
-    .DATA_BITS(8),
-    .RESET(0),
-    .RESET_HIGH(0)
+spram #(
+    .ADDR_WIDTH(ADDR_WIDTH-2),
+    .DATA_WIDTH(8)
 ) u_dtcm1_ram_2 (
     .clk(CLK),
-    .addr_i(D1TCMADDR),
-    .rd_o(D1TCMRDATA[23:16]),
-    .wd_i(D1TCMWDATA[23:16]),
-    .cs_i(D1TCMCS),
-    .we_i({8{D1TCMWR&D1TCMBYTEWR[2]}})
+    .cs(D1TCMCS),
+    .addr(D1TCMADDR[ADDR_WIDTH:3]),
+    .dout(D1TCMRDATA[23:16]),
+    .din(D1TCMWDATA[23:16]),
+    .we(D1TCMWR&D1TCMBYTEWR[2])
 );
-bit_ram #(
-    .ADDR_BITS(20),
-    .DATA_BITS(8),
-    .RESET(0),
-    .RESET_HIGH(0)
+spram #(
+    .ADDR_WIDTH(ADDR_WIDTH-2),
+    .DATA_WIDTH(8)
 ) u_dtcm1_ram_3 (
     .clk(CLK),
-    .addr_i(D1TCMADDR),
-    .rd_o(D1TCMRDATA[31:24]),
-    .wd_i(D1TCMWDATA[31:24]),
-    .cs_i(D1TCMCS),
-    .we_i({8{D1TCMWR&D1TCMBYTEWR[3]}})
+    .cs(D1TCMCS),
+    .addr(D1TCMADDR[ADDR_WIDTH:3]),
+    .dout(D1TCMRDATA[31:24]),
+    .din(D1TCMWDATA[31:24]),
+    .we(D1TCMWR&D1TCMBYTEWR[3])
 );
 
 

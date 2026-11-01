@@ -783,7 +783,7 @@ CORTEXR5 u_cortexr5(
 
 
 cortexr5_tcm
-#(.A_WIDTH                     (20),
+#(.A_WIDTH                     (16),
     .ECC                         (1'b0)
     )
 u_tcm_ram_a
@@ -805,7 +805,7 @@ u_tcm_ram_a
     .parity_out                  (ATCPARITYOUT0));
 
 cortexr5_tcm
-    #(.A_WIDTH                     (20),
+    #(.A_WIDTH                     (16),
     .ECC                         (1'b0)
     )
 u_tcm_ram_b0
@@ -827,7 +827,7 @@ u_tcm_ram_b0
     .parity_out                  (B0TCPARITYOUT0));
 
 cortexr5_tcm
-    #(.A_WIDTH                     (20),
+    #(.A_WIDTH                     (16),
     .ECC                         (1'b0)
     )
 u_tcm_ram_b1

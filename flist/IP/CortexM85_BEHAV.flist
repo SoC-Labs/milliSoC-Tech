@@ -23,17 +23,23 @@
 
 // ============= Include file search path =============
 
-// +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/testbench/execution_tb/verilog
-// -y      $(CORTEX_M85_LOGICAL_DIR)/logical/testbench/execution_tb/verilog
-
-// +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/testbench/execution_tb/verilog/example_sys
-// -y      $(CORTEX_M85_LOGICAL_DIR)/logical/testbench/execution_tb/verilog/example_sys
 
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/testbench/execution_tb/verilog/models
 -y      $(CORTEX_M85_LOGICAL_DIR)/logical/testbench/execution_tb/verilog/models
 
+// Cells
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic
--y      $(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic
+$(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic/olympus_cdc_comb_and2.sv
+$(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic/olympus_cdc_comb_mux4.sv
+$(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic/olympus_cdc_connect.sv
+$(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic/olympus_cell_and_gate.sv
+$(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic/olympus_cell_cdc_and.sv
+$(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic/olympus_cell_cdc_or2.sv
+$(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic/olympus_cell_flop.sv
+$(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic/olympus_cell_inter_clkgate.sv
+$(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic/olympus_cell_semi_sync_flop.sv
+$(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic/olympus_cell_sync.sv
+$(CORTEX_M85_LOGICAL_DIR)/logical/models/cells/generic/olympus_cell_xor2.sv
 
 // OLYMPUS_CONFIG.v
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/olympus/verilog
@@ -52,5 +58,3 @@ $(CORTEX_M85_LOGICAL_DIR)/logical/olympus_epu/verilog/olympus_epu_instrid.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus/verilog/olympus_tarmac.sv
 $(CORTEX_M85_LOGICAL_DIR)/logical/olympus/verilog/olympus_tarmac_inst.sv
 
-+incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/shared/verilog
--y $(CORTEX_M85_LOGICAL_DIR)/logical/shared/verilog

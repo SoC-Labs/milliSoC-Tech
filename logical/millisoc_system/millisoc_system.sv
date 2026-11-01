@@ -808,7 +808,7 @@ millisoc_rt_cpu_subsystem #(
     // AXI Subordinate
     .ACLKENS0(1'b1),
     .AWIDS0({5'h00, CPU_Rx_S_AXI.AWID}),
-    .AWADDRS0(CPU_Rx_S_AXI.AWADDR),
+    .AWADDRS0({8'h0, CPU_Rx_S_AXI.AWADDR[23:0]}),
     .AWLENS0(CPU_Rx_S_AXI.AWLEN),
     .AWSIZES0(CPU_Rx_S_AXI.AWSIZE),
     .AWBURSTS0(CPU_Rx_S_AXI.AWBURST),
@@ -835,7 +835,7 @@ millisoc_rt_cpu_subsystem #(
     .BREADYS0(CPU_Rx_S_AXI.BREADY),
     .BRPTYS0(1'b0),
     .ARIDS0({5'h00,CPU_Rx_S_AXI.ARID}),
-    .ARADDRS0(CPU_Rx_S_AXI.ARADDR),
+    .ARADDRS0({8'h0, CPU_Rx_S_AXI.ARADDR[23:0]}),
     .ARLENS0(CPU_Rx_S_AXI.ARLEN),
     .ARSIZES0(CPU_Rx_S_AXI.ARSIZE),
     .ARBURSTS0(CPU_Rx_S_AXI.ARBURST),
