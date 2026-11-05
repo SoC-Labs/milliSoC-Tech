@@ -348,6 +348,8 @@ module millisoc_debug_subsystem(
   wire        apb_pready2;
   wire        apb_pslverr2;
   wire [31:0] apb_prdata2;
+  wire        r5_rom_sel;
+  reg  [31:0] r5_rom_rdata;
   wire        apb_pdbgswen2;
 
   //---------------------------------------------------------------------------
@@ -894,7 +896,7 @@ module millisoc_debug_subsystem(
       .daprdata(daprdatam2),
 
       .deviceen(1'b1),
-      .rombaseaddr(32'h0000_0000),
+      .rombaseaddr(32'h0000_1001),
 
       .psel(apb_psel2),
       .penable(apb_penable2),
@@ -908,7 +910,25 @@ module millisoc_debug_subsystem(
       .pdbgswen(apb_pdbgswen2)
   );
 
-  assign r5_psel    = apb_psel2;
+  // The R5 EDI only receives the low 4KB address window. Keep the ROM table
+  // in a separate AP2 page and intercept it before truncating the address.
+  assign r5_rom_sel = apb_psel2 && (apb_paddr2[31:12] == 20'h00001);
+
+  always @* begin
+    case (apb_paddr2[11:2])
+      10'h000: r5_rom_rdata = 32'hFFFF_F003; // R5 EDI at AP2 address 0
+      10'h001: r5_rom_rdata = 32'h0000_0000; // End of table
+      10'h3F4: r5_rom_rdata = 32'h0000_0004; // Peripheral ID4
+      10'h3F8: r5_rom_rdata = 32'h0000_0004; // Peripheral ID0
+      10'h3FC: r5_rom_rdata = 32'h0000_000D; // Component ID0
+      10'h3FD: r5_rom_rdata = 32'h0000_0010; // Component ID1
+      10'h3FE: r5_rom_rdata = 32'h0000_0005; // Component ID2
+      10'h3FF: r5_rom_rdata = 32'h0000_00B1; // Component ID3
+      default: r5_rom_rdata = 32'h0000_0000;
+    endcase
+  end
+
+  assign r5_psel    = apb_psel2 && !r5_rom_sel;
   assign r5_penable = apb_penable2;
   assign r5_pwrite  = apb_pwrite2;
   assign r5_pwdata  = apb_pwdata2;
@@ -918,9 +938,9 @@ module millisoc_debug_subsystem(
   // Return path from the Cortex-R5 external debug interface.  These must be
   // fed back into the APB-AP: leaving them unconnected makes its APB transfer
   // state machine wait forever on an unknown PREADY.
-  assign apb_prdata2  = r5_prdata;
-  assign apb_pready2  = r5_pready;
-  assign apb_pslverr2 = r5_pslverr;
+  assign apb_prdata2  = r5_rom_sel ? r5_rom_rdata : r5_prdata;
+  assign apb_pready2  = r5_rom_sel ? 1'b1 : r5_pready;
+  assign apb_pslverr2 = r5_rom_sel ? apb_pwrite2 : r5_pslverr;
 
   //---------------------------------------------------------------------------
   // Instance: AP3 - AHB access port -> Cortex-M85 EPPB
@@ -948,7 +968,7 @@ module millisoc_debug_subsystem(
       .hreadym(m85_hready),
       .hrespm(m85_hresp),
       .hrdatam(m85_hrdata),
-      .rombaseaddr(32'hE00F_E000),
+      .rombaseaddr(32'hE00F_F001),
 
       .dapready(dapreadym3),
       .dapslverr(dapslverrm3),

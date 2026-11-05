@@ -105,18 +105,18 @@
                                   //  0 - excluded
                                   //  1 - included
   // ----------------------------------------------------------------------
-  parameter MICRO_SCU = 1;        // MicroSCU Inclusion
+  parameter MICRO_SCU = 0;        // MicroSCU Inclusion
                                   // Enables ACP functionality
                                   //  0 - excluded
                                   //  1 - included
   // ----------------------------------------------------------------------
   // CORTEXR5 CPU0 PARAMETERS
   // ----------------------------------------------------------------------
-  parameter I_CACHE0 = 1;         // Infer I-Cache Controller for CPU0
+  parameter I_CACHE0 = 0;         // Infer I-Cache Controller for CPU0
                                   //  0 - excluded
                                   //  1 - included
   // ----------------------------------------------------------------------
-  parameter D_CACHE0 = 1;         // Infer D-Cache Controller for CPU0
+  parameter D_CACHE0 = 0;         // Infer D-Cache Controller for CPU0
                                   //  0 - excluded
                                   //  1 - included
   // ----------------------------------------------------------------------

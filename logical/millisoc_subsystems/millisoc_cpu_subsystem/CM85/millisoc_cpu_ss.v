@@ -184,6 +184,8 @@ assign AWID[2]=1'b0;
 assign WID[2]=1'b0;
 
 OLYMPUS #(
+    .ICACHESZ(5'b00001), // 4KB
+    .DCACHESZ(5'b00001), // 4KB
     .BUSPROT(0),
     .ETM(1)
     ) u_cortexm85 (

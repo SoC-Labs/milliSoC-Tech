@@ -200,8 +200,8 @@ $(SOCLABS_ETHOS_U85_DIR)/logical/models/rams/generic/ethosu85_cb_ram.sv
 $(SOCLABS_ETHOS_U85_DIR)/logical/models/rams/generic/ethosu85_ib_ram.sv
 $(SOCLABS_ETHOS_U85_DIR)/logical/models/rams/generic/ethosu85_lut_ram.sv
 $(SOCLABS_ETHOS_U85_DIR)/logical/models/rams/generic/ethosu85_ob_ram.sv
-$(SOCLABS_ETHOS_U85_DIR)/logical/models/rams/generic/ethosu85_ram_model_1r_1w.sv
-$(SOCLABS_ETHOS_U85_DIR)/logical/models/rams/generic/ethosu85_ram_model_1rw.sv
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/memory_integrations/generic/ethosu85_ram_model_1r_1w.sv
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/memory_integrations/generic/ethosu85_ram_model_1rw.sv
 $(SOCLABS_ETHOS_U85_DIR)/logical/models/rams/generic/ethosu85_rb_0_ram.sv
 $(SOCLABS_ETHOS_U85_DIR)/logical/models/rams/generic/ethosu85_rb_1_ram.sv
 $(SOCLABS_ETHOS_U85_DIR)/logical/models/rams/generic/ethosu85_rb_2_ram.sv

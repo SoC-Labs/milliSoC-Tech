@@ -515,8 +515,9 @@ $(CORTEX_M85_LOGICAL_DIR)/logical/shared/verilog/olympus_onehot2bin.sv
 
 
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/models/rams/generic
-$(CORTEX_M85_LOGICAL_DIR)/logical/models/rams/generic/bit_ram.sv
-$(CORTEX_M85_LOGICAL_DIR)/logical/models/rams/generic/olympus_ram.sv
++incdir+$(SOCLABS_MILLISOC_TECH_DIR)/logical/memory_integrations/generic
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/memory_integrations/generic/spram_we.v
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/memory_integrations/generic/olympus_ram.sv
 
 // Generic CDE
 +incdir+$(CORTEX_M85_LOGICAL_DIR)/logical/models/modules

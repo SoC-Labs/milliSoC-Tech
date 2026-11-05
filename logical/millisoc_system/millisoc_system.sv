@@ -875,8 +875,8 @@ millisoc_rt_cpu_subsystem #(
     // read data register and ignores debug writes.  There is no dynamic
     // debug clock gating in this SoC, so the enable is tied high.
     .PCLKENDBG(1'b1),
-    .DBGROMADDR(20'b0),
-    .DBGROMADDRV(1'b0),
+    .DBGROMADDR(20'h00001),
+    .DBGROMADDRV(1'b1),
     .DBGNOPWRDWN(),
 
     .DBGEN0(1'b0),
