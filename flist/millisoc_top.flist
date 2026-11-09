@@ -18,6 +18,7 @@ $(SOCLABS_MILLISOC_TECH_DIR)/logical/interfaces/qchannel_if.sv
 
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_ai_subsystem/millisoc_ai_subsystem.sv
 
+$(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_sys_ctrl/millisoc_reset_ctrl.v
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_sys_ctrl/millisoc_sys_ctrl.sv
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_subsystems/millisoc_sram_wrapper/millisoc_sram_wrapper.sv
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/ROM/generic/ROM_wrapper.v

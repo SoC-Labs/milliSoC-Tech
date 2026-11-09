@@ -562,7 +562,7 @@ OLYMPUS #(
     .SSTCLKEN(CLKEN),
 
     .CURRPRI(),
-    .SYSRESETREQ(),
+    .SYSRESETREQ(SYSRESETREQ),
 
     .PMCTEN(1'b0),
     .PMCTC(1'b0),

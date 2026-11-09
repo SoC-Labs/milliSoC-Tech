@@ -212,12 +212,24 @@ wire        ETMCLKEN;
 wire        ACLK;
 
 wire        nSYSRESET;
+wire        nR5RESET;
+wire        nM85RESET;
 wire        SYSRESETREQ;
+wire        R5_DBGRESETREQ;
+wire        SW_SYSRESETREQ;
+wire        SW_R5RESETREQ;
+wire        SW_M85RESETREQ;
 wire        nDBGETMRESET;
 wire        CPUWAIT;
 wire        TRACECLKIN;
 wire        ARESETn;
 wire        WDOGRESREQ;
+wire        R5_WDOGRESREQ;
+wire        ALL_WDOGRESREQ;
+wire        DAP_SYSRESETREQ;
+wire        DAP_SYSRESETACK;
+
+assign ALL_WDOGRESREQ = WDOGRESREQ | R5_WDOGRESREQ;
 
 // Debug subsystem (Arm CoreSight SoC-400)
 wire        DAP_PWUPREQ;
@@ -354,9 +366,9 @@ assign CPU_ACLKEN  = 1'b1;
 assign HCLK = FCLK;
 assign PCLK = FCLK;
 assign ACLK = FCLK;
-assign HRESETn = nPORESET;
-assign PRESETn = nPORESET;
-assign ARESETn = nPORESET;
+assign HRESETn = nSYSRESET;
+assign PRESETn = nSYSRESET;
+assign ARESETn = nSYSRESET;
 
 millisoc_ai_subsystem u_millisoc_ai_subsystem (
     .FCLK(FCLK),
@@ -388,7 +400,7 @@ millisoc_cpu_ss u_millisoc_cpu_ss (
     .FCLKEN(FCLKEN),
     .HCLKEN(HCLKEN),
     .ETMCLKEN(ETMCLKEN),
-    .nSYSRESET(nSYSRESET),
+    .nSYSRESET(nM85RESET),
     .SYSRESETREQ(SYSRESETREQ),
     .nPORESET(nPORESET),
     .nDBGETMRESET(nDBGETMRESET),
@@ -642,7 +654,9 @@ millisoc_debug_subsystem u_millisoc_debug_subsystem (
     .m85_hresp(M85_DBG_HRESP),
 
     // ---- Debug power-up request ----
-    .dap_pwrupreq(DAP_PWUPREQ)
+    .dap_pwrupreq(DAP_PWUPREQ),
+    .dap_system_reset_req(DAP_SYSRESETREQ),
+    .dap_system_reset_ack(DAP_SYSRESETACK)
 );
 
 // The AXI access port does not generate AXI IDs, so the IDs on the NIC400
@@ -715,13 +729,33 @@ mhu320ae_mx u_ipc_mx (
     .mbx_int(Mx_IPC_REC_mbx)
 );
 
+millisoc_reset_ctrl u_millisoc_reset_ctrl(
+    .CLKIN(FCLK),
+    .nPORESET(nPORESET),
+    .SYSRESETREQ(SYSRESETREQ),
+    .WATCHDOGREQ(ALL_WDOGRESREQ),
+    .DAPSYSRESETREQ(DAP_SYSRESETREQ),
+    .SW_SYSRESETREQ(SW_SYSRESETREQ),
+    .R5_DBGRESETREQ(R5_DBGRESETREQ),
+    .SW_R5RESETREQ(SW_R5RESETREQ),
+    .SW_M85RESETREQ(SW_M85RESETREQ),
+    .nSYSRESET(nSYSRESET),
+    .nR5RESET(nR5RESET),
+    .nM85RESET(nM85RESET),
+    .DAPSYSRESETACK(DAP_SYSRESETACK)
+);
+
 millisoc_sys_ctrl u_millisoc_sys_ctrl(
     .pclk(FCLK),
     .nporeset(nPORESET),
     .sys_ctrl_apb(SYS_CTRL_APB),
     .sysresetreq(SYSRESETREQ),
-    .watchdogreq(WDOGRESREQ),
-    .nsysreset(nSYSRESET),
+    .watchdogreq(ALL_WDOGRESREQ),
+    .dapresetreq(DAP_SYSRESETREQ),
+    .r5dbgresetreq(R5_DBGRESETREQ),
+    .sw_sysresetreq(SW_SYSRESETREQ),
+    .sw_r5resetreq(SW_R5RESETREQ),
+    .sw_m85resetreq(SW_M85RESETREQ),
     .cpu_mx_wait(CPUWAIT)
 );
 
@@ -732,8 +766,8 @@ millisoc_rt_cpu_subsystem #(
     .BE(0)
     ) u_millisoc_rt_cpu_ss (
     .CLKIN(FCLK),
-    .ACPRESETn(nSYSRESET),
-    .nRESET0(nSYSRESET),
+    .ACPRESETn(nR5RESET),
+    .nRESET0(nR5RESET),
     .nSYSPORESET(nPORESET),
     .nCPUHALT0(1'b1),
     .DBGNOCLKSTOP(1'b0),
@@ -879,7 +913,7 @@ millisoc_rt_cpu_subsystem #(
     .DBGROMADDRV(1'b1),
     .DBGNOPWRDWN(),
 
-    .DBGEN0(1'b0),
+    .DBGEN0(1'b1),
     // Non-invasive debug is enabled to permit ETM trace; invasive debug stays off.
     .NIDEN0(1'b1),
     .EDBGRQ0(R5_EDBGRQ),
@@ -900,7 +934,7 @@ millisoc_rt_cpu_subsystem #(
     .DBGSELFADDRV0(1'b0),
     .DBGRESTART0(1'b0),
     .DBGRESTARTED0(),
-    .DBGRSTREQ0(),
+    .DBGRSTREQ0(R5_DBGRESETREQ),
 
     // ETM
     .ETMICTL0(R5_ETM_ICTL),
@@ -935,8 +969,8 @@ millisoc_rt_cpu_subsystem #(
     .nPMUIRQ0(),
     .IRQS(Rx_CPU_IRQs),
 
-    .DBGRESET0n(nSYSRESET),
-    .PRESETDBG0n(nSYSRESET),
+    .DBGRESET0n(nR5RESET),
+    .PRESETDBG0n(nR5RESET),
     .nCLKSTOPPED0(),
     .nWFEPIPESTOPPED0(),
     .nWFIPIPESTOPPED0(),
@@ -1295,15 +1329,17 @@ millisoc_rt_peripheral_subsystem u_rt_peripheral(
     .SPI_SCLK(),
     .SPI_MOSI(),
     .SPI_MISO(),
-    .WDOGRESREQ(),
+    .WDOGRESREQ(R5_WDOGRESREQ),
     .PERI_IRQS(Rx_PERI_IRQS)
 );
 
 top_ahb_qspi u_ahb_qspi(
     .HCLK(HCLK),
-    .HRESETn(HRESETn),
+    // Keep QSPI controller/configuration state across warm system resets:
+    // the bootloader uses retained CTRL state to avoid re-entering flash QPI mode.
+    .HRESETn(nPORESET),
     .PCLK(PCLK),
-    .PRESETn(PRESETn),
+    .PRESETn(nPORESET),
 
     .HADDR(QSPI_AHB.HADDR),
     .HTRANS(QSPI_AHB.HTRANS),

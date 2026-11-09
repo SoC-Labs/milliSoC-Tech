@@ -188,7 +188,9 @@ module millisoc_debug_subsystem(
     input  wire [1:0]  m85_hresp,
 
     // ---- Debug power-up request from the DP (active high) ------------------
-    output wire        dap_pwrupreq
+    output wire        dap_pwrupreq,
+    output wire        dap_system_reset_req,
+    input  wire        dap_system_reset_ack
 );
 
   //---------------------------------------------------------------------------
@@ -479,7 +481,7 @@ module millisoc_debug_subsystem(
       .cdbgrstreq(dp_cdbgrstreq),
       .cdbgpwrupack(1'b1),   // debug power domain is always available
       .csyspwrupack(1'b1),   // system power domain is always available
-      .cdbgrstack(1'b0),     // no debug reset controller in Stage 0
+      .cdbgrstack(dap_system_reset_ack),
 
       // ---- Multidrop ----
       .targetid(32'h0000_0000),
@@ -493,9 +495,10 @@ module millisoc_debug_subsystem(
   // power controller can gate the debug power domains (the Cortex-M85
   // debug power controller integration is deferred to a later stage).
   assign dap_pwrupreq = dp_cdbgpwrupreq;
+  assign dap_system_reset_req = dp_cdbgrstreq;
 
   // Unused DP outputs
-  wire _unused_dp = &{1'b0, dp_csyspwrupreq, dp_cdbgrstreq, dp_jtagnsw, dp_jtagtop};
+  wire _unused_dp = &{1'b0, dp_csyspwrupreq, dp_jtagnsw, dp_jtagtop};
 
   //---------------------------------------------------------------------------
   // Instance: DAPBUS interconnect
@@ -956,7 +959,7 @@ module millisoc_debug_subsystem(
       .dapresetn(dapresetn),
 
       .dbgen(1'b1),
-      .spiden(1'b0),
+      .spiden(1'b1),
 
       .dapsel(dapselm3),
       .dapenable(dapenablem3),

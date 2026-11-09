@@ -7,8 +7,12 @@ module millisoc_sys_ctrl(
 
     input  wire         sysresetreq,
     input  wire         watchdogreq,
+    input  wire         dapresetreq,
+    input  wire         r5dbgresetreq,
 
-    output wire         nsysreset,
+    output wire         sw_sysresetreq,
+    output wire         sw_r5resetreq,
+    output wire         sw_m85resetreq,
 
     output reg          cpu_mx_wait
 );
@@ -32,6 +36,7 @@ localparam  SYSCTRL_IDB        = {32'h00000031}; // 0xFFC : 1
 wire apb_read_en;
 wire apb_write_en;
 wire [1:0] apb_wr_sel;
+wire reset_command_write;
 reg [31:0] PRDATA;
 assign sys_ctrl_apb.prdata=PRDATA;
 // APB Control
@@ -42,19 +47,34 @@ assign sys_ctrl_apb.pslverr = 1'b0; // Always OK
 
 assign apb_wr_sel[0] = apb_write_en & (sys_ctrl_apb.paddr[11:2]==10'h0);
 assign apb_wr_sel[1] = apb_write_en & (sys_ctrl_apb.paddr[11:2]==10'h1);
+assign reset_command_write = sys_ctrl_apb.psel &
+                             sys_ctrl_apb.penable &
+                             sys_ctrl_apb.pwrite &
+                             (sys_ctrl_apb.paddr[11:2] == 10'h2) &
+                             sys_ctrl_apb.pstrb[0];
 
-wire [1:0] next_reset_info;
+wire [7:0] next_reset_info;
 wire  reg_next_reset_info_en;
 assign next_reset_info[0] = sysresetreq;
 assign next_reset_info[1] = watchdogreq;
+assign next_reset_info[2] = dapresetreq;
+assign next_reset_info[3] = sw_sysresetreq;
+assign next_reset_info[4] = sw_r5resetreq;
+assign next_reset_info[5] = sw_m85resetreq;
+assign next_reset_info[6] = r5dbgresetreq;
+assign next_reset_info[7] = 1'b0;
 
-assign reg_next_reset_info_en = sysresetreq | watchdogreq;
+assign reg_next_reset_info_en = |next_reset_info;
 
-reg [1:0] reset_info;
+reg [7:0] reset_info;
+
+assign sw_r5resetreq = reset_command_write & sys_ctrl_apb.pwdata[0];
+assign sw_m85resetreq = reset_command_write & sys_ctrl_apb.pwdata[1];
+assign sw_sysresetreq = reset_command_write & sys_ctrl_apb.pwdata[2];
 
 always @(posedge pclk or negedge nporeset) begin
     if(~nporeset)
-        reset_info <= 2'b00;
+        reset_info <= 8'd0;
     else if (reg_next_reset_info_en)
         reset_info <= next_reset_info;
 end
@@ -66,12 +86,13 @@ always @(posedge pclk or negedge nporeset) begin
         cpu_mx_wait <= sys_ctrl_apb.pwdata[0];
 end
 
-always @(apb_read_en or sys_ctrl_apb.paddr or reset_info) begin
+always @* begin
     case(apb_read_en)
         1'b1: begin
             case(sys_ctrl_apb.paddr[11:2])
-                10'h000: PRDATA = {30'd0, reset_info};
+                10'h000: PRDATA = {24'd0, reset_info};
                 10'h001: PRDATA = {31'd0, cpu_mx_wait};
+                10'h002: PRDATA = 32'd0;
                 10'h3F4: PRDATA = SYSCTRL_ID0;
                 10'h3F5: PRDATA = SYSCTRL_ID1;
                 10'h3F6: PRDATA = SYSCTRL_ID2;
@@ -90,25 +111,6 @@ always @(apb_read_en or sys_ctrl_apb.paddr or reset_info) begin
         1'b0: PRDATA = 32'd0;
         default: PRDATA = 32'd0;
     endcase
-end
-
-reg nsysreset_i;
-reg [3:0] nsysreset_sync;
-wire nsysreset_en;
-
-assign nsysreset_en = (~nporeset) | watchdogreq | sysresetreq;
-assign nsysreset = nsysreset_sync[3];
-
-always @(posedge pclk)begin
-    if (nsysreset_en) begin
-        nsysreset_i <= 1'b1;
-        nsysreset_sync <= 4'h0;
-    end else begin
-        nsysreset_sync[3] <= nsysreset_sync[2];
-        nsysreset_sync[2] <= nsysreset_sync[1];
-        nsysreset_sync[1] <= nsysreset_sync[0];
-        nsysreset_sync[0] <= nsysreset_i;
-    end
 end
 
 endmodule
