@@ -25,6 +25,7 @@
 
 module millisoc_system(
     input  wire             FCLK,
+    input  wire             RT_CLK,
     input  wire             nPORESET,
 
     // QSPI Signals
@@ -1269,7 +1270,7 @@ millisoc_peripheral_subsystem u_millisoc_peripheral_subsystem (
     .PRESETn(PRESETn),
     .HCLK(HCLK),
     .HRESETn(HRESETn),
-    .RT_CLK(),
+    .RT_CLK(RT_CLK),
 
     .PERIPH_AHB(PERIPH_AHB),
     .MHU_REC(RT_MHU_REC),
@@ -1303,6 +1304,7 @@ millisoc_peripheral_subsystem u_millisoc_peripheral_subsystem (
 
 millisoc_rt_peripheral_subsystem u_rt_peripheral(
     .CLK(FCLK),
+    .RT_CLK(RT_CLK),
     .PORESETn(nPORESET),
     .SYSRESETn(nSYSRESET),
 

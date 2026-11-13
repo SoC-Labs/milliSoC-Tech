@@ -1,6 +1,6 @@
 -f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/OVL.flist 
 
--f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/EthosU85_256.flist
+-f $(SOCLABS_MILLISOC_TECH_DIR)/flist/IP/EthosU85.flist
 
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_chip_pads/millisoc_chip_pads.v
 $(SOCLABS_MILLISOC_TECH_DIR)/logical/millisoc_system/millisoc_system.sv

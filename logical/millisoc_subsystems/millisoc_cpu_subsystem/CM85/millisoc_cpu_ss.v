@@ -187,8 +187,8 @@ OLYMPUS #(
     .ICACHESZ(5'b00001), // 4KB
     .DCACHESZ(5'b00001), // 4KB
     .ECC(0),
-    .FPU(1),
-    .MVE(2),
+    .FPU(0),    // No Floating point unit
+    .MVE(1),    // Integer subset of MVE included
     .CPIF(1),
     .PACBTI(0),
     .MPU_NS(8),
@@ -207,7 +207,7 @@ OLYMPUS #(
     .DBGLVL(2),
     .ITM(1),
     .PMC(0),
-    .PMCPROGSIZE(14),
+    .PMCPROGSIZE(2),
     .IWIC(1),
     .RAR(0),
     .CDEMAPPEDONCP0(0),
@@ -335,8 +335,8 @@ OLYMPUS #(
     .REVIDRNUM(4'd0),
 
     // Config and status inputs?
-    .CFGITCMSZ(4'b0111),
-    .CFGDTCMSZ(4'b0111),
+    .CFGITCMSZ(4'b0111),    // 64KB
+    .CFGDTCMSZ(4'b0111),    // 64KB
     .CFGPAHBSZ(3'b001), // 64MB
     .CFGMEMALIAS(5'b00000),
     .CFGFPU(1'b1),
@@ -806,7 +806,7 @@ dtcm u_dtcm2 (
 );
 
 
-itcm u_itcm (
+itcm  u_itcm (
     .CLK(FCLK),
     .ITCMCS(ITCMCS),
     .ITCMADDR(ITCMADDR),

@@ -39,7 +39,7 @@ module millisoc_peripheral_subsystem #(
     input  wire         RT_CLK, // 32kHz real time clock
 
     // Peripheral AHB bus interface
-    ahb_if.subordinate     PERIPH_AHB,
+    ahb_if.subordinate  PERIPH_AHB,
 
     apb4_if.master      MHU_REC,
     apb4_if.master      MHU_SND,
@@ -814,6 +814,12 @@ cmsdk_apb_watchdog u_apb_watchdog(
 assign PSLVERR_WATCHDOG = 1'b0;
 assign PREADY_WATCHDOG  = 1'b1;
 
+reg nRTCRST;
+
+always @(posedge rt_clk_div[14]) begin
+    nRTCRST <= PRESETn;
+end
+
 
 Rtc u_apb_rtc(
     // Inputs
@@ -826,7 +832,7 @@ Rtc u_apb_rtc(
     .PWDATA(PWDATA),
     .CLK1HZ(rt_clk_div[14]),
 
-    .nRTCRST(PRESETn),
+    .nRTCRST(nRTCRST),
     .nPOR(PRESETn),
     .SCANENABLE(1'b0),
     .SCANINPCLK(PCLK),

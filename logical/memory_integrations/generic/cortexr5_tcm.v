@@ -48,13 +48,13 @@ module cortexr5_tcm
    output wire        lateerror     // Late error
    );
 
-  wire [A_WIDTH-1:0] ram_addr = addr[A_WIDTH+2:3]; // Implemented address bits
+  wire [A_WIDTH-4:0] ram_addr = addr[A_WIDTH-1:3]; // Implemented address bits
   wire [7:0]         strb_q   = {8{we}} & strb;    // Qualified strobes
   
   // Implement RAM banks
   // NOTE: All signals are active HIGH
   spram 
-    #(.ADDR_WIDTH  (A_WIDTH),
+    #(.ADDR_WIDTH  (A_WIDTH-3),
       .DATA_WIDTH (8)
       )
   u_tcm_ram_0_b0
@@ -67,7 +67,7 @@ module cortexr5_tcm
       );
 
   spram 
-    #(.ADDR_WIDTH  (A_WIDTH),
+    #(.ADDR_WIDTH  (A_WIDTH-3),
       .DATA_WIDTH (8)
       )
   u_tcm_ram_0_b1
@@ -80,7 +80,7 @@ module cortexr5_tcm
       );
 
   spram 
-    #(.ADDR_WIDTH  (A_WIDTH),
+    #(.ADDR_WIDTH  (A_WIDTH-3),
       .DATA_WIDTH (8)
       )
   u_tcm_ram_0_b2
@@ -93,7 +93,7 @@ module cortexr5_tcm
       );
 
   spram 
-    #(.ADDR_WIDTH  (A_WIDTH),
+    #(.ADDR_WIDTH  (A_WIDTH-3),
       .DATA_WIDTH (8)
       )
   u_tcm_ram_0_b3
@@ -106,7 +106,7 @@ module cortexr5_tcm
       );
 
   spram 
-    #(.ADDR_WIDTH  (A_WIDTH),
+    #(.ADDR_WIDTH  (A_WIDTH-3),
       .DATA_WIDTH (8)
       )
   u_tcm_ram_0_b4
@@ -119,7 +119,7 @@ module cortexr5_tcm
       );
 
   spram 
-    #(.ADDR_WIDTH  (A_WIDTH),
+    #(.ADDR_WIDTH  (A_WIDTH-3),
       .DATA_WIDTH (8)
       )
   u_tcm_ram_0_b5
@@ -132,7 +132,7 @@ module cortexr5_tcm
       );
 
   spram 
-    #(.ADDR_WIDTH  (A_WIDTH),
+    #(.ADDR_WIDTH  (A_WIDTH-3),
       .DATA_WIDTH (8)
       )
   u_tcm_ram_0_b6
@@ -145,7 +145,7 @@ module cortexr5_tcm
       );
 
   spram 
-    #(.ADDR_WIDTH  (A_WIDTH),
+    #(.ADDR_WIDTH  (A_WIDTH-3),
       .DATA_WIDTH (8)
       )
   u_tcm_ram_0_b7

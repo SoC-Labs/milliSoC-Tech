@@ -12,7 +12,12 @@ make_project:
 	socrates_cli --project millisoc_tech -data ../ --flow AddNewProject
 
 build_u85:
-	$(U85_SOURCE_DIR)/logical/generate --config $(U85_CONFIG) --output $(U85_OUTPUT_DIR)
+	rm -rf $(U85_OUTPUT_DIR)
+	@set -eu; \
+	tmpdir=$$(mktemp -d); \
+	trap 'rm -rf "$$tmpdir"' 0; \
+	cp -a "$(U85_SOURCE_DIR)" "$$tmpdir/ethosu85"; \
+	"$(U85_PERL)" "$$tmpdir/ethosu85/logical/generate" --config "$(U85_CONFIG)" --output "$(U85_OUTPUT_DIR)"
 
 build_nic400:
 	socrates_cli --project millisoc_tech -data ../ --flow build.configured.component configuredComponentName=nic400_millisoc_main

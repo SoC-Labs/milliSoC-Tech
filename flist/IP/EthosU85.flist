@@ -25,7 +25,7 @@ $(SOCLABS_ETHOS_U85_DIR)/logical/ethosu85_mac/verilog/ethosu85_mac_pkg.sv
 $(SOCLABS_ETHOS_U85_DIR)/logical/shared/verilog/ethosu85_shared_pkg.sv
 $(SOCLABS_ETHOS_U85_DIR)/logical/ethosu85_ao/verilog/ethosu85_ao_pkg.sv
 
-$(SOCLABS_ETHOS_U85_DIR)/logical/ethosu85/verilog/ETHOSU85_NUM_MACS256.sv
+$(SOCLABS_ETHOS_U85_DIR)/logical/ethosu85/verilog/ETHOSU85_NUM_MACS128.sv
 $(SOCLABS_ETHOS_U85_DIR)/logical/ethosu85/verilog/ethosu85_core.sv
 
 $(SOCLABS_ETHOS_U85_DIR)/logical/ethosu85_mbist/verilog/ethosu85_mbist.sv

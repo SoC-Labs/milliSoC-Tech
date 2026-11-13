@@ -29,7 +29,7 @@ assign U85_SRAM1_AXI.ARLOCK = 1'b0;
 assign U85_EXT0_AXI.AWLOCK = 1'b0;
 assign U85_EXT0_AXI.ARLOCK = 1'b0;
 
-ETHOSU85_NUM_MACS256 u_ethosu85 (
+ETHOSU85_NUM_MACS128 u_ethosu85 (
     .CLK(FCLK),
     .nRESET(nRESET),
     .nMBISTRESET(1'b1),

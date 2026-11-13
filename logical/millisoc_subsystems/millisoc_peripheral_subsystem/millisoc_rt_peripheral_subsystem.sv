@@ -1,6 +1,7 @@
 
 module millisoc_rt_peripheral_subsystem(
     input  wire         CLK,
+    input  wire         RT_CLK, // 32kHz real time clock
     input  wire         PORESETn,
     input  wire         SYSRESETn,
 
@@ -116,7 +117,7 @@ millisoc_peripheral_subsystem u_rx_periphs(
     .PRESETn(SYSRESETn),
     .HCLK(CLK),
     .HRESETn(SYSRESETn),
-    .RT_CLK(),
+    .RT_CLK(RT_CLK),
 
     .PERIPH_AHB(PERIPH_AHB),
     .MHU_REC(MHU_REC),
